@@ -1,164 +1,3 @@
-// import React from 'react';
-// import { View, Text, Dimensions, ScrollView } from 'react-native';
-// import Svg, { Path, Circle } from 'react-native-svg';
-
-// // Substatuses grouped by statuses
-// const statuses = {
-//   Ongoing: [
-//     'Roof Casting',
-//     'Brick Wall',
-//     'Plaster',
-//     'Pudding',
-//     'Two Coat Paint',
-//   ],
-//   Ready: [
-//     'Tiles Complete',
-//     'Final Paint Done',
-//     'Handed Over',
-//     'Staying in the Apartment',
-//   ],
-//   Renovation: ['Interior Work Complete'],
-// };
-
-// interface StageProps {
-//   width: number;
-//   height: number;
-//   circles: number[]; // X positions of circles
-//   texts: Array<{ text: string; x: number; isTop: boolean }>; // Substatus labels with position and alignment
-//   activeIndex?: number; // Index of the active substatus
-// }
-
-// const Stage = ({ width, height, circles, texts, activeIndex }: StageProps) => {
-//   const circleRadius = Math.min(12, width / 15); // Circle radius
-//   const strokeThickness = Math.min(8, width / 25); // Stroke thickness
-
-//   return (
-//     <View style={{ width, height: height + 50, position: 'relative' }}>
-//       <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-//         {/* Connecting Line */}
-//         <Path
-//           d={`M${circles[0]} ${height / 2} H${circles[circles.length - 1]}`}
-//           stroke="rgb(219, 219, 219)"
-//           strokeWidth={strokeThickness}
-//         />
-
-//         {/* Circles */}
-//         {circles.map((cx, index) => (
-//           <Circle
-//             key={index}
-//             cx={cx}
-//             cy={height / 2}
-//             r={circleRadius}
-//             fill={index === activeIndex ? 'rgb(4, 98, 138)' : 'rgb(219, 219, 219)'}
-//             stroke="rgb(219, 219, 219)"
-//             strokeWidth={2}
-//           />
-//         ))}
-//       </Svg>
-
-//       {/* Text Labels */}
-//       {texts.map((item, index) => (
-//         <View
-//           key={index}
-//           style={{
-//             position: 'absolute',
-//             left: item.x - 50,
-//             // [item.isTop ? 'top' : 'bottom']: -25, // Alternate text positions
-//             [item.isTop ? 'top' : 'bottom']: item.isTop ? -25 : +20,
-//             width: 100,
-//             alignItems: 'center',
-//           }}
-//         >
-//           <Text
-//             style={{
-//               fontSize: Math.min(13, width / 30),
-//               fontWeight: '600',
-//               color: '#6B7280',
-//               textAlign: 'center',
-//             }}
-//           >
-//             {item.text}
-//           </Text>
-//         </View>
-//       ))}
-//     </View>
-//   );
-// };
-
-// const ProjectStatusTracker = ({
-//   projectStatus,
-// }: {
-//   projectStatus: { status: string; subStatus: string };
-// }) => {
-//   const screenWidth = Dimensions.get('window').width;
-//   const padding = Math.min(16, screenWidth / 30);
-
-//   // Helper to find the active index
-//   const getActiveIndex = (substatuses: string[], subStatus: string) =>
-//     substatuses.indexOf(subStatus);
-
-//   const renderSection = (status: string, substatuses: string[]) => {
-//     const maxSubstatuses = Math.max(...Object.values(statuses).map((s) => s.length)); // Max substatuses
-//     const minWidth = maxSubstatuses * 90; // Minimum width for sections
-  
-//     const totalWidth = Math.max(substatuses.length * 120, minWidth); // Pad smaller sections
-//     const circles = substatuses.map((_, index) => index * 120 + 30); // Circle positions
-//     const texts = substatuses.map((text, index) => ({
-//       text,
-//       x: index * 120 + 30,
-//       isTop: index % 2 === 0, // Alternate between top and bottom
-//     }));
-  
-//     return (
-//       <View
-//         key={status}
-//         style={{
-//           marginHorizontal: 20, // Ensure consistent horizontal spacing between sections
-//           alignItems: 'flex-start',
-//         }}
-//       >
-//         {/* Substatuses */}
-//         <Stage
-//           width={totalWidth}
-//           height={40}
-//           circles={circles}
-//           texts={texts}
-//           activeIndex={getActiveIndex(substatuses, projectStatus.subStatus)}
-//         />
-//       </View>
-//     );
-//   };
-  
-
-
-//   return (
-//     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-//       <View
-//         className="flex-row"
-//         style={{ flex: 1, paddingHorizontal: padding, paddingTop: 30 }}
-//       >
-//         {Object.entries(statuses).map(([status, substatuses]) =>
-//           renderSection(status, substatuses)
-//         )}
-//       </View>
-//     </ScrollView>
-//   );
-// };
-
-// export default ProjectStatusTracker;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import React from 'react';
 import { View, Text, Dimensions, ScrollView } from 'react-native';
@@ -188,21 +27,42 @@ interface StageProps {
   circles: number[]; // X positions of circles
   texts: Array<{ text: string; x: number; isTop: boolean }>; // Substatus labels with position and alignment
   activeIndex?: number; // Index of the active substatus
+  isCompleted: boolean; // Whether the entire section is completed
 }
 
-const Stage = ({ width, height, circles, texts, activeIndex }: StageProps) => {
+const Stage = ({
+  width,
+  height,
+  circles,
+  texts,
+  activeIndex,
+  isCompleted,
+}: StageProps) => {
   const circleRadius = Math.min(12, width / 15); // Circle radius
   const strokeThickness = Math.min(8, width / 25); // Stroke thickness
+
+  const completedColor = 'rgb(4, 98, 138)';
+  const pendingColor = 'rgb(219, 219, 219)';
 
   return (
     <View style={{ width, height: height + 50, position: 'relative' }}>
       <Svg width={width} height={height} viewBox={`0 0 ${width} ${height}`}>
-        {/* Connecting Line */}
-        <Path
-          d={`M${circles[0]} ${height / 2} H${circles[circles.length - 1]}`}
-          stroke="rgb(219, 219, 219)"
-          strokeWidth={strokeThickness}
-        />
+        {/* Connecting Lines */}
+        {circles.map((cx, index) => {
+          if (index === circles.length - 1) return null; // Skip last line
+          return (
+            <Path
+              key={`line-${index}`}
+              d={`M${circles[index]} ${height / 2} H${circles[index + 1]}`}
+              stroke={
+                isCompleted || index < (activeIndex ?? -1)
+                  ? completedColor
+                  : pendingColor
+              }
+              strokeWidth={strokeThickness}
+            />
+          );
+        })}
 
         {/* Circles */}
         {circles.map((cx, index) => (
@@ -211,8 +71,16 @@ const Stage = ({ width, height, circles, texts, activeIndex }: StageProps) => {
             cx={cx}
             cy={height / 2}
             r={circleRadius}
-            fill={index === activeIndex ? 'rgb(4, 98, 138)' : 'rgb(219, 219, 219)'}
-            stroke="rgb(219, 219, 219)"
+            fill={
+              isCompleted || index <= (activeIndex ?? -1)
+                ? completedColor
+                : pendingColor
+            }
+            stroke={
+              isCompleted || index <= (activeIndex ?? -1)
+                ? completedColor
+                : pendingColor
+            }
             strokeWidth={2}
           />
         ))}
@@ -225,15 +93,15 @@ const Stage = ({ width, height, circles, texts, activeIndex }: StageProps) => {
           style={{
             position: 'absolute',
             left: item.x - 50,
-            [item.isTop ? 'top' : 'bottom']: item.isTop ? -25 : 10, // Alternate top and bottom positions
+            [item.isTop ? 'top' : 'bottom']: item.isTop ? -30 : 10,
             width: 100,
             alignItems: 'center',
           }}
         >
           <Text
             style={{
-              fontSize: Math.min(13, width / 30), // Responsive font size
-              fontWeight: '600',
+              fontSize: 14,
+              fontWeight: '700',
               color: '#6B7280',
               textAlign: 'center',
             }}
@@ -253,38 +121,57 @@ const ProjectStatusTracker = ({
 }) => {
   const screenWidth = Dimensions.get('window').width;
   const padding = Math.min(16, screenWidth / 30);
+console.log('projectStatus---->',projectStatus);
+  // Helper to find the active section and index
+  const findActiveSection = () => {
+    let sectionIndex = 0;
+    let activeIndex = -1;
 
-  // Helper to find the active index
-  const getActiveIndex = (substatuses: string[], subStatus: string) =>
-    substatuses.indexOf(subStatus);
+    for (const [index, [status, substatuses]] of Object.entries(
+      Object.entries(statuses)
+    )) {
+      const subIndex = substatuses.indexOf(projectStatus.subStatus);
+      if (subIndex !== -1) {
+        sectionIndex = parseInt(index, 10);
+        activeIndex = subIndex;
+        break;
+      }
+    }
 
-  const renderSection = (status: string, substatuses: string[]) => {
-    const maxSubstatuses = Math.max(...Object.values(statuses).map((s) => s.length)); // Max substatuses
-    const minWidth = maxSubstatuses * 55; // Minimum width for sections (reduced arm length)
+    return { sectionIndex, activeIndex };
+  };
 
-    const totalWidth = Math.max(substatuses.length * 60, minWidth); // Reduced arm length
-    const circles = substatuses.map((_, index) => index * 60 + 30); // Reduced circle spacing
+  const { sectionIndex, activeIndex } = findActiveSection();
+
+  const renderSection = (
+    status: string,
+    substatuses: string[],
+    currentIndex: number,
+    isCompleted: boolean
+  ) => {
+    const totalWidth = Math.max(substatuses.length * 60, 200);
+    const circles = substatuses.map((_, index) => index * 60 + 30);
     const texts = substatuses.map((text, index) => ({
       text,
-      x: index * 60 + 30, // Match reduced spacing
-      isTop: index % 2 === 0, // Alternate between top and bottom
+      x: index * 60 + 30,
+      isTop: index % 2 === 0,
     }));
 
     return (
       <View
         key={status}
         style={{
-          marginHorizontal: 20, // Ensure consistent horizontal spacing between sections
+          marginHorizontal: 20,
           alignItems: 'flex-start',
         }}
       >
-        {/* Substatuses */}
         <Stage
           width={totalWidth}
           height={40}
           circles={circles}
           texts={texts}
-          activeIndex={getActiveIndex(substatuses, projectStatus.subStatus)}
+          activeIndex={currentIndex}
+          isCompleted={isCompleted}
         />
       </View>
     );
@@ -293,11 +180,20 @@ const ProjectStatusTracker = ({
   return (
     <ScrollView horizontal showsHorizontalScrollIndicator={false}>
       <View
-        className="flex-row"
-        style={{ flex: 1, paddingHorizontal: padding, paddingTop: 30 }}
+        style={{
+          flex: 1,
+          paddingHorizontal: padding,
+          paddingTop: 30,
+          flexDirection: 'row',
+        }}
       >
-        {Object.entries(statuses).map(([status, substatuses]) =>
-          renderSection(status, substatuses)
+        {Object.entries(statuses).map(([status, substatuses], index) =>
+          renderSection(
+            status,
+            substatuses,
+            index === sectionIndex ? activeIndex : -1,
+            index < sectionIndex
+          )
         )}
       </View>
     </ScrollView>
