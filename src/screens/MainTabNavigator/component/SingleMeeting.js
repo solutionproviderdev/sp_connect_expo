@@ -20,8 +20,8 @@ import {useGetUserbyIDQuery} from '../../../redux/services/api'; // ✅ Import t
 import MeetingCard from './MeetingCard'; // ✅ Import the MeetingCard component
 import {useNavigation} from '@react-navigation/native';
 import Svg, {Circle, Line} from 'react-native-svg';
-import ProgressBar from './ProjecStatus';
-import ProjecStatus from './ProjecStatus';
+import ProgressBar from './projectStatusTrack/ProjecStatus';
+import ProjecStatus from './projectStatusTrack/ProjecStatus';
 
 // ✅ Updated to fetch CRE name
 const CommentItem = ({comment}) => {
@@ -70,8 +70,9 @@ const SingleMeeting = ({route}) => {
   // const meeting = meeting
   const status = meeting?.lead?.projectStatus?.status;
   const subStatus = meeting?.lead?.projectStatus?.subStatus;
+  const leadId = meeting?.lead?._id;
   const {data: user} = useGetUserbyIDQuery(meeting.lead.creName);
- 
+ console.log('meeting is here for lead id ok---->',meeting?.lead?._id);
   return (
     <SafeAreaView style={styles.container} className="bg-spBg p-4">
       {/* Header Section */}
@@ -227,14 +228,15 @@ const SingleMeeting = ({route}) => {
 
         <View className="flex-row items-center justify-center mt-8 ">
           <ProjecStatus
-            projectStatus={{status: status, subStatus: subStatus}}
-          />
+            projectStatus={{status: status, subStatus: subStatus}} 
+            leadId={leadId}
+           />
         </View>
 
         {/* ------------svg project progress bar--------------- */}
 
         {/* Comments Section */}
-        <View className="mt-4">
+        <ScrollView className="mt-4">
           <Text className="text-lg font-extrabold text-black mb-2">
             Comments
           </Text>
@@ -248,7 +250,7 @@ const SingleMeeting = ({route}) => {
               No comments available
             </Text>
           )}
-        </View>
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );
