@@ -16,7 +16,7 @@ import IconP from 'react-native-vector-icons/MaterialIcons';
 import IconE from 'react-native-vector-icons/Entypo';
 import IconF from 'react-native-vector-icons/Feather';
 
-import {useGetUserbyIDQuery} from '../../../redux/services/api'; // ✅ Import the query hook
+import {useGetMeetingByIdQuery, useGetUserbyIDQuery} from '../../../redux/services/api'; // ✅ Import the query hook
 import MeetingCard from './MeetingCard'; // ✅ Import the MeetingCard component
 import {useNavigation} from '@react-navigation/native';
 import Svg, {Circle, Line} from 'react-native-svg';
@@ -26,6 +26,7 @@ import ProjecStatus from './projectStatusTrack/ProjecStatus';
 // ✅ Updated to fetch CRE name
 const CommentItem = ({comment}) => {
   const {data: user, isLoading} = useGetUserbyIDQuery(comment.commentBy);
+  
   const formattedDate = new Date(comment?.date).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -71,34 +72,36 @@ const SingleMeeting = ({route}) => {
   const status = meeting?.lead?.projectStatus?.status;
   const subStatus = meeting?.lead?.projectStatus?.subStatus;
   const leadId = meeting?.lead?._id;
-  const {data: user} = useGetUserbyIDQuery(meeting.lead.creName);
- console.log('meeting is here for lead id ok---->',meeting?.lead?._id);
+  const meetingId = meeting?.lead.meetings[0];
+  const {data: user} = useGetUserbyIDQuery(meeting?.lead?.creName);
+
+  const { data:datas, isLoading, refetch } = useGetMeetingByIdQuery(meetingId);
+
+  // console.log('status update in dataaaas------------------------>', datas?.lead?.name);
   return (
-    <SafeAreaView style={styles.container} className="bg-spBg p-4">
-      {/* Header Section */}
-      <View className="flex-row items-center justify-between px-4 py-2">
-        {/* Menu Icon */}
-        <TouchableOpacity>
-          <Icon name="menu" size={24} color="#000" />
-        </TouchableOpacity>
+    <SafeAreaView style={styles.container} className="bg-spBg p-4 ">
+      <View className="px-4">
+        {/* Header Section */}
+        <View className="flex-row items-center justify-between px-4 py-2">
+          {/* Menu Icon */}
+          <TouchableOpacity>
+            <Icon name="menu" size={24} color="#000" />
+          </TouchableOpacity>
 
-        {/* Search Bar */}
-        <TouchableOpacity className="flex-1 mx-3 flex-row items-center justify-center border border-gray-400 h-10 px-4 rounded-3xl">
-          <Icon name="magnify" size={20} color="#6B7280" />
-          <Text className="text-gray-500 ml-2">Area, Product, Client...</Text>
-        </TouchableOpacity>
+          {/* Search Bar */}
+          <TouchableOpacity className="flex-1 mx-3 flex-row items-center justify-center border border-gray-400 h-10 px-4 rounded-3xl">
+            <Icon name="magnify" size={20} color="#6B7280" />
+            <Text className="text-gray-500 ml-2">Area, Product, Client...</Text>
+          </TouchableOpacity>
 
-        {/* Settings Icon */}
-        <TouchableOpacity>
-          <Image
-            source={require('../../../assets/sp_gear_icon.png')}
-            style={{width: 30, height: 30, borderRadius: 15}}
-          />
-        </TouchableOpacity>
-      </View>
-
-      <ScrollView className="px-4">
-        {/* ✅ Displaying the MeetingCard */}
+          {/* Settings Icon */}
+          <TouchableOpacity>
+            <Image
+              source={require('../../../assets/sp_gear_icon.png')}
+              style={{width: 30, height: 30, borderRadius: 15}}
+            />
+          </TouchableOpacity>
+        </View>
 
         <View className="flex-row items-center justify-between pb-6">
           {/* 🔙 Back Icon */}
@@ -114,6 +117,7 @@ const SingleMeeting = ({route}) => {
           {/* 🔲 Spacer to Balance Layout */}
           <View className="" />
         </View>
+        {/* ✅ Displaying the MeetingCard */}
 
         <View className="flex-row rounded-xl  mb-3">
           {/* Left Section */}
@@ -228,30 +232,30 @@ const SingleMeeting = ({route}) => {
 
         <View className="flex-row items-center justify-center mt-8 ">
           <ProjecStatus
-            projectStatus={{status: status, subStatus: subStatus}} 
+            projectStatus={{status: status, subStatus: subStatus}}
             leadId={leadId}
-           />
+            refetch={refetch}
+          />
         </View>
 
         {/* ------------svg project progress bar--------------- */}
-
+        <Text className="text-lg font-extrabold text-black mb-2">Comments</Text>
+      </View>
+      <ScrollView className="px-4">
         {/* Comments Section */}
-        <ScrollView className="mt-4">
-          <Text className="text-lg font-extrabold text-black mb-2">
-            Comments
-          </Text>
+        {/* <ScrollView className="mt-4"> */}
 
-          {comments?.length > 0 ? (
-            comments?.map((comment, index) => (
-              <CommentItem key={index} comment={comment} />
-            ))
-          ) : (
-            <Text className="text-gray-500 text-center mt-4">
-              No comments available
-            </Text>
-          )}
-        </ScrollView>
+        {comments?.length > 0 ? (
+          comments?.map((comment, index) => (
+            <CommentItem key={index} comment={comment} />
+          ))
+        ) : (
+          <Text className="text-gray-500 text-center mt-4">
+            No comments available
+          </Text>
+        )}
       </ScrollView>
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };

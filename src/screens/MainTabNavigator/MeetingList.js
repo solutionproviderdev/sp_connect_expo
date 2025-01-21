@@ -135,7 +135,7 @@ const MeetingList = () => {
       {isOffline && (
         <View className="bg-yellow-300 p-2 mb-3 rounded-md">
           <Text className="text-yellow-800 text-center">
-            ⚠️ You are offline. 
+            ⚠️ You are offline.
           </Text>
         </View>
       )}
@@ -198,6 +198,15 @@ const MeetingList = () => {
         </TouchableOpacity>
       </View>
 
+      {meetings === undefined && (
+        <View className="w-1/2 mt-12 mx-auto border border-spRed bg-red-300 p-6 rounded-md">
+          <Text className="text-dark text-2xl text-center">
+            ⚠️ Something went wrong !
+          </Text>
+          <Text className="text-dark text-2xl text-center" >Login again ! </Text>
+        </View>
+      )}
+
       {meetings?.length < 1 ? (
         <View className=" mt-24 justify-center items-center bg-white">
           <Text className="text-gray-500 border border-gray-400 px-4 py-2 rounded-lg text-lg">
@@ -214,7 +223,6 @@ const MeetingList = () => {
           }
         />
       )}
-
       {isLoading && (
         <View className="flex-1 justify-center items-center bg-white">
           <ActivityIndicator size="large" color="#0000ff" />

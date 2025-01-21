@@ -273,7 +273,7 @@ const ProjectStatus = ({
   leadId,
 }) => {
   // console.log('ProjectStatus Component Mounted');
-  console.log('Initial props:', { projectStatus, leadId });
+  // console.log('Initial props:', { projectStatus, leadId });
 
   useEffect(() => {
     // console.log('ProjectStatus Effect - Props changed:', { projectStatus, leadId });
@@ -320,16 +320,7 @@ const ProjectStatus = ({
     // console.log('Circle clicked:', { sectionIndex, circleIndex });
     setSelectedSectionIndex(sectionIndex);
     setSelectedCircle(circleIndex);
-    
-    try {
-      const selectedStatus = Object.values(statuses)[sectionIndex][circleIndex];
-      // console.log('Selected status:', selectedStatus);
-      setComment(
-        `This step was changed to "${selectedStatus}" by the account holder on ${new Date().toLocaleDateString()}.`
-      );
-    } catch (error) {
-      console.error('Error in handleCircleClick:', error);
-    }
+
   };
 
   const handleSubmit = async () => {
@@ -351,13 +342,13 @@ const ProjectStatus = ({
           subStatus: selectedStatus,
         },
       }).unwrap();
-      console.log('Update status result:', leadId,"project statuses",projectStatus,"comment------",comment);
+      // console.log('Update status result:', leadId,"project statuses",projectStatus,"comment------",comment);
 
       const commentResult = await addComment({
         leadId,
         comment,
       }).unwrap();
-      console.log('Add comment result:', commentResult);
+      console.log('commentResult--d-d:dd d d d d----->', commentResult,'updateProjectStatus---',result);
 
       setSelectedCircle(null);
       setSelectedSectionIndex(null);
@@ -505,3 +496,10 @@ const ProjectStatus = ({
 
 export default ProjectStatus;
 
+
+
+//i can show comment from saved comment response & projectstatus------------->
+
+// (NOBRIDGE) LOG  commentResult--d-d:dd d d d d-----> {"msg": "Comment added successfully", "savedComment": {"_id": "678f9df2845a5107530a0970", "comment": "Nikita", "commentBy": {"_id": "6772a2c1d109caaa71254840", "nameAsPerNID": "Supto Bala Kumar", "profilePicture": "http://192.168.68.130/api/images/image_1735566009070.png"}, "createdAt": "2025-01-21T13:15:30.642Z", "date": "2025-01-21T13:15:30.639Z", "images": [], "updatedAt": "2025-01-21T13:15:30.642Z"}} commentResult--- {"lead": {"CID": "", "__v": 11, "_id": "6787466ff857b2ee4a659bfe", "address": {"address": "hfhgfh", "area": "Uttara Azompur Farid Market", "district": "Dhaka - North", "division": "Dhaka"}, "botResponded": false, "callLogs": [], "comment": [[Object], [Object], [Object]], "creName": "6772a589d109caaa71267385", "createdAt": "2025-01-15T05:23:00.000Z", "lastMsg": "ম্যামের নাম্বার শেয়ার করা যায়?  
+
+// তাহলে ম্যাম আপনাকে কল দিয়ে  আমাদের সিস্টেম এবং বাজেট সম্পর্কে বিস্তারিত বলতে পারবো।", "meetings": ["678a641bf857b2ee4a7fc381"], "messages": [[Object], [Object], [Object], [O     Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object], [Object]], "messagesSeen": true, "name": "Ni Ki Ta", "pageInfo": {"fbSenderID": "8206886619413898", "pageId": "289500500919707", "pageName": "Solution Provider", "pageProfilePicture": "http://192.168.68.130/api/profile_pictures/289500500919707.jpg"}, "phone": ["01877444434343"], "projectLocation": "Inside", "projectStatus": {"status": "Ongoing", "subStatus": "Plaster"}, "reminder": [], "requirements": ["tv unit"], "source": "Facebook", "status": "Meeting Fixed", "updatedAt": "2025-01-21T13:15:30.473Z"}, "msg": "Lead updated successfully"}

@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -24,7 +24,7 @@ import SearchMeetingScreen from './component/SearchMeeting';
 const HomeScreen = () => {
   const [userId, setUserId] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
-  const [refreshing, setRefreshing] = useState(false); //  
+  const [refreshing, setRefreshing] = useState(false); //
   const [isOffline, setIsOffline] = useState(false);
   const [cachedMeetings, setCachedMeetings] = useState([]);
 
@@ -70,11 +70,27 @@ const HomeScreen = () => {
     refetch,
   } = useGetMeetingsQuery({date: '', userId}, {skip: !userId});
 
+  console.log(meetings);
+
   // ✅ Logout Function
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('token');
-      navigation.reset({index: 0, routes: [{name: 'welcome'}]});
+      // navigation.reset({index: 0, routes: [{name:'welcome'}]});
+
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [
+            {
+              name: 'welcome' // Make sure this matches exactly with your route name
+            },
+          ],
+        })
+      );
+
+
+
     } catch (error) {
       console.error('Error during logout:', error);
     }
@@ -129,7 +145,9 @@ const HomeScreen = () => {
         {/* 🔥 Offline Indicator */}
         {isOffline && (
           <View className="bg-yellow-300 p-2 mb-3 rounded-md">
-            <Text className="text-yellow-800 text-center">⚠️ You are offline.</Text>
+            <Text className="text-yellow-800 text-center">
+              ⚠️ You are offline.
+            </Text>
           </View>
         )}
 
@@ -148,9 +166,7 @@ const HomeScreen = () => {
               })
             }>
             <Icon name="magnify" size={20} color="#6B7280" />
-            <Text className="text-gray-500 ml-2">
-              Area, Product, Client...
-            </Text>
+            <Text className="text-gray-500 ml-2">Area, Product, Client...</Text>
           </TouchableOpacity>
 
           {/* Dropdown Menu */}
@@ -224,6 +240,18 @@ const HomeScreen = () => {
         </View>
         {/* 🔥 Meetings Section */}
         <Text className="text-xl font-extrabold mb-2">Meetings</Text>
+
+        {meetings === undefined && (
+          <View className="w-1/2 mt-12 mx-auto border border-spRed bg-red-300 p-6 rounded-md">
+            <Text className="text-dark text-2xl text-center">
+              ⚠️ Something went wrong !
+            </Text>
+            <Text className="text-dark text-2xl text-center">
+              Login again !
+            </Text>
+          </View>
+        )}
+
         <FlatList
           data={meetings}
           renderItem={renderMeetingCard}

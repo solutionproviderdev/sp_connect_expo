@@ -17,6 +17,8 @@ export const api = createApi({
       return headers;
     },
   }),
+  tagTypes: ['Meeting', 'ProjectStatus', 'Comment', 'Lead'],
+
   endpoints: builder => ({
     login: builder.mutation({
       query: credentials => ({
@@ -28,9 +30,21 @@ export const api = createApi({
     getMeetings: builder.query({
       query: ({date, userId}) =>
         `/meeting?dateRange=${date}&salesExecutiveId=${userId}`,
+      providesTags: (result = []) => [
+        'Meeting',
+        ...result.map(({ lead }) => ({ type: 'Lead', id: lead._id }))
+      ]
     }),
     getMeetingById: builder.query({
       query: id => `/meeting/${id}`,
+      providesTags: (result) => 
+        result ? [
+          { type: 'Meeting', id: result._id },
+          { type: 'Lead', id: result.lead._id },
+          { type: 'ProjectStatus', id: result.lead._id },
+          { type: 'Comment', id: result.lead._id }
+        ] : []
+      // providesTags: (result, error, id) => [{ type: 'Meeting', id }], // Tag the specific meeting
     }),
     getUserbyID: builder.query({
       query: id => `/users/${id}`,
@@ -44,6 +58,12 @@ export const api = createApi({
           projectStatus,
         },
       }),
+      invalidatesTags: (result, error, { leadId }) => [
+        { type: 'Lead', id: leadId },
+        { type: 'ProjectStatus', id: leadId },
+        { type: 'Meeting' }
+      ]
+
     }),
     //add comment endpoind
     addComment: builder.mutation({
@@ -55,6 +75,12 @@ export const api = createApi({
           images,
         },
       }),
+      invalidatesTags: (result, error, { leadId }) => [
+        { type: 'Lead', id: leadId },
+        { type: 'Comment', id: leadId },
+        { type: 'Meeting' }
+      ]
+
     }),
   }),
 });
