@@ -70,7 +70,7 @@ const HomeScreen = () => {
     refetch,
   } = useGetMeetingsQuery({date: '', userId}, {skip: !userId});
 
-  console.log(meetings);
+  // console.log(meetings);
 
   // ✅ Logout Function
   const handleLogout = async () => {
@@ -246,9 +246,9 @@ const HomeScreen = () => {
             <Text className="text-dark text-2xl text-center">
               ⚠️ Something went wrong !
             </Text>
-            <Text className="text-dark text-2xl text-center">
+            {/* <Text className="text-dark text-2xl text-center">
               Login again !
-            </Text>
+            </Text> */}
           </View>
         )}
 

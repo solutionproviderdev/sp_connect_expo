@@ -17,7 +17,7 @@ const WelcomeScreen = () => {
 
   const handleVerify = async () => {
     const token = await AsyncStorage.getItem('token');
-    console.log('Token--||---->', token);
+    // console.log('Token--||---->', token);
     if (token) {
       navigation.reset({index: 0, routes: [{name: 'main'}]});
     } else {

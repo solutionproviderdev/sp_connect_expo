@@ -15,7 +15,7 @@ const authSlice = createSlice({
       state.user = action.payload.user;
     },
     logout: (state) => {
-      console.log("token remove:", state); 
+      // console.log("token remove:", state); 
       state.token = null;
       state.user = null;
     },

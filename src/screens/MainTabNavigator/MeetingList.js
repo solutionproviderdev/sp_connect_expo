@@ -71,6 +71,8 @@ const MeetingList = () => {
   //   }
   // }, [meetings, isOffline]);
 
+  console.log('meeting is here let find with realtime update',meetings);
+
   // ✅ Load cached meetings when offline
   useEffect(() => {
     if (isOffline) {
@@ -98,7 +100,6 @@ const MeetingList = () => {
       onpress={() => navigation.navigate('SingleMeeting', {meeting: item})}
     />
   );
-
   // if (isError) {
   //   return (
   //     <View className="flex-1 justify-center items-center bg-white">
@@ -203,7 +204,7 @@ const MeetingList = () => {
           <Text className="text-dark text-2xl text-center">
             ⚠️ Something went wrong !
           </Text>
-          <Text className="text-dark text-2xl text-center" >Login again ! </Text>
+          {/* <Text className="text-dark text-2xl text-center" >Login again ! </Text> */}
         </View>
       )}
 

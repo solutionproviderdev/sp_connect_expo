@@ -1,4 +1,5 @@
-import React, {useState} from 'react';
+
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,25 +9,20 @@ import {
   TouchableOpacity,
   Image,
   Linking,
-  Alert,
-  Pressable,
+  FlatList,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconP from 'react-native-vector-icons/MaterialIcons';
 import IconE from 'react-native-vector-icons/Entypo';
 import IconF from 'react-native-vector-icons/Feather';
 
-import {useGetMeetingByIdQuery, useGetUserbyIDQuery} from '../../../redux/services/api'; // ✅ Import the query hook
-import MeetingCard from './MeetingCard'; // ✅ Import the MeetingCard component
-import {useNavigation} from '@react-navigation/native';
-import Svg, {Circle, Line} from 'react-native-svg';
-import ProgressBar from './projectStatusTrack/ProjecStatus';
+import { useGetMeetingByIdQuery, useGetUserbyIDQuery } from '../../../redux/services/api';
+import { useNavigation } from '@react-navigation/native';
 import ProjecStatus from './projectStatusTrack/ProjecStatus';
 
-// ✅ Updated to fetch CRE name
-const CommentItem = ({comment}) => {
-  const {data: user, isLoading} = useGetUserbyIDQuery(comment.commentBy);
-  
+const CommentItem = ({ comment }) => {
+  const { data: user } = useGetUserbyIDQuery(comment.commentBy);
+
   const formattedDate = new Date(comment?.date).toLocaleDateString('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -36,17 +32,14 @@ const CommentItem = ({comment}) => {
   const formattedTime = new Date(comment?.date).toLocaleTimeString('en-GB', {
     hour: '2-digit',
     minute: '2-digit',
-    hour12: true, // Shows AM/PM format
+    hour12: true,
   });
 
   return (
     <View className="flex-row items-start mb-4 border-b-2 pb-1 px-2 border-gray-200 rounded-md  ">
-      {/* Avatar */}
       <View className="rounded-full p-1 mr-2 bg-spDepGray">
         <Icon name="account" size={30} color="#fff" />
       </View>
-
-      {/* Comment Content */}
       <View className="flex-1">
         <Text className="text-spDarkGray font-extrabold">
           {user?.nameAsPerNID || 'Unknown'}
@@ -63,38 +56,40 @@ const CommentItem = ({comment}) => {
   );
 };
 
-const SingleMeeting = ({route}) => {
-  const {meeting} = route.params;
+const SingleMeeting = ({ route }) => {
   const navigation = useNavigation();
-
-  const comments = meeting?.lead?.comment || [];
-  // const meeting = meeting
+  const { meeting } = route.params;
+  
+  const [comments, setComments] = useState(meeting?.lead?.comment || []);
+  
   const status = meeting?.lead?.projectStatus?.status;
   const subStatus = meeting?.lead?.projectStatus?.subStatus;
   const leadId = meeting?.lead?._id;
-  const meetingId = meeting?.lead.meetings[0];
-  const {data: user} = useGetUserbyIDQuery(meeting?.lead?.creName);
+  const meetingId = meeting?.lead?.meetings?.[0];
+  
+  const { data: user } = useGetUserbyIDQuery(meeting?.lead?.creName);
+  const { data: meetingData } = useGetMeetingByIdQuery(meetingId);
 
-  const { data:datas, isLoading, refetch } = useGetMeetingByIdQuery(meetingId);
+  // Real-time comment update
+  useEffect(() => {
+    console.log('Comments updated--------<>', meetingData?.lead?.comment.length);
+    setComments(meetingData?.lead?.comment || []);
+  }, [meetingData]);
 
-  // console.log('status update in dataaaas------------------------>', datas?.lead?.name);
   return (
     <SafeAreaView style={styles.container} className="bg-spBg p-4 ">
       <View className="px-4">
         {/* Header Section */}
         <View className="flex-row items-center justify-between px-4 py-2">
-          {/* Menu Icon */}
           <TouchableOpacity>
             <Icon name="menu" size={24} color="#000" />
           </TouchableOpacity>
 
-          {/* Search Bar */}
           <TouchableOpacity className="flex-1 mx-3 flex-row items-center justify-center border border-gray-400 h-10 px-4 rounded-3xl">
             <Icon name="magnify" size={20} color="#6B7280" />
             <Text className="text-gray-500 ml-2">Area, Product, Client...</Text>
           </TouchableOpacity>
 
-          {/* Settings Icon */}
           <TouchableOpacity>
             <Image
               source={require('../../../assets/sp_gear_icon.png')}
@@ -104,25 +99,19 @@ const SingleMeeting = ({route}) => {
         </View>
 
         <View className="flex-row items-center justify-between pb-6">
-          {/* 🔙 Back Icon */}
           <TouchableOpacity onPress={() => navigation.goBack()} className="">
             <IconP name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
 
-          {/* 📝 Centered Title */}
           <View className="">
             <Text className="text-2xl font-extrabold mr-10">Meeting</Text>
           </View>
 
-          {/* 🔲 Spacer to Balance Layout */}
           <View className="" />
         </View>
-        {/* ✅ Displaying the MeetingCard */}
 
         <View className="flex-row rounded-xl  mb-3">
-          {/* Left Section */}
           <View className="flex-1 pr-3 ">
-            {/* Name */}
             <View className="flex-row items-center mb-2">
               <Icon name="account" size={16} color="#6B7280" />
               <Text
@@ -133,7 +122,6 @@ const SingleMeeting = ({route}) => {
               </Text>
             </View>
 
-            {/* Phone */}
             <View className="flex-row items-center mb-2">
               <Icon name="phone" size={16} color="#6B7280" />
               <Text
@@ -143,7 +131,6 @@ const SingleMeeting = ({route}) => {
               </Text>
             </View>
 
-            {/* Address */}
             <View className="flex-row items-center mb-2">
               <Icon name="map-marker" size={16} color="#6B7280" />
               <Text className=" text-gray-600 ml-2 max-w-[180px]">
@@ -152,32 +139,14 @@ const SingleMeeting = ({route}) => {
               </Text>
             </View>
 
-            {/* Status */}
             <View className="flex-row items-center mb-2">
               <Icon name="calendar" size={16} color="#6B7280" />
               <Text className=" font-extrabold text-spRed ml-2">
                 {meeting?.status || 'No Status'}
               </Text>
             </View>
-            <View className="flex-row items-center pt-2">
-              <IconE name="info-with-circle" size={16} color="#6B7280" />
-              {meeting?.lead?.requirements?.length > 0 ? (
-                <View className="flex-row flex-wrap ml-2">
-                  {meeting.lead.requirements.map((requirement, index) => (
-                    <Text
-                      key={index}
-                      className=" text-white bg-spDarkGray px-2 py-1 mr-2 mb-1 rounded-md">
-                      {requirement}
-                    </Text>
-                  ))}
-                </View>
-              ) : (
-                <Text className=" text-gray-400 ml-2">No requirements</Text>
-              )}
-            </View>
           </View>
 
-          {/* Right Section */}
           <View className="items-end gap-2 w-1/3">
             <View className="bg-gray-200 border border-gray-400 mb-1 overflow-hidden w-full">
               <Text className="bg-spDarkGray text-center text-xs font-bold px-2 py-0.5 text-white">
@@ -187,7 +156,7 @@ const SingleMeeting = ({route}) => {
                 MSG123458
               </Text>
             </View>
-            {/* Time and Date */}
+
             <View className="bg-white border border-gray-400 mb-1 rounded-md overflow-hidden w-full">
               <Text className="bg-spRed text-center text-xs font-bold px-2 py-0.5 text-white">
                 {meeting?.slot}
@@ -203,7 +172,6 @@ const SingleMeeting = ({route}) => {
               </Text>
             </View>
 
-            {/* CRE Name */}
             <View className="border border-gray-400 overflow-hidden w-full">
               <Text className="text-center text-xs font-bold px-2 py-0.5 text-gray-800">
                 {user?.nameAsPerNID || 'Unknown CRE'}
@@ -214,8 +182,6 @@ const SingleMeeting = ({route}) => {
             </View>
           </View>
         </View>
-
-        {/* progress */}
 
         <TouchableOpacity
           disabled={!meeting?.lead?.phone?.[0]}
@@ -228,34 +194,27 @@ const SingleMeeting = ({route}) => {
           </Text>
         </TouchableOpacity>
 
-        {/* ------------svg project progress bar--------------- */}
-
         <View className="flex-row items-center justify-center mt-8 ">
           <ProjecStatus
             projectStatus={{status: status, subStatus: subStatus}}
             leadId={leadId}
-            refetch={refetch}
           />
         </View>
 
-        {/* ------------svg project progress bar--------------- */}
         <Text className="text-lg font-extrabold text-black mb-2">Comments</Text>
       </View>
-      <ScrollView className="px-4">
-        {/* Comments Section */}
-        {/* <ScrollView className="mt-4"> */}
 
-        {comments?.length > 0 ? (
-          comments?.map((comment, index) => (
-            <CommentItem key={index} comment={comment} />
-          ))
-        ) : (
+      <FlatList
+        data={comments}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => <CommentItem comment={item} />}
+        ListEmptyComponent={
           <Text className="text-gray-500 text-center mt-4">
             No comments available
           </Text>
-        )}
-      </ScrollView>
-      {/* </ScrollView> */}
+        }
+        contentContainerStyle={{ paddingHorizontal: 16 }}
+      />
     </SafeAreaView>
   );
 };
