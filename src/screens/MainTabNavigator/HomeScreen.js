@@ -16,15 +16,28 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icons from 'react-native-vector-icons/Ionicons';
 
-import {Menu, Provider} from 'react-native-paper';
-import {useGetMeetingsQuery} from '../../redux/services/api';
+import {Avatar, Menu, Provider} from 'react-native-paper';
+import {
+  useGetMeetingsQuery,
+  useGetUserbyIDQuery,
+} from '../../redux/services/api';
 import MeetingCard from './component/MeetingCard';
 import SearchMeetingScreen from './component/SearchMeeting';
+import {navigationRef} from '../../App';
+import {Video} from 'expo-av';
+import ProgressBar from './component/homescreen/ProgressBar';
+import store from '../../redux/store';
+import DoubleCard from './component/homescreen/DoubleCard';
+import Tasks from './component/homescreen/Tasks';
+import TodayMeetings from './component/homescreen/screen/TodayMeetings';
+
+// import { decode } from 'expo-jwt';
+
 
 const HomeScreen = () => {
   const [userId, setUserId] = useState(null);
   const [menuVisible, setMenuVisible] = useState(false);
-  const [refreshing, setRefreshing] = useState(false); //
+  const [refreshing, setRefreshing] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [cachedMeetings, setCachedMeetings] = useState([]);
 
@@ -35,6 +48,7 @@ const HomeScreen = () => {
     const fetchUser = async () => {
       try {
         const user = await AsyncStorage.getItem('user');
+        // console.log('homescreen',user);
         setUserId(user);
       } catch (error) {
         console.error('Failed to retrieve user:', error);
@@ -42,6 +56,11 @@ const HomeScreen = () => {
     };
     fetchUser();
   }, []);
+
+  // Helper function to check token validity
+
+  const {data: userData} = useGetUserbyIDQuery(userId, {skip: !userId});
+  // console.log('user data is here ---------><>', userData);
 
   // ✅ Monitor Network Status
   useEffect(() => {
@@ -70,27 +89,41 @@ const HomeScreen = () => {
     refetch,
   } = useGetMeetingsQuery({date: '', userId}, {skip: !userId});
 
-  // console.log(meetings);
+  // ✅ Fetch Meetings
 
-  // ✅ Logout Function
+  console.log('All Meetings:', meetings?.length);
+
+  const getTodayDate = () => {
+    // Get today's date in ISO format (YYYY-MM-DD)
+    return new Date().toISOString().split('T')[0];
+  };
+
+  // Filter Today's Meetings
+  const todayDate = getTodayDate();
+  const todayMeetings =
+    meetings?.filter(meeting => {
+      // Ensure the date from `meeting.date` matches today's date
+      const meetingDate = new Date(meeting.date).toISOString().split('T')[0];
+      return meetingDate === todayDate;
+    }) || [];
+
+  console.log("Number of Today's Meetings:", todayMeetings?.length);
+
   const handleLogout = async () => {
     try {
+      // Remove the token from AsyncStorage
       await AsyncStorage.removeItem('token');
-      // navigation.reset({index: 0, routes: [{name:'welcome'}]});
 
-      navigation.dispatch(
+      navigationRef.dispatch(
         CommonActions.reset({
           index: 0,
           routes: [
             {
-              name: 'welcome' // Make sure this matches exactly with your route name
+              name: 'welcome', // Point directly to the welcome screen
             },
           ],
-        })
+        }),
       );
-
-
-
     } catch (error) {
       console.error('Error during logout:', error);
     }
@@ -100,26 +133,7 @@ const HomeScreen = () => {
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
-  // 🔄 Pull-to-refresh handler
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
-
-  // ✅ Render Meeting Card
-  const renderMeetingCard = ({item}) => (
-    <MeetingCard
-      item={item}
-      onpress={() =>
-        navigation.navigate('meeting', {
-          screen: 'SingleMeeting',
-          params: {meeting: item},
-        })
-      }
-    />
-  );
-
+ 
   // ✅ Loading State
   if (isLoading) {
     return (
@@ -130,18 +144,10 @@ const HomeScreen = () => {
     );
   }
 
-  // ✅ Error State
-  // if (isError) {
-  //   return (
-  //     <View className="flex-1 justify-center items-center bg-spBg">
-  //       <Text className="text-red-500 text-lg">Error loading meetings!</Text>
-  //     </View>
-  //   );
-  // }
 
   return (
     <Provider>
-      <View className="p-4 flex-1 bg-spBg">
+      <ScrollView className="p-4 flex-1 bg-spBg">
         {/* 🔥 Offline Indicator */}
         {isOffline && (
           <View className="bg-yellow-300 p-2 mb-3 rounded-md">
@@ -152,21 +158,35 @@ const HomeScreen = () => {
         )}
 
         {/* 🔥 Header with Dropdown */}
-        <View className="flex-row items-center justify-between px-4 py-2 bg-spBgSec shadow-sm rounded-lg">
+        <View className="flex-row items-center justify-between px-4 py-2 mt-4 bg-spBg rounded-lg">
           <TouchableOpacity>
-            <Icon name="menu" size={24} color="#000" />
+            <Image
+              source={require('../../assets/sp_gear_icon.png')}
+              style={{width: 30, height: 30, borderRadius: 15}}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
-            className="flex-1 mx-3 flex-row items-center justify-center border border-gray-400 h-10 px-4 rounded-3xl bg-spBgSec shadow-"
+            className="flex-1 mx-3 flex-row items-center justify-center border border-spBlue h-10 px-4 rounded-3xl bg-spBg "
             onPress={() =>
               navigation.navigate('meeting', {
                 screen: 'SearchMeeting',
                 params: {SearchMeetingScreen},
               })
             }>
-            <Icon name="magnify" size={20} color="#6B7280" />
-            <Text className="text-gray-500 ml-2">Area, Product, Client...</Text>
+            <Icon name="magnify" size={22} color="gray" />
+            <View className=" ml-2 flex-row">
+              <Text className="text-xl font-extrabold text-spDarkGray">
+                Find{' '}
+              </Text>
+              <Text className="text-xl font-extrabold text-spBlue">
+                Solutions
+              </Text>
+            </View>
+          </TouchableOpacity>
+          {/* bell */}
+          <TouchableOpacity className="mr-2">
+            <Icon name="bell-badge-outline" size={25} color="rgb(4,98,138)" />
           </TouchableOpacity>
 
           {/* Dropdown Menu */}
@@ -175,9 +195,12 @@ const HomeScreen = () => {
             onDismiss={closeMenu}
             anchor={
               <TouchableOpacity onPress={openMenu}>
-                <Image
-                  source={require('../../assets/sp_gear_icon.png')}
-                  style={{width: 30, height: 30, borderRadius: 15}}
+                <Avatar.Image
+                  size={35}
+                  source={{
+                    uri:
+                      userData?.profilePicture || 'https://via.placeholder.com/35',
+                  }}
                 />
               </TouchableOpacity>
             }
@@ -207,60 +230,94 @@ const HomeScreen = () => {
             />
           </Menu>
         </View>
-        {/* 🔥 Quick Action Cards */}
-        <View className="flex-row items-center justify-around mt-4 mb-4 rounded-xl h-24 bg-spCardGray shadow-red-400 px-2 py-2">
-          {/* for deep shadow */}
-          <TouchableOpacity className="flex-1 h-20 bg-spBg rounded-xl justify-center items-center mx-2 shadow-sm">
-            <View className="bg-spBlue w-10 h-10 rounded-full justify-center items-center">
-              <Icon name={'file-document-outline'} size={20} color="#FFFFFF" />
-            </View>
-            <Text className="text-gray-800 text-xs mt-1">Quotation</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="flex-1 h-20 bg-spBg rounded-xl justify-center items-center mx-2 shadow-sm"
-            onPress={() => navigation.navigate('meeting')}>
-            <View className="bg-spBlue w-10 h-10 rounded-full justify-center items-center">
-              <Icons name={'calendar-outline'} size={20} color="#FFFFFF" />
-            </View>
-            <Text className="text-gray-800 text-xs mt-1">Meetings</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="flex-1 h-20 bg-spBg rounded-xl justify-center items-center mx-2 shadow-sm">
-            <View className="bg-spBlue w-10 h-10 rounded-full justify-center items-center">
-              <Icon name={'phone-in-talk-outline'} size={20} color="#FFFFFF" />
-            </View>
-            <Text className="text-gray-800 text-xs mt-1">Follow-Up</Text>
-          </TouchableOpacity>
-          <TouchableOpacity className="flex-1 h-20 bg-spBg rounded-xl justify-center items-center mx-2 shadow-sm">
-            <View className="bg-spBlue w-10 h-10 rounded-full justify-center items-center">
-              <Icon name={'account-outline'} size={20} color="#FFFFFF" />
-            </View>
-            <Text className="text-gray-800 text-xs mt-1">Clients</Text>
-          </TouchableOpacity>
-          {/* ))} */}
-        </View>
-        {/* 🔥 Meetings Section */}
-        <Text className="text-xl font-extrabold mb-2">Meetings</Text>
 
-        {meetings === undefined && (
-          <View className="w-1/2 mt-12 mx-auto border border-spRed bg-red-300 p-6 rounded-md">
-            <Text className="text-dark text-2xl text-center">
-              ⚠️ Something went wrong !
+
+
+
+
+
+
+
+        <View className="flex-row items-center justify-around">
+          <View>
+            <Text className="text-3xl font-bold text-spBlue">
+              Welcome Back, <Text className='text-yellow-600'>{userData?.nickname}</Text> !
             </Text>
-            {/* <Text className="text-dark text-2xl text-center">
-              Login again !
-            </Text> */}
+            <Text className="text-5xl font-bold text-spBlue">
+              Start Your Day
+            </Text>
+            <Text className="text-5xl font-bold text-spBlue">
+              & Be Productive
+            </Text>
           </View>
-        )}
+          <View>
+            <Image source={require('../../assets/orrangeEmojie.gif')} />
+          </View>
+        </View>
 
-        <FlatList
-          data={meetings}
-          renderItem={renderMeetingCard}
-          keyExtractor={item => item._id}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-          }
-        />
-      </View>
+        <View className="flex-row items-center justify-between px-8 py-6 bg-spNavGray shadow-yellow-600 drop-shadow-lg rounded-full">
+          <Icon name="comment-text-outline" size={40} color="rgb(4,98,138)" />
+          <View>
+            <Text className="text-4xl font-extrabold">
+              <Text className="text-spBlue">You have </Text>
+              <Text className="text-black">17</Text>
+              <Text className="text-spBlue"> tasks today</Text>
+            </Text>
+          </View>
+          <Icon name="eye-outline" size={40} color="rgb(4,98,138)" />
+        </View>
+
+        {/* section 3 */}
+
+        {/* <Tasks meeting={todayMeetings} /> */}
+        <Tasks meeting={meetings} user={userData} />
+
+        <DoubleCard />
+
+        {/* sales target */}
+        <View className="flex-1 gap-y-10 mt-6 ">
+          <View className="border-2 border-spBlue w-full mx-auto">
+            {/* Header Row */}
+            <View className="flex-row items-center justify-between bg-gray-100 border-b-2 border-spBlue">
+              <View className="flex-row items-center justify-center w-1/2 border-r-2 border-spBlue">
+                <Text className="  text-spBlue  font-bold text-3xl ">
+                  SALES TARGET
+                </Text>
+              </View>
+              <View className="flex-row items-center justify-center w-1/2 border-spBlue">
+                <Text className="text-spBlue font-bold text-3xl ">
+                  12,00,000/-
+                </Text>
+              </View>
+            </View>
+
+            {/* <View> */}
+            <ProgressBar completed={870000} total={1200000} />
+            {/* </View> */}
+          </View>
+
+          {/* collection target */}
+          <View className="border-2 border-spBlue w-full mx-auto">
+            {/* Header Row */}
+            <View className="flex-row items-center justify-between bg-gray-100 border-b-2 border-spBlue">
+              <View className="flex-row items-center justify-center w-1/2 border-r-2 border-spBlue">
+                <Text className="  text-spBlue  font-bold text-3xl ">
+                  COLLECTION TARGET
+                </Text>
+              </View>
+              <View className="flex-row items-center justify-center w-1/2  border-spBlue">
+                <Text className="text-spBlue font-bold text-3xl ">
+                  12,00,000/-
+                </Text>
+              </View>
+            </View>
+
+            {/* <View> */}
+            <ProgressBar completed={170000} total={1200000} />
+            {/* </View> */}
+          </View>
+        </View>
+      </ScrollView>
     </Provider>
   );
 };

@@ -10,7 +10,6 @@ export const api = createApi({
       if (!token) {
         token = await AsyncStorage.getItem('token');
       }
-
       if (token) {
         headers.set('Authorization', `Bearer ${token}`);
       }

@@ -96,6 +96,12 @@ import { createNavigationContainerRef } from '@react-navigation/native';
 // ✅ Create a global navigation reference
 export const navigationRef = createNavigationContainerRef();
 
+export const navigate = (name, params) => {
+  if (navigationRef.isReady()) {
+    navigationRef.navigate(name, params);
+  }
+};
+
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const appState = useRef(AppState.currentState);

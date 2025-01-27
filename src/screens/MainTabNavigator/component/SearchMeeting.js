@@ -1,16 +1,22 @@
-
-
-import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, Platform, ActivityIndicator } from 'react-native';
+import {StatusBar} from 'expo-status-bar';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+  Platform,
+  ActivityIndicator,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MeetingCard from './MeetingCard';
-import { useGetMeetingsQuery } from '../../../redux/services/api';
-import { useNavigation } from '@react-navigation/native';
+import {useGetMeetingsQuery} from '../../../redux/services/api';
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SearchMeetingScreen = ({ route }) => {
-  const { meetings } = route.params; // Initial suggestions
+const SearchMeetingScreen = ({route}) => {
+  const {meetings} = route.params; // Initial suggestions
 
   const [userId, setUserId] = useState(null);
   const navigation = useNavigation();
@@ -33,10 +39,11 @@ const SearchMeetingScreen = ({ route }) => {
   }, []);
 
   // ✅ Fetch All Meetings
-  const { data: allMeetings, isLoading, isError } = useGetMeetingsQuery(
-    { date: '', userId },
-    { skip: !userId }
-  );
+  const {
+    data: allMeetings,
+    isLoading,
+    isError,
+  } = useGetMeetingsQuery({date: '', userId}, {skip: !userId});
 
   // ✅ Show initial suggestions from route.params
   useEffect(() => {
@@ -47,7 +54,7 @@ const SearchMeetingScreen = ({ route }) => {
   }, [meetings]);
 
   // ✅ Handle Search Logic
-  const handleSearch = (text) => {
+  const handleSearch = text => {
     setQuery(text);
     if (text.trim() === '') {
       // Show initial suggestions if search is empty
@@ -55,26 +62,27 @@ const SearchMeetingScreen = ({ route }) => {
     } else if (allMeetings?.length) {
       // Filter through all meetings
       const searchText = text.toLowerCase();
-      const filtered = allMeetings.filter((meeting) =>
-        meeting.lead?.name?.toLowerCase().includes(searchText) ||
-        meeting.lead?.phone?.[0]?.toLowerCase().includes(searchText) ||
-        meeting.salesExecutive?.nickname?.toLowerCase().includes(searchText)
+      const filtered = allMeetings.filter(
+        meeting =>
+          meeting.lead?.name?.toLowerCase().includes(searchText) ||
+          meeting.lead?.phone?.[0]?.toLowerCase().includes(searchText) ||
+          meeting.salesExecutive?.nickname?.toLowerCase().includes(searchText),
       );
       setFilteredMeetings(filtered);
     }
   };
 
   // ✅ Render Meeting Card
-  const renderMeetingCard = ({ item }) => (
-<MeetingCard
-    item={item}
-    onpress={() =>
-      navigation.navigate('meeting', {
-        screen: 'SingleMeeting',
-        params: {meeting: item},
-      })
-    }
-  />
+  const renderMeetingCard = ({item}) => (
+    <MeetingCard
+      item={item}
+      onpress={() =>
+        navigation.navigate('meeting', {
+          screen: 'SingleMeeting',
+          params: {meeting: item},
+        })
+      }
+    />
   );
 
   return (
@@ -82,14 +90,20 @@ const SearchMeetingScreen = ({ route }) => {
       <StatusBar style="dark" />
 
       {/* ✅ Search Input */}
-      <View className="flex-row items-center border border-gray-300 rounded-lg px-3 p-2 mb-4 bg-white">
-        <Icon name="magnify" size={20} color="#6B7280" />
-        <TextInput
-          className="flex-1 text-base text-gray-800 ml-2"
-          placeholder="Search by name, phone, or sales executive..."
-          value={query}
-          onChangeText={handleSearch}
-        />
+      <View className="flex-row ">
+        {/* <TouchableOpacity onpress={() => navigation.navigate('Meetinglist')} > */}
+        <TouchableOpacity onPress={() => navigation.navigate('Meetinglist')}>
+          <Text className="p-2 rounded bg-spGreen text-spRed">back</Text>
+        </TouchableOpacity>
+        <View className="flex-row w-11/12 mx-auto items-center border border-gray-300 rounded-lg px-3 p-2 mb-4 bg-white">
+          <Icon name="magnify" size={20} color="#6B7280" />
+          <TextInput
+            className="flex-1 text-base text-gray-800 ml-2"
+            placeholder="Search by name, phone, or sales executive..."
+            value={query}
+            onChangeText={handleSearch}
+          />
+        </View>
       </View>
 
       {/* ✅ Loading Indicator */}
@@ -101,7 +115,9 @@ const SearchMeetingScreen = ({ route }) => {
           keyExtractor={(item, index) => item._id || index.toString()}
           renderItem={renderMeetingCard}
           ListEmptyComponent={
-            <Text className="text-center text-gray-500 mt-4">No results found</Text>
+            <Text className="text-center text-gray-500 mt-4">
+              No results found
+            </Text>
           }
         />
       )}

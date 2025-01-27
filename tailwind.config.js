@@ -10,7 +10,7 @@ module.exports = {
     // TODO: These are from the previous project, need to be updated
     extend: {
       colors: {
-        spBg: 'rgb(250, 250, 250)',
+        spBg: 'rgb(255, 254, 246)',
         spCardGray: 'rgb(235, 235, 230)',
         spBgSec: 'rgb(255, 255, 255)',
         spDarkGray: 'rgb(107, 107, 104)',
@@ -18,6 +18,7 @@ module.exports = {
         spRed: 'rgb(140, 19, 0)',
         spBlue: 'rgb(4, 98, 138)',
         spNavGray: 'rgb(227, 226, 220)',
+        spGreen:'#67A74A',
         primary: {
           50: '#EDF3FF',
           100: '#DFE7FF',

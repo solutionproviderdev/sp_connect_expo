@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -16,12 +15,16 @@ import IconP from 'react-native-vector-icons/MaterialIcons';
 import IconE from 'react-native-vector-icons/Entypo';
 import IconF from 'react-native-vector-icons/Feather';
 
-import { useGetMeetingByIdQuery, useGetUserbyIDQuery } from '../../../redux/services/api';
-import { useNavigation } from '@react-navigation/native';
+import {
+  useGetMeetingByIdQuery,
+  useGetUserbyIDQuery,
+} from '../../../redux/services/api';
+import {useNavigation} from '@react-navigation/native';
 import ProjecStatus from './projectStatusTrack/ProjecStatus';
+import {ActivityIndicator} from 'react-native-paper';
 
-const CommentItem = ({ comment }) => {
-  const { data: user } = useGetUserbyIDQuery(comment.commentBy);
+const CommentItem = ({comment}) => {
+  const {data: user} = useGetUserbyIDQuery(comment.commentBy);
 
   const formattedDate = new Date(comment?.date).toLocaleDateString('en-GB', {
     day: '2-digit',
@@ -56,23 +59,24 @@ const CommentItem = ({ comment }) => {
   );
 };
 
-const SingleMeeting = ({ route }) => {
+const SingleMeeting = ({route}) => {
   const navigation = useNavigation();
-  const { meeting } = route.params;
-  
+  const {meeting} = route.params;
+
   const [comments, setComments] = useState(meeting?.lead?.comment || []);
-  
+
   const status = meeting?.lead?.projectStatus?.status;
   const subStatus = meeting?.lead?.projectStatus?.subStatus;
   const leadId = meeting?.lead?._id;
   const meetingId = meeting?.lead?.meetings?.[0];
-  
-  const { data: user } = useGetUserbyIDQuery(meeting?.lead?.creName);
-  const { data: meetingData } = useGetMeetingByIdQuery(meetingId);
+
+  const {data: user} = useGetUserbyIDQuery(meeting?.lead?.creName);
+  const {data: meetingData} = useGetMeetingByIdQuery(meetingId);
 
   // Real-time comment update
   useEffect(() => {
-    console.log('Comments updated--------<>', meetingData?.lead?.comment.length);
+    // console.log('Comments updated--------<>', meetingData?.lead?.comment.length);
+    console.log('Comments updated--------<>', comments.length);
     setComments(meetingData?.lead?.comment || []);
   }, [meetingData]);
 
@@ -207,13 +211,13 @@ const SingleMeeting = ({ route }) => {
       <FlatList
         data={comments}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <CommentItem comment={item} />}
+        renderItem={({item}) => <CommentItem comment={item} />}
         ListEmptyComponent={
-          <Text className="text-gray-500 text-center mt-4">
-            No comments available
+          <Text className="flex-row justify-center items-center text-gray-500 text-center mt-4">
+            <ActivityIndicator size="large" color="#0000ff" />
           </Text>
         }
-        contentContainerStyle={{ paddingHorizontal: 16 }}
+        contentContainerStyle={{paddingHorizontal: 16}}
       />
     </SafeAreaView>
   );

@@ -6,7 +6,7 @@ import {useGetUserbyIDQuery} from '../../../redux/services/api';
 
 const MeetingCard = ({item, onpress}) => {
   const {data: user} = useGetUserbyIDQuery(item.lead.creName);
-  // console.log('salmankahhar----------',user?.nameAsPerNID);
+  // console.log('salmankahhar----------',item);
   return (
     <TouchableOpacity onPress={onpress} activeOpacity={0.8}>
       <View className="flex-row items-start rounded-xl p-2 mb-3 border border-gray-300">
