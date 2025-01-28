@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Tasks = ({meeting,user}) => {
+const Tasks = ({meeting,user,isLoading}) => {
     const navigation=useNavigation()
     // console.log('Tasks--->',user);
   return (
@@ -21,7 +21,7 @@ const Tasks = ({meeting,user}) => {
           </View>
           <TouchableOpacity>
             <Text className="text-spDarkGray text-2xl font-extrabold"
-            onPress={() => navigation.navigate('todayMeetings',{ meeting, user })} 
+            onPress={() => navigation.navigate('todayMeetings',{ user, })} 
             >See All {'>'}</Text>
           </TouchableOpacity>
         </View>

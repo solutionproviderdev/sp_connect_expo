@@ -132,18 +132,16 @@ const HomeScreen = () => {
   // ✅ Dropdown Menu Handlers
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
-
  
   // ✅ Loading State
-  if (isLoading) {
-    return (
-      <View className="flex-1 justify-center items-center bg-spBg">
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text className="text-gray-600 mt-2">Welcome...</Text>
-      </View>
-    );
-  }
-
+  // if (isLoading) {
+  //   return (
+  //     <View className="flex-1 justify-center items-center bg-spBg">
+  //       <ActivityIndicator size="large" color="#0000ff" />
+  //       <Text className="text-gray-600 mt-2">Welcome...</Text>
+  //     </View>
+  //   );
+  // }
 
   return (
     <Provider>
@@ -230,14 +228,7 @@ const HomeScreen = () => {
             />
           </Menu>
         </View>
-
-
-
-
-
-
-
-
+ 
         <View className="flex-row items-center justify-around">
           <View>
             <Text className="text-3xl font-bold text-spBlue">
@@ -270,7 +261,8 @@ const HomeScreen = () => {
         {/* section 3 */}
 
         {/* <Tasks meeting={todayMeetings} /> */}
-        <Tasks meeting={meetings} user={userData} />
+        {/* <Tasks meeting={meetings} user={userData} isLoading={isLoading} /> */}
+        <Tasks meeting={meetings} user={userData} isLoading={isLoading} />
 
         <DoubleCard />
 

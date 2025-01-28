@@ -44,7 +44,7 @@ const MeetingList = () => {
   const [filteredMeetings, setFilteredMeetings] = useState([]);
 
   const navigation = useNavigation();
-console.log('dateRange',dateRange);
+// console.log('dateRange',dateRange);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -59,14 +59,14 @@ console.log('dateRange',dateRange);
   }, []);
 
   const { data: userData } = useGetUserbyIDQuery(userId, { skip: !userId });
-console.log('userData---->',userData);
+// console.log('userData---->',userData);
   const {
     data: meetings,
     isLoading,
     isError,
     refetch,
   } = useGetMeetingsQuery({ date: '', userId: userId }, { skip: !userId });
-console.log('meetings',meetings);
+// console.log('meetings',meetings);
   useEffect(() => {
     if (meetings) {
       applyFilters();
@@ -85,7 +85,7 @@ console.log('meetings',meetings);
       const endDate = dayjs(dateRange.endDate);
       filtered = filtered.filter(meeting => {
         const meetingDate = dayjs(meeting.date)
-        console.log('meetingDate----->',meetingDate);
+        // console.log('meetingDate----->',meetingDate);
         return meetingDate?.isBetween(startDate, endDate, 'day', '[]');
       });
     }

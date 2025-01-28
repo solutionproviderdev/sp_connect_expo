@@ -22,48 +22,13 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import ProjecStatus from './projectStatusTrack/ProjecStatus';
 import {ActivityIndicator} from 'react-native-paper';
+import SingleMeetingComment from './SingleMeetingComment';
 
-const CommentItem = ({comment}) => {
-  const {data: user} = useGetUserbyIDQuery(comment.commentBy);
-
-  const formattedDate = new Date(comment?.date).toLocaleDateString('en-GB', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  });
-
-  const formattedTime = new Date(comment?.date).toLocaleTimeString('en-GB', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  });
-
-  return (
-    <View className="flex-row items-start mb-4 border-b-2 pb-1 px-2 border-gray-200 rounded-md  ">
-      <View className="rounded-full p-1 mr-2 bg-spDepGray">
-        <Icon name="account" size={30} color="#fff" />
-      </View>
-      <View className="flex-1">
-        <Text className="text-spDarkGray font-extrabold">
-          {user?.nameAsPerNID || 'Unknown'}
-        </Text>
-        <Text className="text-spDarkGray text-sm">{comment?.comment}</Text>
-      </View>
-      <View>
-        <Text className="text-gray-400 text-xs mt-1 ">{formattedDate}</Text>
-        <Text className="text-gray-400 text-xs mt-1 text-right">
-          {formattedTime}
-        </Text>
-      </View>
-    </View>
-  );
-};
+import SkeletonLoading from 'expo-skeleton-loading';
 
 const SingleMeeting = ({route}) => {
   const navigation = useNavigation();
   const {meeting} = route.params;
-
-  const [comments, setComments] = useState(meeting?.lead?.comment || []);
 
   const status = meeting?.lead?.projectStatus?.status;
   const subStatus = meeting?.lead?.projectStatus?.subStatus;
@@ -71,17 +36,15 @@ const SingleMeeting = ({route}) => {
   const meetingId = meeting?.lead?.meetings?.[0];
 
   const {data: user} = useGetUserbyIDQuery(meeting?.lead?.creName);
-  const {data: meetingData} = useGetMeetingByIdQuery(meetingId);
 
-  // Real-time comment update
-  useEffect(() => {
-    // console.log('Comments updated--------<>', meetingData?.lead?.comment.length);
-    console.log('Comments updated--------<>', comments.length);
-    setComments(meetingData?.lead?.comment || []);
-  }, [meetingData]);
+  const {data: meetingData, isLoading} = useGetMeetingByIdQuery(meetingId);
+
+  const comments = meetingData?.lead?.comment || [];
+  const skeleton = Array(7).fill(0);
+  console.log('skeletong   --------<>', skeleton);
 
   return (
-    <SafeAreaView style={styles.container} className="bg-spBg p-4 ">
+    <View style={styles.container} className="bg-spBg p-4 pb-16">
       <View className="px-4">
         {/* Header Section */}
         <View className="flex-row items-center justify-between px-4 py-2">
@@ -102,16 +65,17 @@ const SingleMeeting = ({route}) => {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row items-center justify-between pb-6">
-          <TouchableOpacity onPress={() => navigation.goBack()} className="">
-            <IconP name="arrow-back" size={24} color="black" />
+        <View className="flex-row items-center justify-between pb-4">
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image
+              source={require('../../../assets/backArrowImg.png')}
+              style={{width: 55, height: 40}}
+            />
           </TouchableOpacity>
-
-          <View className="">
-            <Text className="text-2xl font-extrabold mr-10">Meeting</Text>
-          </View>
-
-          <View className="" />
+          <Text className="text-3xl font-extrabold text-spBlue">
+            TODAY MEETINGS
+          </Text>
+          <Text></Text>
         </View>
 
         <View className="flex-row rounded-xl  mb-3">
@@ -208,18 +172,92 @@ const SingleMeeting = ({route}) => {
         <Text className="text-lg font-extrabold text-black mb-2">Comments</Text>
       </View>
 
-      <FlatList
-        data={comments}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item}) => <CommentItem comment={item} />}
-        ListEmptyComponent={
-          <Text className="flex-row justify-center items-center text-gray-500 text-center mt-4">
-            <ActivityIndicator size="large" color="#0000ff" />
-          </Text>
-        }
-        contentContainerStyle={{paddingHorizontal: 16}}
-      />
-    </SafeAreaView>
+      {isLoading ? (
+        <ScrollView>
+          {skeleton.map((_, index) => (
+            <SkeletonLoading
+              key={index}
+              background={'#adadad'}
+              highlight={'#ffffff'}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: 10,
+                }}>
+                {/* Left Section: Avatar */}
+                <View
+                  style={{
+                    width: 60,
+                    height: 60,
+                    backgroundColor: '#adadad',
+                    borderRadius: 30,
+                  }}
+                />
+
+                {/* Middle Section: Two Lines */}
+                <View style={{flex: 1, marginLeft: 20}}>
+                  <View
+                    style={{
+                      backgroundColor: '#adadad',
+                      width: '70%',
+                      height: 10,
+                      marginBottom: 6,
+                      borderRadius: 5,
+                    }}
+                  />
+                  <View
+                    style={{
+                      backgroundColor: '#adadad',
+                      width: '50%',
+                      height: 10,
+                      borderRadius: 5,
+                    }}
+                  />
+                </View>
+
+                {/* Right Section: Two Small Lines */}
+                <View style={{justifyContent: 'space-between', height: 20}}>
+                  <View
+                    style={{
+                      backgroundColor: '#adadad',
+                      width: 80,
+                      height: 10,
+                      marginBottom: 8,
+                      borderRadius: 5,
+                    }}
+                  />
+                  <View
+                    style={{
+                      backgroundColor: '#adadad',
+                      width: 70,
+                      height: 8,
+                      marginLeft: 10,
+                      borderRadius: 5,
+                    }}
+                  />
+                </View>
+              </View>
+            </SkeletonLoading>
+          ))}
+        </ScrollView>
+      ) : (
+        <FlatList
+          data={comments}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item}) => <SingleMeetingComment comment={item} />}
+          ListEmptyComponent={
+            <View className="flex-row justify-center items-center">
+              <Text className="text-gray-500 text-center mt-4">
+                No Comments Available
+              </Text>
+            </View>
+          }
+          contentContainerStyle={{paddingHorizontal: 16}}
+        />
+      )}
+    </View>
   );
 };
 
