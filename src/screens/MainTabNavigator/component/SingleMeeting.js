@@ -41,10 +41,10 @@ const SingleMeeting = ({route}) => {
 
   const comments = meetingData?.lead?.comment || [];
   const skeleton = Array(7).fill(0);
-  console.log('skeletong   --------<>', skeleton);
+  // console.log('skeletong   --------<>', skeleton);
 
   return (
-    <View style={styles.container} className="bg-spBg p-4 pb-16">
+    <View style={styles.container} className="bg-spBg p-4">
       <View className="px-4">
         {/* Header Section */}
         <View className="flex-row items-center justify-between px-4 py-2">
@@ -254,8 +254,8 @@ const SingleMeeting = ({route}) => {
               </Text>
             </View>
           }
-          contentContainerStyle={{paddingHorizontal: 16}}
-        />
+          contentContainerStyle={{paddingBottom: 50}}
+         />
       )}
     </View>
   );

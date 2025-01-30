@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {CommonActions, useNavigation} from '@react-navigation/native';
+import {CommonActions, createNavigationContainerRef, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -33,6 +33,7 @@ import TodayMeetings from './component/homescreen/screen/TodayMeetings';
 
 // import { decode } from 'expo-jwt';
 
+// const navigationRef = createNavigationContainerRef();
 
 const HomeScreen = () => {
   const [userId, setUserId] = useState(null);
@@ -42,6 +43,8 @@ const HomeScreen = () => {
   const [cachedMeetings, setCachedMeetings] = useState([]);
 
   const navigation = useNavigation();
+
+
 
   // ✅ Fetch User ID from AsyncStorage
   useEffect(() => {
@@ -91,7 +94,7 @@ const HomeScreen = () => {
 
   // ✅ Fetch Meetings
 
-  console.log('All Meetings:', meetings?.length);
+  // console.log('All Meetings:', meetings?.length);
 
   const getTodayDate = () => {
     // Get today's date in ISO format (YYYY-MM-DD)
@@ -107,7 +110,7 @@ const HomeScreen = () => {
       return meetingDate === todayDate;
     }) || [];
 
-  console.log("Number of Today's Meetings:", todayMeetings?.length);
+  // console.log("Number of Today's Meetings:", todayMeetings?.length);
 
   const handleLogout = async () => {
     try {
@@ -119,7 +122,7 @@ const HomeScreen = () => {
           index: 0,
           routes: [
             {
-              name: 'welcome', // Point directly to the welcome screen
+              name: 'welcome',  
             },
           ],
         }),
@@ -133,16 +136,6 @@ const HomeScreen = () => {
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
  
-  // ✅ Loading State
-  // if (isLoading) {
-  //   return (
-  //     <View className="flex-1 justify-center items-center bg-spBg">
-  //       <ActivityIndicator size="large" color="#0000ff" />
-  //       <Text className="text-gray-600 mt-2">Welcome...</Text>
-  //     </View>
-  //   );
-  // }
-
   return (
     <Provider>
       <ScrollView className="p-4 flex-1 bg-spBg">

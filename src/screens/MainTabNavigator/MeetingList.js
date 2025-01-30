@@ -30,6 +30,7 @@ import { useNavigation } from '@react-navigation/native';
 import dayjs from 'dayjs';
 
 import isBetween from 'dayjs/plugin/isBetween';
+import MeetingCardSkeleton from './component/homescreen/MeetingCardSkeleton';
 dayjs.extend(isBetween);
 
 
@@ -67,6 +68,7 @@ const MeetingList = () => {
     refetch,
   } = useGetMeetingsQuery({ date: '', userId: userId }, { skip: !userId });
 // console.log('meetings',meetings);
+// const isLoading=true
   useEffect(() => {
     if (meetings) {
       applyFilters();
@@ -121,7 +123,7 @@ const MeetingList = () => {
 
   return (
     <Provider>
-      <View className="flex-1 bg-spBg p-4 pb-20">
+      <View className="flex-1 bg-spBg p-4 ">
         {/* Header */}
         <View className="flex-row items-center justify-between px-4 py-2 mt-4 bg-spBg rounded-lg">
           <TouchableOpacity>
@@ -177,12 +179,12 @@ const MeetingList = () => {
                 <Icon name="account-circle-outline" size={20} color="black" />
               )}
             />
-            <Menu.Item
+            {/* <Menu.Item
               onPress={closeProfileMenu}
               title="Logout"
               titleStyle={{ color: '#000000' }}
               leadingIcon={() => <Icon name="logout" size={20} color="red" />}
-            />
+            /> */}
           </Menu>
         </View>
 
@@ -298,12 +300,10 @@ const MeetingList = () => {
           </Portal>
         </View>
 
-        {filteredMeetings.length < 1 ? (
-          <View className="mt-24 justify-center items-center bg-white">
-            <Text className="text-gray-500 border border-gray-400 px-4 py-2 rounded-lg text-lg">
-              There is no meeting with the selected criteria.
-            </Text>
-          </View>
+        {isLoading ? (
+ 
+          <MeetingCardSkeleton />
+
         ) : (
           <FlatList
             data={filteredMeetings}
@@ -315,14 +315,8 @@ const MeetingList = () => {
                 onRefresh={handleRefresh}
               />
             }
+            contentContainerStyle={{ paddingBottom: 50 }}
           />
-        )}
-
-        {isLoading && (
-          <View className="flex-1 justify-center items-center bg-white">
-            <ActivityIndicator size="large" color="#0000ff" />
-            <Text className="text-gray-600 mt-2">Loading Meetings...</Text>
-          </View>
         )}
       </View>
     </Provider>

@@ -43,8 +43,7 @@ export const api = createApi({
           { type: 'ProjectStatus', id: result.lead._id },
           { type: 'Comment', id: result.lead._id }
         ] : []
-      // providesTags: (result, error, id) => [{ type: 'Meeting', id }], // Tag the specific meeting
-    }),
+     }),
     getUserbyID: builder.query({
       query: id => `/users/${id}`,
     }),

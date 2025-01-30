@@ -1,18 +1,43 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Image, FlatList, ScrollView} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import {Avatar, Menu, Provider} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeMeetingCard from '../HomeMeetingCard';
 import {CommonActions, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {navigationRef} from '../../../../../App';
-import { useGetMeetingsQuery } from '../../../../../redux/services/api';
+import {useGetMeetingsQuery} from '../../../../../redux/services/api';
 import SkeletonLoading from 'expo-skeleton-loading';
-
+import MeetingCardSkeleton from '../MeetingCardSkeleton';
 
 const TodayMeetings = ({route}) => {
   const {user} = route?.params || {}; // Extract passed data
-  const {data: meeting, isLoading} = useGetMeetingsQuery();
+  const userId = user?._id;
+  // console.log('user is here----->',user._id);
+  const today = new Date();
+  const todayDate = today.toISOString().split('T')[0]; // Extract YYYY-MM-DD part
+  const dateRange = `${todayDate}_${todayDate}`;
+
+ console.log('todayDate----->',dateRange);
+  const {
+    data: meetings,
+    isLoading,
+    isError,
+    refetch,
+  } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
+
+  const sortedMeetings = meetings?.slice().sort((a, b) => 
+    new Date(b.createdAt) - new Date(a.createdAt) // Newest first
+  );
+
+  console.log('meeting, isLoading----->', meetings, isLoading);
 
   const navigation = useNavigation();
   // State for dropdown menu
@@ -46,7 +71,7 @@ const TodayMeetings = ({route}) => {
 
   return (
     <Provider>
-      <View className="flex-1 bg-spBg p-4 pb-24">
+      <View className="flex-1 bg-spBg p-4">
         {/* Header */}
         <View className="flex-row items-center justify-between px-4 py-2 mt-4 bg-spBg rounded-lg">
           <TouchableOpacity>
@@ -82,8 +107,8 @@ const TodayMeetings = ({route}) => {
                   size={35}
                   source={{
                     uri: user?.profilePicture
-                      ? user.profilePicture // Use profile photo if available
-                      : 'https://via.placeholder.com/35', // Fallback to placeholder image
+                      ? user.profilePicture  
+                      : 'https://via.placeholder.com/35', 
                   }}
                 />
               </TouchableOpacity>
@@ -128,187 +153,15 @@ const TodayMeetings = ({route}) => {
         {/* Meetings Section */}
 
         {isLoading ? (
-          
-<ScrollView>
-  {Array(7)
-    .fill(0)
-    .map((_, index) => (
-      <SkeletonLoading
-        key={index}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'flex-start',
-          padding: 16,
-          marginTop: 16,
-          borderRadius: 12,
-          borderWidth: 1,
-          borderColor: '#D1D5DB',
-          backgroundColor: '#F3F4F6',
-        }}
-      >
-        {/* Left Section */}
-        <View style={{ flex: 1, paddingRight: 16 }}>
-          {/* Name */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-            <View
-              style={{
-                width: 16,
-                height: 16,
-                backgroundColor: '#E5E7EB',
-                borderRadius: 8,
-                marginRight: 8,
-              }}
-            />
-            <View
-              style={{
-                backgroundColor: '#E5E7EB',
-                height: 20,
-                width: '50%',
-                borderRadius: 5,
-              }}
-            />
-          </View>
-
-          {/* Address */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-            <View
-              style={{
-                width: 16,
-                height: 16,
-                backgroundColor: '#E5E7EB',
-                borderRadius: 8,
-                marginRight: 8,
-              }}
-            />
-            <View
-              style={{
-                backgroundColor: '#E5E7EB',
-                height: 20,
-                width: '70%',
-                borderRadius: 5,
-              }}
-            />
-          </View>
-
-          {/* Status */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 8 }}>
-            <View
-              style={{
-                width: 16,
-                height: 16,
-                backgroundColor: '#E5E7EB',
-                borderRadius: 8,
-                marginRight: 8,
-              }}
-            />
-            <View
-              style={{
-                backgroundColor: '#E5E7EB',
-                height: 20,
-                width: '40%',
-                borderRadius: 5,
-              }}
-            />
-          </View>
-
-          {/* Tags */}
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: 8 }}>
-            <View
-              style={{
-                width: 16,
-                height: 16,
-                backgroundColor: '#E5E7EB',
-                borderRadius: 8,
-                marginRight: 8,
-              }}
-            />
-            <View
-              style={{
-                backgroundColor: '#E5E7EB',
-                height: 20,
-                width: '30%',
-                borderRadius: 5,
-                marginBottom: 8,
-              }}
-            />
-          </View>
-
-          {/* Accept/Pass Buttons */}
-          <View style={{ flexDirection: 'row', marginTop: 16, gap: 16 }}>
-            <View
-              style={{
-                flex: 1,
-                height: 40,
-                backgroundColor: '#E5E7EB',
-                borderRadius: 20,
-              }}
-            />
-            <View
-              style={{
-                flex: 1,
-                height: 40,
-                backgroundColor: '#E5E7EB',
-                borderRadius: 20,
-              }}
-            />
-          </View>
-        </View>
-
-        {/* Right Section */}
-        <View style={{ width: '33%', alignItems: 'flex-end' }}>
-          {/* CID */}
-          <View
-            style={{
-              backgroundColor: '#E5E7EB',
-              height: 20,
-              width: '100%',
-              borderRadius: 5,
-              marginBottom: 8,
-            }}
+          <MeetingCardSkeleton />
+        ) : (
+          <FlatList
+            data={sortedMeetings}
+            renderItem={renderMeetingCard}
+            keyExtractor={item => item._id.toString()}
+            contentContainerStyle={{paddingBottom: 60}}
           />
-          {/* Time and Date */}
-          <View
-            style={{
-              backgroundColor: '#E5E7EB',
-              height: 20,
-              width: '80%',
-              borderRadius: 5,
-              marginBottom: 8,
-            }}
-          />
-          {/* CRE and Visit Charge */}
-          <View
-            style={{
-              backgroundColor: '#E5E7EB',
-              height: 20,
-              width: '70%',
-              borderRadius: 5,
-              marginBottom: 8,
-            }}
-          />
-        </View>
-      </SkeletonLoading>
-    ))}
-</ScrollView>
-
-
-
-            ) : (
-<FlatList
-          data={meeting}
-          renderItem={renderMeetingCard}
-          keyExtractor={item => item._id.toString()}
-          ListEmptyComponent={
-            <View className="flex-1 justify-center items-center">
-              <Text className="text-gray-500 text-lg">
-                No meetings available.
-              </Text>
-            </View>
-          }
-        />
-
-            )}
-
+        )}
       </View>
     </Provider>
   );

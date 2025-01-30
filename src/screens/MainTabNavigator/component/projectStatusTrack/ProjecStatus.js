@@ -44,7 +44,7 @@ const ProjectStatus = ({projectStatus: initialStatus, leadId}) => {
   // console.log('ProjectStatus Component Mounted');
   // console.log('Initial props:', { projectStatus, leadId });
   useEffect(() => {
-    console.log('ProjectStatus is:', projectStatus, leadId);
+    // console.log('ProjectStatus is:', projectStatus, leadId);
   }, [projectStatus, leadId]);
 
   const screenWidth = Dimensions.get('window').width;

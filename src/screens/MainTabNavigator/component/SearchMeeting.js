@@ -119,6 +119,7 @@ const SearchMeetingScreen = ({route}) => {
               No results found
             </Text>
           }
+          contentContainerStyle={{ paddingBottom: 40 }}
         />
       )}
     </View>

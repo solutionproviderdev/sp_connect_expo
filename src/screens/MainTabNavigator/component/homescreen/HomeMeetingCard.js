@@ -1,35 +1,28 @@
-
-
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import IconE from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeMeetingCard = ({item}) => {
-//   console.log('HomeMeetingCard--<><>', item);
-const navigation=useNavigation()
+  //   console.log('HomeMeetingCard--<><>', item);
+  const navigation = useNavigation();
   // Extract the necessary data
-  const {
-    lead,
-    slot,
-    date,
-    salesExecutive,
-    visitCharge,
-  } = item || {};
+  const {lead, slot, date, salesExecutive, visitCharge} = item || {};
   const {name, address, requirements} = lead || {};
   const {area, district} = address || {};
 
   return (
-    <TouchableOpacity className="flex-row items-start rounded-xl p-4 mt-4 border border-gray-300 bg-spCardGray"
-    onPress={() =>  
-    navigation.navigate('meeting', {
-      screen: 'SingleMeeting',  
-      params: { meeting: item },  
-    })
-  }
-  
-    // onPress={() => console.log('onpress onpress---->')}
+    <TouchableOpacity
+      className="flex-row items-start rounded-xl p-4 mt-4 border border-gray-300 bg-spCardGray"
+      onPress={() =>
+        navigation.navigate('meeting', {
+          screen: 'SingleMeeting',
+          params: {meeting: item},
+        })
+      }
+
+      // onPress={() => console.log('onpress onpress---->')}
     >
       {/* Left Section */}
       <View className="flex-1 pr-3">
@@ -78,10 +71,14 @@ const navigation=useNavigation()
         {/* Accept/Pass Buttons */}
         <View className="flex-row mt-4 gap-4">
           <TouchableOpacity className="flex-1 bg-spGreen py-2 rounded-full">
-            <Text className="text-white text-center font-bold text-xl">ACCEPT</Text>
+            <Text className="text-white text-center font-bold text-xl">
+              ACCEPT
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity className="flex-1 bg-spRed py-2 rounded-full">
-            <Text className="text-white text-center font-bold text-xl">PASS</Text>
+            <Text className="text-white text-center font-bold text-xl">
+              PASS
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
