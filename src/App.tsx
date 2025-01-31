@@ -27,7 +27,7 @@ const App = () => {
   const appState = useRef(AppState.currentState);
   
  
-  usePreventScreenCapture();
+  // usePreventScreenCapture();
 
   // ✅ Check login status on app load
   useEffect(() => {
