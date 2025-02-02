@@ -25,6 +25,7 @@ import {ActivityIndicator} from 'react-native-paper';
 import SingleMeetingComment from './SingleMeetingComment';
 
 import SkeletonLoading from 'expo-skeleton-loading';
+import {getDeviceType} from '../HomeScreen';
 
 const SingleMeeting = ({route}) => {
   const navigation = useNavigation();
@@ -42,9 +43,12 @@ const SingleMeeting = ({route}) => {
   const comments = meetingData?.lead?.comment || [];
   const skeleton = Array(7).fill(0);
   // console.log('skeletong   --------<>', skeleton);
+  const deviceType = getDeviceType();
 
+  console.log('deviceType singlemeeting <->', deviceType);
   return (
-    <View style={styles.container} className="bg-spBg p-4">
+    <View className="bg-spBg p-4">
+      {/* <ScrollView horizontal={false}> */}
       <View className="px-4">
         {/* Header Section */}
         <View className="flex-row items-center justify-between px-4 py-2">
@@ -67,15 +71,31 @@ const SingleMeeting = ({route}) => {
 
         <View className="flex-row items-center justify-between pb-4">
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={require('../../../assets/backArrowImg.png')}
-              style={{width: 55, height: 40}}
-            />
+            {deviceType === 'tablet' ? (
+              <Image
+                source={require('../../../assets/backArrowImg.png')}
+                style={{width: 55, height: 40}}
+              />
+            ) : (
+              <Image
+                source={require('../../../assets/backArrowImg.png')}
+                style={{width: 40, height: 25}}
+              />
+            )}
           </TouchableOpacity>
-          <Text className="text-3xl font-extrabold text-spBlue">
+
+          {/* <Text className="text-3xl font-extrabold text-spBlue">
+            TODAY MEETINGS
+          </Text> */}
+          <Text
+            className={`${
+              deviceType === 'tablet'
+                ? 'text-3xl font-extrabold text-spBlue '
+                : 'text-xl text-spBlue font-extraboldm p-0'
+            }`}>
             TODAY MEETINGS
           </Text>
-          <Text></Text>
+          <Text />
         </View>
 
         <View className="flex-row rounded-xl  mb-3">
@@ -255,8 +275,9 @@ const SingleMeeting = ({route}) => {
             </View>
           }
           contentContainerStyle={{paddingBottom: 50}}
-         />
+        />
       )}
+      {/* </ScrollView> */}
     </View>
   );
 };

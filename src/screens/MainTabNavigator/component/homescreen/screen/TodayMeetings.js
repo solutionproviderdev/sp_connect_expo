@@ -16,6 +16,7 @@ import {navigationRef} from '../../../../../App';
 import {useGetMeetingsQuery} from '../../../../../redux/services/api';
 import SkeletonLoading from 'expo-skeleton-loading';
 import MeetingCardSkeleton from '../MeetingCardSkeleton';
+import {getDeviceType} from '../../../HomeScreen';
 
 const TodayMeetings = ({route}) => {
   const {user} = route?.params || {}; // Extract passed data
@@ -24,8 +25,10 @@ const TodayMeetings = ({route}) => {
   const today = new Date();
   const todayDate = today.toISOString().split('T')[0]; // Extract YYYY-MM-DD part
   const dateRange = `${todayDate}_${todayDate}`;
+  const deviceType = getDeviceType();
 
- console.log('todayDate----->',dateRange);
+  // console.log('deviceType from today meeting----->', deviceType);
+  //  console.log('todayDate----->',dateRange);
   const {
     data: meetings,
     isLoading,
@@ -33,11 +36,11 @@ const TodayMeetings = ({route}) => {
     refetch,
   } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
 
-  const sortedMeetings = meetings?.slice().sort((a, b) => 
-    new Date(b.createdAt) - new Date(a.createdAt) // Newest first
+  const sortedMeetings = meetings?.slice().sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt), // Newest first
   );
 
-  console.log('meeting, isLoading----->', meetings, isLoading);
+  // console.log('meeting, isLoading----->', meetings, isLoading);
 
   const navigation = useNavigation();
   // State for dropdown menu
@@ -107,8 +110,8 @@ const TodayMeetings = ({route}) => {
                   size={35}
                   source={{
                     uri: user?.profilePicture
-                      ? user.profilePicture  
-                      : 'https://via.placeholder.com/35', 
+                      ? user.profilePicture
+                      : 'https://via.placeholder.com/35',
                   }}
                 />
               </TouchableOpacity>
@@ -138,16 +141,35 @@ const TodayMeetings = ({route}) => {
           </Menu>
         </View>
         {/*  back button  */}
-        <View className="flex-row items-center justify-between py-4">
+        <View
+        className={`${
+          deviceType === 'tablet'
+            ? 'flex-row items-center justify-between px-4'
+            : 'flex-row items-center justify-between'
+        }`}
+        >
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Image
-              source={require('../../../../../assets/backArrowImg.png')}
-              style={{width: 55, height: 40}}
-            />
+            {deviceType === 'tablet' ? (
+              <Image
+                source={require('../../../../../assets/backArrowImg.png')}
+                style={{width: 55, height: 40}}
+              />
+            ) : (
+              <Image
+                source={require('../../../../../assets/backArrowImg.png')}
+                style={{width: 40, height: 25}}
+              />
+            )}
           </TouchableOpacity>
-          <Text className="text-3xl font-extrabold text-spBlue">
+          <Text
+            className={`${
+              deviceType === 'tablet'
+                ? 'text-3xl font-extrabold text-spBlue'
+                : 'text-xl text-spBlue font-extrabold'
+            }`}>
             TODAY MEETINGS
           </Text>
+
           <Text></Text>
         </View>
         {/* Meetings Section */}

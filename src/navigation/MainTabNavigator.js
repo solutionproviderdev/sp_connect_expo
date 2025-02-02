@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Alert,
   Animated,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   View,
   Text,
+  Keyboard,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { CurvedBottomBarExpo } from 'react-native-curved-bottom-bar';
@@ -13,6 +14,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MeetingStack from './MeetingStack';
 import HomeStack from './HomeStack';
 import { navigationRef } from '../App';
+
+ 
 
 const Screen1 = () => (
   <View style={styles.screen1}>
@@ -31,6 +34,8 @@ const Screen3 = () => (
     <Text>Screen 3</Text>
   </View>
 );
+
+
 
 export default function MainTabNavigator() {
   const handleTabPress = (routeName, selectedTab, navigate) => {
@@ -88,7 +93,12 @@ export default function MainTabNavigator() {
     </TouchableOpacity>
   );
 
+
+ 
+
+
   return (
+    
     <CurvedBottomBarExpo.Navigator
       type="DOWN"
       screenOptions={{
@@ -141,7 +151,7 @@ export default function MainTabNavigator() {
         position="RIGHT"
       />
     </CurvedBottomBarExpo.Navigator>
-  );
+   );
 }
 
 const styles = StyleSheet.create({
