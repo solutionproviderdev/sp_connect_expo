@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useGetUserbyIDQuery } from '../../../redux/services/api';
 
 const SingleMeetingComment = ({comment}) => {
+  // console.log('comment ',comment);
   const {data: user} = useGetUserbyIDQuery(comment.commentBy);
 
   const formattedDate = new Date(comment?.date).toLocaleDateString('en-GB', {

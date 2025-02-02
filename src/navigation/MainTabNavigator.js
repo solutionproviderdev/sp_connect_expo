@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Animated,
@@ -7,15 +7,15 @@ import {
   View,
   Text,
   Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { CurvedBottomBarExpo } from 'react-native-curved-bottom-bar';
+import {useNavigation} from '@react-navigation/native';
+import {CurvedBottomBarExpo} from 'react-native-curved-bottom-bar';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import MeetingStack from './MeetingStack';
 import HomeStack from './HomeStack';
-import { navigationRef } from '../App';
-
- 
+import {navigationRef} from '../App';
 
 const Screen1 = () => (
   <View style={styles.screen1}>
@@ -35,8 +35,6 @@ const Screen3 = () => (
   </View>
 );
 
-
-
 export default function MainTabNavigator() {
   const handleTabPress = (routeName, selectedTab, navigate) => {
     if (selectedTab === routeName) return; // Don't do anything if pressing the same tab
@@ -44,12 +42,12 @@ export default function MainTabNavigator() {
     switch (routeName) {
       case 'home':
         navigationRef.navigate('home', {
-          screen: 'homes'
+          screen: 'homes',
         });
         break;
       case 'meeting':
         navigationRef.navigate('meeting', {
-          screen: 'Meetinglist'
+          screen: 'Meetinglist',
         });
         break;
       case 'add':
@@ -85,79 +83,74 @@ export default function MainTabNavigator() {
     );
   };
 
-  const renderTabBar = ({ routeName, selectedTab, navigate }) => (
+  const renderTabBar = ({routeName, selectedTab, navigate}) => (
     <TouchableOpacity
       onPress={() => handleTabPress(routeName, selectedTab, navigate)}
-      style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       {_renderIcon(routeName, selectedTab)}
     </TouchableOpacity>
   );
 
-
- 
-
-
   return (
-    
-    <CurvedBottomBarExpo.Navigator
-      type="DOWN"
-      screenOptions={{
-        headerShown: false,
-      }}
-      style={styles.bottomBar}
-      shadowStyle={styles.shadow}
-      height={55}
-      circleWidth={50}
-      bgColor="#D9D9D9"
-      initialRouteName="home"
-      borderTopLeftRight
-      renderCircle={({ selectedTab, navigate }) => (
-        <Animated.View style={styles.btnCircleUp}>
-          <TouchableOpacity
-            onPress={() => Alert.alert('Center Button Clicked!')}>
-            <Ionicons name="add-outline" size={50} color="white" />
-          </TouchableOpacity>
-        </Animated.View>
-      )}
-      tabBar={renderTabBar}>
-      <CurvedBottomBarExpo.Screen
-        name="home"
-        component={HomeStack}
-        options={{ unmountOnBlur: true }}
-        position="LEFT"
-      />
-      <CurvedBottomBarExpo.Screen
-        name="meeting"
-        component={MeetingStack}
-        options={{ unmountOnBlur: true }}
-        position="LEFT"
-      />
-      <CurvedBottomBarExpo.Screen
-        name="add"
-        component={Screen1}
-        options={{ unmountOnBlur: true }}
-        position="CIRCLE"
-      />
-      <CurvedBottomBarExpo.Screen
-        name="search"
-        component={Screen2}
-        options={{ unmountOnBlur: true }}
-        position="RIGHT"
-      />
-      <CurvedBottomBarExpo.Screen
-        name="profile"
-        component={Screen3}
-        options={{ unmountOnBlur: true }}
-        position="RIGHT"
-      />
-    </CurvedBottomBarExpo.Navigator>
+      <CurvedBottomBarExpo.Navigator
+         type="DOWN"
+        screenOptions={{
+          headerShown: false,
+        }}
+        style={styles.bottomBar}
+        shadowStyle={styles.shadow}
+        height={55}
+        circleWidth={50}
+        bgColor="#D9D9D9"
+        initialRouteName="home"
+        borderTopLeftRight
+        renderCircle={({selectedTab, navigate}) => (
+          <Animated.View style={styles.btnCircleUp}>
+            <TouchableOpacity
+              onPress={() => Alert.alert('Center Button Clicked!')}>
+              <Ionicons name="add-outline" size={50} color="white" />
+            </TouchableOpacity>
+          </Animated.View>
+        )}
+        tabBar={renderTabBar}>
+        <CurvedBottomBarExpo.Screen
+          name="home"
+          component={HomeStack}
+          options={{unmountOnBlur: true}}
+          position="LEFT"
+        />
+        <CurvedBottomBarExpo.Screen
+          name="meeting"
+          component={MeetingStack}
+          options={{unmountOnBlur: true}}
+          position="LEFT"
+        />
+        <CurvedBottomBarExpo.Screen
+          name="add"
+          component={Screen1}
+          options={{unmountOnBlur: true}}
+          position="CIRCLE"
+        />
+        <CurvedBottomBarExpo.Screen
+          name="search"
+          component={Screen2}
+          options={{unmountOnBlur: true}}
+          position="RIGHT"
+        />
+        <CurvedBottomBarExpo.Screen
+          name="profile"
+          component={Screen3}
+          options={{unmountOnBlur: true}}
+          position="RIGHT"
+        />
+      </CurvedBottomBarExpo.Navigator>
    );
 }
 
 const styles = StyleSheet.create({
   shadow: {
     shadowColor: '#DDDDDD',
-    shadowOffset: { width: 0, height: 0 },
+    shadowOffset: {width: 0, height: 0},
     shadowOpacity: 1,
     shadowRadius: 5,
   },
@@ -170,7 +163,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(4, 98, 138)',
     bottom: 30,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 1,
@@ -199,22 +192,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#D3D3D3',
   },
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // no one preve
 
@@ -290,7 +267,6 @@ const styles = StyleSheet.create({
 //     );
 //   };
 
-
 //   const renderTabBar = ({ routeName, selectedTab, navigate }) => (
 //     <TouchableOpacity
 //     onPress={() => navigate(routeName)}
@@ -298,8 +274,6 @@ const styles = StyleSheet.create({
 //     {_renderIcon(routeName, selectedTab)}
 //   </TouchableOpacity>
 //   );
-
-  
 
 //   return (
 //        <CurvedBottomBarExpo.Navigator
@@ -402,11 +376,3 @@ const styles = StyleSheet.create({
 //     backgroundColor: '#D3D3D3',
 //   },
 // });
-
-
-
-
-
-
-
-

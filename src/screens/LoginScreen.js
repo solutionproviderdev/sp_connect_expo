@@ -24,6 +24,8 @@ const LoginScreen = () => {
   const [login, {isLoading}] = useLoginMutation();
   const dispatch = useDispatch();
 
+  const [error, setError] = useState(null)
+
   const handleLogin = async () => {
     try {
       const response = await login({email, password}).unwrap();
@@ -38,6 +40,7 @@ const LoginScreen = () => {
 
       navigation.reset({index: 0, routes: [{name: 'main'}]});
     } catch (error) {
+      setError(error?.data?.msg)
       console.error('Login failed:', error);
     }
   };
@@ -66,14 +69,19 @@ const LoginScreen = () => {
               placeholder="Email"
               value={email}
               onChangeText={setEmail}
-              className="w-full h-12 px-4 rounded-xl bg-gray-50 text-gray-800"
+              // className="w-full h-12 px-4 rounded-xl bg-gray-50 text-gray-800"
+              className={`w-full h-12 px-4 rounded-xl bg-gray-50 text-gray-800 ${
+                error ? 'border border-red-500' : ''
+              }`}
             />
             <TextInput
               placeholder="Password"
               secureTextEntry
               value={password}
               onChangeText={setPassword}
-              className="w-full h-12 px-4 mt-4 rounded-xl bg-gray-50 text-gray-800"
+              className={`w-full h-12 px-4 mt-4 rounded-xl bg-gray-50 text-gray-800 ${
+                error ? 'border border-red-500' : ''
+              }`}
             />
           </View>
 
@@ -100,11 +108,14 @@ const LoginScreen = () => {
           {/* Login Button */}
           <TouchableOpacity
             onPress={handleLogin}
-            className="bg-spBlue w-full h-14 rounded-full flex items-center justify-center my-6">
+            className="bg-spBlue w-full h-14 rounded-full flex items-center justify-center mt-4">
             <Text className=" text-white text-2xl font-extrabold">
               {isLoading ? 'Logging in...' : 'Log In'}
             </Text>
           </TouchableOpacity>
+            <Text className=" text-red-500 text-center pt-1">
+             {error}
+            </Text>
         </View>
 
         {/* Footer Text */}

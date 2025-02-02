@@ -9,6 +9,10 @@ import {
   Image,
   Linking,
   FlatList,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconP from 'react-native-vector-icons/MaterialIcons';
@@ -47,57 +51,55 @@ const SingleMeeting = ({route}) => {
 
   console.log('deviceType singlemeeting <->', deviceType);
   return (
-    <View className="bg-spBg p-4">
-      {/* <ScrollView horizontal={false}> */}
-      <View className="px-4">
-        {/* Header Section */}
-        <View className="flex-row items-center justify-between px-4 py-2">
-          <TouchableOpacity>
-            <Icon name="menu" size={24} color="#000" />
-          </TouchableOpacity>
+    <View className="bg-spBg p-4" style={{flex: 1}}>
+      {/* Header Section */}
+      <View className="flex-row items-center justify-between px-4 py-2">
+        <TouchableOpacity>
+          <Icon name="menu" size={24} color="#000" />
+        </TouchableOpacity>
 
-          <TouchableOpacity className="flex-1 mx-3 flex-row items-center justify-center border border-gray-400 h-10 px-4 rounded-3xl">
-            <Icon name="magnify" size={20} color="#6B7280" />
-            <Text className="text-gray-500 ml-2">Area, Product, Client...</Text>
-          </TouchableOpacity>
+        <TouchableOpacity className="flex-1 mx-3 flex-row items-center justify-center border border-gray-400 h-10 px-4 rounded-3xl">
+          <Icon name="magnify" size={20} color="#6B7280" />
+          <Text className="text-gray-500 ml-2">Area, Product, Client...</Text>
+        </TouchableOpacity>
 
-          <TouchableOpacity>
+        <TouchableOpacity>
+          <Image
+            source={require('../../../assets/sp_gear_icon.png')}
+            style={{width: 30, height: 30, borderRadius: 15}}
+          />
+        </TouchableOpacity>
+      </View>
+
+      <View className="flex-row items-center justify-between pb-4">
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          {deviceType === 'tablet' ? (
             <Image
-              source={require('../../../assets/sp_gear_icon.png')}
-              style={{width: 30, height: 30, borderRadius: 15}}
+              source={require('../../../assets/backArrowImg.png')}
+              style={{width: 55, height: 40}}
             />
-          </TouchableOpacity>
-        </View>
+          ) : (
+            <Image
+              source={require('../../../assets/backArrowImg.png')}
+              style={{width: 40, height: 25}}
+            />
+          )}
+        </TouchableOpacity>
 
-        <View className="flex-row items-center justify-between pb-4">
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            {deviceType === 'tablet' ? (
-              <Image
-                source={require('../../../assets/backArrowImg.png')}
-                style={{width: 55, height: 40}}
-              />
-            ) : (
-              <Image
-                source={require('../../../assets/backArrowImg.png')}
-                style={{width: 40, height: 25}}
-              />
-            )}
-          </TouchableOpacity>
-
-          {/* <Text className="text-3xl font-extrabold text-spBlue">
+        {/* <Text className="text-3xl font-extrabold text-spBlue">
             TODAY MEETINGS
           </Text> */}
-          <Text
-            className={`${
-              deviceType === 'tablet'
-                ? 'text-3xl font-extrabold text-spBlue '
-                : 'text-xl text-spBlue font-extraboldm p-0'
-            }`}>
-            TODAY MEETINGS
-          </Text>
-          <Text />
-        </View>
-
+        <Text
+          className={`${
+            deviceType === 'tablet'
+              ? 'text-3xl font-extrabold text-spBlue '
+              : 'text-xl text-spBlue font-extraboldm p-0'
+          }`}>
+          TODAY MEETINGS
+        </Text>
+        <Text />
+      </View>
+      <ScrollView className="" contentContainerStyle={{flexGrow: 1}}>
         <View className="flex-row rounded-xl  mb-3">
           <View className="flex-1 pr-3 ">
             <View className="flex-row items-center mb-2">
@@ -190,94 +192,102 @@ const SingleMeeting = ({route}) => {
         </View>
 
         <Text className="text-lg font-extrabold text-black mb-2">Comments</Text>
-      </View>
+        {/* </View> */}
 
-      {isLoading ? (
-        <ScrollView>
-          {skeleton.map((_, index) => (
-            <SkeletonLoading
-              key={index}
-              background={'#adadad'}
-              highlight={'#ffffff'}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  padding: 10,
-                }}>
-                {/* Left Section: Avatar */}
+        {isLoading ? (
+          <ScrollView>
+            {skeleton.map((_, index) => (
+              <SkeletonLoading
+                key={index}
+                background={'#adadad'}
+                highlight={'#ffffff'}>
                 <View
                   style={{
-                    width: 60,
-                    height: 60,
-                    backgroundColor: '#adadad',
-                    borderRadius: 30,
-                  }}
-                />
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: 10,
+                  }}>
+                  {/* Left Section: Avatar */}
+                  <View
+                    style={{
+                      width: 60,
+                      height: 60,
+                      backgroundColor: '#adadad',
+                      borderRadius: 30,
+                    }}
+                  />
 
-                {/* Middle Section: Two Lines */}
-                <View style={{flex: 1, marginLeft: 20}}>
-                  <View
-                    style={{
-                      backgroundColor: '#adadad',
-                      width: '70%',
-                      height: 10,
-                      marginBottom: 6,
-                      borderRadius: 5,
-                    }}
-                  />
-                  <View
-                    style={{
-                      backgroundColor: '#adadad',
-                      width: '50%',
-                      height: 10,
-                      borderRadius: 5,
-                    }}
-                  />
-                </View>
+                  {/* Middle Section: Two Lines */}
+                  <View style={{flex: 1, marginLeft: 20}}>
+                    <View
+                      style={{
+                        backgroundColor: '#adadad',
+                        width: '70%',
+                        height: 10,
+                        marginBottom: 6,
+                        borderRadius: 5,
+                      }}
+                    />
+                    <View
+                      style={{
+                        backgroundColor: '#adadad',
+                        width: '50%',
+                        height: 10,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
 
-                {/* Right Section: Two Small Lines */}
-                <View style={{justifyContent: 'space-between', height: 20}}>
-                  <View
-                    style={{
-                      backgroundColor: '#adadad',
-                      width: 80,
-                      height: 10,
-                      marginBottom: 8,
-                      borderRadius: 5,
-                    }}
-                  />
-                  <View
-                    style={{
-                      backgroundColor: '#adadad',
-                      width: 70,
-                      height: 8,
-                      marginLeft: 10,
-                      borderRadius: 5,
-                    }}
-                  />
+                  {/* Right Section: Two Small Lines */}
+                  <View style={{justifyContent: 'space-between', height: 20}}>
+                    <View
+                      style={{
+                        backgroundColor: '#adadad',
+                        width: 80,
+                        height: 10,
+                        marginBottom: 8,
+                        borderRadius: 5,
+                      }}
+                    />
+                    <View
+                      style={{
+                        backgroundColor: '#adadad',
+                        width: 70,
+                        height: 8,
+                        marginLeft: 10,
+                        borderRadius: 5,
+                      }}
+                    />
+                  </View>
                 </View>
-              </View>
-            </SkeletonLoading>
-          ))}
-        </ScrollView>
-      ) : (
-        <FlatList
-          data={comments}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({item}) => <SingleMeetingComment comment={item} />}
-          ListEmptyComponent={
-            <View className="flex-row justify-center items-center">
-              <Text className="text-gray-500 text-center mt-4">
-                No Comments Available
-              </Text>
-            </View>
-          }
-          contentContainerStyle={{paddingBottom: 50}}
-        />
-      )}
-      {/* </ScrollView> */}
+              </SkeletonLoading>
+            ))}
+          </ScrollView>
+        ) : (
+          // <FlatList
+          //   data={comments}
+          //   keyExtractor={(item, index) => index.toString()}
+          //   renderItem={({item}) => <SingleMeetingComment comment={item} />}
+          //    ListEmptyComponent={
+          //     <View className="flex-row justify-center items-center">
+          //       <Text className="text-gray-500 text-center mt-4">
+          //         No Comments Available
+          //       </Text>
+          //     </View>
+          //   }
+          //   contentContainerStyle={{paddingBottom: 120}}
+          // />
+          <View  
+          className={`${deviceType === 'tablet' ? 'pb-20': 'pb-12'}`}
+          >
+            {comments.map(item => (
+              <SingleMeetingComment key={item?._id} comment={item} />
+            ))}
+          </View>
+        )}
+        {/* </ScrollView> */}
+      </ScrollView>
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import NetInfo from '@react-native-community/netinfo';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   CommonActions,
@@ -79,14 +79,6 @@ const HomeScreen = () => {
   const {data: userData} = useGetUserbyIDQuery(userId, {skip: !userId});
   // console.log('user data is here ---------><>', userData);
 
-  // ✅ Monitor Network Status
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      setIsOffline(!state.isConnected);
-    });
-    return () => unsubscribe();
-  }, []);
-
   // ✅ Load Cached Data When Offline
   useEffect(() => {
     if (isOffline) {
@@ -112,7 +104,7 @@ const HomeScreen = () => {
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('user');
 
-      navigation.reset({
+      navigationRef.reset({
         index: 0,
         routes: [{name: 'welcome'}],
       });
@@ -127,16 +119,8 @@ const HomeScreen = () => {
 
   return (
     <Provider>
-      {/* 🔥 Offline Indicator */}
-      {isOffline && (
-        <View className="bg-yellow-300 p-2 mb-3 rounded-md">
-          <Text className="text-yellow-800 text-center">
-            ⚠️ You are offline.
-          </Text>
-        </View>
-      )}
-      {/* 🔥 Header with Dropdown */}
-      <View className="flex-row items-center justify-between px-4 pt-4 mt-2 bg-spBg rounded-lg">
+       {/* 🔥 Header with Dropdown */}
+      <View className="flex-row items-center justify-between px-4 pt-2 mt-8 bg-spBg rounded-lg">
         <TouchableOpacity>
           <Image
             source={require('../../assets/sp_gear_icon.png')}
