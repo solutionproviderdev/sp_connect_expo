@@ -34,22 +34,58 @@ import {getDeviceType} from '../HomeScreen';
 const SingleMeeting = ({route}) => {
   const navigation = useNavigation();
   const {meeting} = route.params;
+  // console.log('singlemeeting meeting', meeting?.lead?._id);
 
-  const status = meeting?.lead?.projectStatus?.status;
-  const subStatus = meeting?.lead?.projectStatus?.subStatus;
-  const leadId = meeting?.lead?._id;
-  const meetingId = meeting?.lead?.meetings?.[0];
+  const status = meeting?.lead?.projectStatus?.status || 'Unknown';
+  const subStatus = meeting?.lead?.projectStatus?.subStatus || 'Unknown';
+  const leadId = meeting?.lead?._id || '';
+  const meetingId = meeting?.lead?.meetings?.[0] || '';
 
-  const {data: user} = useGetUserbyIDQuery(meeting?.lead?.creName);
+  const {
+    data: user,
+    isLoading: userLoading,
+    isError: userError,
+    refetch: refetchUser,
+  } = useGetUserbyIDQuery(meeting?.lead?.creName, {
+    skip: !meeting?.lead?.creName,
+  });
+  const {
+    data: meetingData,
+    isLoading,
+    isError,
+    error,
+    refetch: refetchMeeting,
+  } = useGetMeetingByIdQuery(meetingId, {skip: !meetingId});
 
-  const {data: meetingData, isLoading} = useGetMeetingByIdQuery(meetingId);
-
-  const comments = meetingData?.lead?.comment || [];
-  const skeleton = Array(7).fill(0);
-  // console.log('skeletong   --------<>', skeleton);
+  const comments = Array.isArray(meetingData?.lead?.comment)
+    ? meetingData.lead.comment
+    : [];
+  // console.log('comment type che is it array or not ',comments);
   const deviceType = getDeviceType();
+  const skeleton = Array(7).fill(0);
 
-  console.log('deviceType singlemeeting <->', deviceType);
+  const handleRetry = () => {
+    refetchMeeting();
+    refetchUser();
+  };
+
+  if (isError || userError) {
+    return (
+      <View className="flex-1 justify-center items-center bg-gray-100">
+        <Text className="text-red-500 text-lg font-semibold">
+          Failed to load data. Please try again.
+        </Text>
+        <TouchableOpacity
+          onPress={handleRetry}
+          className="mt-4 px-6 py-3 bg-blue-500 rounded-lg">
+          <Text className="text-white font-bold text-lg">Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const phoneNumber = meeting?.lead?.phone?.[0] || '';
+
   return (
     <View className="bg-spBg p-4" style={{flex: 1}}>
       {/* Header Section */}
@@ -99,6 +135,16 @@ const SingleMeeting = ({route}) => {
         </Text>
         <Text />
       </View>
+
+      {isLoading || userLoading && (
+          <View className="flex-1 justify-center items-center bg-gray-100">
+            <ActivityIndicator size="large" color="#4A90E2" />
+            <Text className="mt-2 text-gray-600 text-lg">
+              Loading Meeting Details...
+            </Text>
+          </View>
+        )}
+
       <ScrollView className="" contentContainerStyle={{flexGrow: 1}}>
         <View className="flex-row rounded-xl  mb-3">
           <View className="flex-1 pr-3 ">
@@ -140,7 +186,7 @@ const SingleMeeting = ({route}) => {
           <View className="items-end gap-2 w-1/3">
             <View className="bg-gray-200 border border-gray-400 mb-1 overflow-hidden w-full">
               <Text className="bg-spDarkGray text-center text-xs font-bold px-2 py-0.5 text-white">
-                CID123456
+                CID{meeting?.lead?._id || ' N/A'}
               </Text>
               <Text className="bg-spDepGray text-center text-xs font-bold px-2 py-0.5 text-white">
                 MSG123458
@@ -149,7 +195,7 @@ const SingleMeeting = ({route}) => {
 
             <View className="bg-white border border-gray-400 mb-1 rounded-md overflow-hidden w-full">
               <Text className="bg-spRed text-center text-xs font-bold px-2 py-0.5 text-white">
-                {meeting?.slot}
+                {meeting?.slot || ' N/A'}
               </Text>
               <Text className="bg-spDarkGray text-center text-xs font-medium px-2 py-0.5 text-white">
                 {meeting?.date
@@ -158,7 +204,7 @@ const SingleMeeting = ({route}) => {
                       month: 'short',
                       year: '2-digit',
                     })
-                  : '16 DEC 24'}
+                  : '16 DEC 24' || 'N/A'}
               </Text>
             </View>
 
@@ -167,20 +213,20 @@ const SingleMeeting = ({route}) => {
                 {user?.nameAsPerNID || 'Unknown CRE'}
               </Text>
               <Text className="bg-spDepGray text-center text-xs font-medium px-2 py-0.5 text-white">
-                {meeting.visitCharge ? `${meeting.visitCharge}/-` : '550/-'}
+                {meeting.visitCharge ? `${meeting.visitCharge}/-` : 'Free/-'}
               </Text>
             </View>
           </View>
         </View>
 
         <TouchableOpacity
-          disabled={!meeting?.lead?.phone?.[0]}
-          onPress={() => Linking.openURL(`tel:${meeting?.lead?.phone?.[0]}`)}
+          disabled={!phoneNumber}
+          onPress={() => Linking.openURL(`tel:${phoneNumber}`)}
           className={`flex-row items-center justify-center py-2 px-5 rounded-lg 
-            ${meeting?.lead?.phone?.[0] ? 'bg-spRed' : 'bg-spRed'}`}>
+            ${phoneNumber ? 'bg-spRed' : 'bg-spRed'}`}>
           <IconF name="phone-call" size={20} color="rgb(227, 226, 220)" />
           <Text className="text-red font-bold ml-2 text-spNavGray">
-            {meeting?.lead?.phone?.[0] ? 'Call' : 'No Number'}
+            {phoneNumber ? 'Call' : 'No Number'}
           </Text>
         </TouchableOpacity>
 
@@ -196,7 +242,7 @@ const SingleMeeting = ({route}) => {
 
         {isLoading ? (
           <ScrollView>
-            {skeleton.map((_, index) => (
+            {skeleton?.map((_, index) => (
               <SkeletonLoading
                 key={index}
                 background={'#adadad'}
@@ -265,25 +311,19 @@ const SingleMeeting = ({route}) => {
             ))}
           </ScrollView>
         ) : (
-          // <FlatList
-          //   data={comments}
-          //   keyExtractor={(item, index) => index.toString()}
-          //   renderItem={({item}) => <SingleMeetingComment comment={item} />}
-          //    ListEmptyComponent={
-          //     <View className="flex-row justify-center items-center">
-          //       <Text className="text-gray-500 text-center mt-4">
-          //         No Comments Available
-          //       </Text>
-          //     </View>
-          //   }
-          //   contentContainerStyle={{paddingBottom: 120}}
-          // />
-          <View  
-          className={`${deviceType === 'tablet' ? 'pb-20': 'pb-12'}`}
-          >
-            {comments.map(item => (
+          <View className={`${deviceType === 'tablet' ? 'pb-20' : 'pb-12'}`}>
+            {/* { comments > 0 && comments.map(item => (
               <SingleMeetingComment key={item?._id} comment={item} />
-            ))}
+            ))} */}
+            {comments.length > 0 ? (
+              comments.map(item => (
+                <SingleMeetingComment key={item?._id} comment={item} />
+              ))
+            ) : (
+              <Text className="text-gray-500 text-center mt-4">
+                No Comments Available
+              </Text>
+            )}
           </View>
         )}
         {/* </ScrollView> */}

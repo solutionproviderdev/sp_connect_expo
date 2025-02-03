@@ -31,6 +31,8 @@ import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import MeetingCardSkeleton from './component/homescreen/MeetingCardSkeleton';
 import {getDeviceType} from './HomeScreen';
+import {StatusBar} from 'expo-status-bar';
+import {SafeAreaView} from 'react-native-safe-area-context';
 dayjs.extend(isBetween);
 
 const MeetingList = () => {
@@ -125,9 +127,23 @@ const MeetingList = () => {
 
   return (
     <Provider>
-      <View className="flex-1 bg-spBg p-4 ">
-        {/* Header */}
-        <View className="flex-row items-center justify-between px-4 py-2 mt-4 bg-spBg rounded-lg">
+      <SafeAreaView
+        className={`
+        ${
+          deviceType === 'tablet'
+            ? 'flex-1 bg-spBg px-4'
+            : 'flex-1 bg-spBg px-4 mt-8'
+        }
+        `}>
+          {/* Header */}
+        <View
+          className={`
+          ${
+            deviceType === 'tablet'
+              ? 'flex-row items-center justify-between px-4 py-2 mt-4 bg-spBg rounded-lg'
+              : 'flex-row items-center justify-between px-4 py-2 bg-spBg rounded-lg'
+          }
+          `}>
           <TouchableOpacity>
             <Image
               source={require('../../assets/sp_gear_icon.png')}
@@ -191,13 +207,12 @@ const MeetingList = () => {
         </View>
 
         {/* Title */}
-        <View  
-        className={`${
-          deviceType === 'tablet'
-            ? 'flex-row justify-center items-center shadow-md py-4'
-            : 'flex-row justify-center items-center shadow-md'
-        }`}
-        >
+        <View
+          className={`${
+            deviceType === 'tablet'
+              ? 'flex-row justify-center items-center shadow-md py-4'
+              : 'flex-row justify-center items-center shadow-md'
+          }`}>
           <View className="flex-row items-center justify-center rounded-full w-52 bg-spCardGray p-2 gap-2">
             <Text className="text-2xl font-extrabold text-center text-spBlue">
               Meetings
@@ -208,12 +223,11 @@ const MeetingList = () => {
 
         {/* Buttons */}
         <View
-        className={`${
-          deviceType === 'tablet'
-            ? 'flex-row justify-around items-center py-4'
-            : 'flex-row justify-around items-center py-2'
-        }`}
-        >
+          className={`${
+            deviceType === 'tablet'
+              ? 'flex-row justify-around items-center py-4'
+              : 'flex-row justify-around items-center py-2'
+          }`}>
           {/* Status Filter Menu */}
           <Menu
             visible={menuVisible}
@@ -291,7 +305,7 @@ const MeetingList = () => {
                   ).format('D-MMM')}`
                 : 'Select Date Range'}
             </Text>
- 
+
             {deviceType === 'tablet' ? (
               <Icons
                 name="calendar-outline"
@@ -361,7 +375,7 @@ const MeetingList = () => {
             contentContainerStyle={{paddingBottom: 50}}
           />
         )}
-      </View>
+      </SafeAreaView>
     </Provider>
   );
 };

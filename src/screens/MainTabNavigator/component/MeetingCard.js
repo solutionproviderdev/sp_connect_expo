@@ -6,7 +6,7 @@ import {useGetUserbyIDQuery} from '../../../redux/services/api';
 
 const MeetingCard = ({item, onpress}) => {
   const {data: user} = useGetUserbyIDQuery(item.lead.creName);
-  // console.log('salmankahhar----------',item);
+  // console.log('meetign card----------',item?.lead?._id);
   return (
     <TouchableOpacity onPress={onpress} activeOpacity={0.8}>
       <View className="flex-row items-start rounded-xl p-2 mb-3 border border-gray-300">
@@ -78,7 +78,7 @@ const MeetingCard = ({item, onpress}) => {
           {/* CID and MSG */}
           <View className="bg-gray-200 border border-gray-400 mb-1 overflow-hidden w-full">
             <Text className="bg-spDarkGray text-center text-xs font-bold px-2 py-0.5 text-white">
-              CID123456
+              CID{item?.lead?._id || ' N/A'}
             </Text>
             <Text className="bg-spDepGray text-center text-xs font-bold px-2 py-0.5 text-white">
               MSG123458

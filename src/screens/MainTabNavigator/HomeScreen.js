@@ -1,4 +1,3 @@
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   CommonActions,
@@ -36,6 +35,8 @@ import DoubleCard from './component/homescreen/DoubleCard';
 import Tasks from './component/homescreen/Tasks';
 import TodayMeetings from './component/homescreen/screen/TodayMeetings';
 import SalesCollectionBar from './component/homescreen/SalesCollectionBar';
+import {StatusBar} from 'expo-status-bar';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 // import { decode } from 'expo-jwt';
 
@@ -98,7 +99,6 @@ const HomeScreen = () => {
     refetch,
   } = useGetMeetingsQuery({date: '', userId}, {skip: !userId});
 
-   
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('token');
@@ -119,8 +119,17 @@ const HomeScreen = () => {
 
   return (
     <Provider>
-       {/* 🔥 Header with Dropdown */}
-      <View className="flex-row items-center justify-between px-4 pt-2 mt-8 bg-spBg rounded-lg">
+      {/* 🔥 Header with Dropdown */}
+      <SafeAreaView
+        className={`
+        ${
+          deviceType === 'tablet'
+            ? 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
+            : 'flex-row items-center justify-between px-4 pt-2 mt-8 bg-spBg rounded-lg'
+        }
+        `}
+        source={require('../../assets/orrangeEmojie.gif')}>
+ 
         <TouchableOpacity>
           <Image
             source={require('../../assets/sp_gear_icon.png')}
@@ -192,82 +201,111 @@ const HomeScreen = () => {
             leadingIcon={() => <Icon name="logout" size={20} color="red" />}
           />
         </Menu>
-      </View>
+      </SafeAreaView>
       <ScrollView className="px-4 flex-1 bg-spBg">
-      {/* ${deviceType === 'tablet' ? 'px-6 py-4' : 'px-4 py-2'} */}
-        <View 
-        className={`
-          ${deviceType === 'tablet' ? 'flex-row items-center justify-around' : 'flex-row items-center justify-around py-2'}
-          `}
-        >
+        {/* ${deviceType === 'tablet' ? 'px-6 py-4' : 'px-4 py-2'} */}
+        <View
+          className={`
+          ${
+            deviceType === 'tablet'
+              ? 'flex-row items-center justify-around'
+              : 'flex-row items-center justify-around py-4'
+          }
+          `}>
           <View>
-            <Text className={`
-              ${deviceType === 'tablet' ? 'text-3xl font-bold text-spBlue' : 'text-xl font-bold text-spBlue'}
+            <Text
+              className={`
+              ${
+                deviceType === 'tablet'
+                  ? 'text-3xl font-bold text-spBlue'
+                  : 'text-xl font-bold text-spBlue'
+              }
               `}>
               Welcome Back,{' '}
-              <Text className="text-yellow-600"
-              >{userData?.nickname}</Text> !
+              <Text className="text-yellow-600">{userData?.nickname}</Text> !
             </Text>
-            <Text className={`
-              ${deviceType === 'tablet' ? 'text-5xl font-bold text-spBlue' : 'text-3xl font-bold text-spBlue'}
-              `}
-            >
+            <Text
+              className={`
+              ${
+                deviceType === 'tablet'
+                  ? 'text-5xl font-bold text-spBlue'
+                  : 'text-3xl font-bold text-spBlue'
+              }
+              `}>
               Start Your Day
             </Text>
-            <Text className={`
-              ${deviceType === 'tablet' ? 'text-5xl font-bold text-spBlue' : 'text-3xl font-bold text-spBlue'}
-              `}
-            >
+            <Text
+              className={`
+              ${
+                deviceType === 'tablet'
+                  ? 'text-5xl font-bold text-spBlue'
+                  : 'text-3xl font-bold text-spBlue'
+              }
+              `}>
               & Be Productive
             </Text>
           </View>
           <View>
-            <Image className={`
+            <Image
+              className={`
               ${deviceType === 'tablet' ? '' : 'w-24 h-24'}
-              `} source={require('../../assets/orrangeEmojie.gif')} />
+              `}
+              source={require('../../assets/orrangeEmojie.gif')}
+            />
           </View>
         </View>
+
         {/* className={`
               ${deviceType === 'tablet' ? 'text-3xl font-bold text-spBlue' : 'text-xl'}
               `} */}
         <View
-         className={`
-          ${deviceType === 'tablet' ? 'flex-row items-center justify-between px-8 py-6 bg-spNavGray rounded-full' :
-             'flex-row items-center justify-between bg-spNavGray rounded-full px-4 py-2 mt-2'}
-          `}
-        >
-          {
-           deviceType === 'tablet' ? <Icon name="comment-text-outline" size={40} color="rgb(4,98,138)" />
-           : <Icon name="comment-text-outline" size={24} color="rgb(4,98,138)" />
-           }
+          className={`
+          ${
+            deviceType === 'tablet'
+              ? 'flex-row items-center justify-between px-8 py-6 bg-spNavGray rounded-full'
+              : 'flex-row items-center justify-between bg-spNavGray rounded-full px-4 py-2 my-2'
+          }
+          `}>
+          {deviceType === 'tablet' ? (
+            <Icon name="comment-text-outline" size={40} color="rgb(4,98,138)" />
+          ) : (
+            <Icon name="comment-text-outline" size={24} color="rgb(4,98,138)" />
+          )}
 
           <View>
             <Text
-                     className={`
-                      ${deviceType === 'tablet' ? 'text-4xl font-extrabold' :
-                         'text-lg font-bold'}
-                      `}
-            >
+              className={`
+                      ${
+                        deviceType === 'tablet'
+                          ? 'text-4xl font-extrabold'
+                          : 'text-lg font-extrabold pb-1'
+                      }
+                      `}>
               <Text className="text-spBlue">You have </Text>
-              <Text className="text-black">17</Text>
+              <Text className="text-black ">17</Text>
               <Text className="text-spBlue"> tasks today</Text>
             </Text>
           </View>
-          {
-           deviceType === 'tablet' ? <Icon name="eye-outline" size={40} color="rgb(4,98,138)" />
-           : <Icon name="eye-outline" size={24} color="rgb(4,98,138)" />
-           }
-          
+          {deviceType === 'tablet' ? (
+            <Icon name="eye-outline" size={40} color="rgb(4,98,138)" />
+          ) : (
+            <Icon name="eye-outline" size={24} color="rgb(4,98,138)" />
+          )}
         </View>
 
         {/* section 3 */}
         {/* <Tasks meeting={todayMeetings} /> */}
         {/* <Tasks meeting={meetings} user={userData} isLoading={isLoading} /> */}
-        <Tasks meeting={meetings} user={userData} isLoading={isLoading} deviceType={deviceType} />
+        <Tasks
+          meeting={meetings}
+          user={userData}
+          isLoading={isLoading}
+          deviceType={deviceType}
+        />
 
         <DoubleCard deviceType={deviceType} />
 
-{/* sales and target collection bar */}
+        {/* sales and target collection bar */}
         {/* sales target */}
 
         {/* <View className="flex-1 gap-y-10 mt-6 ">
@@ -304,8 +342,7 @@ const HomeScreen = () => {
           </View>
         </View> */}
 
-<SalesCollectionBar deviceType={deviceType} />
-
+        <SalesCollectionBar deviceType={deviceType} />
       </ScrollView>
     </Provider>
   );

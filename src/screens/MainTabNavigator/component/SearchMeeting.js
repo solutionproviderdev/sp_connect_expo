@@ -90,8 +90,6 @@ const SearchMeetingScreen = ({route}) => {
 
   return (
     <View className="flex-1 pt-8 px-4 bg-spBg mb-4">
-      <StatusBar style="dark" />
-
       {/* ✅ Search Input */}
       <View className="flex-row items-center mb-2">
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -120,7 +118,7 @@ const SearchMeetingScreen = ({route}) => {
             className={`${
               deviceType === 'tablet'
                 ? 'flex-1 mb-2 text-xl justify-center ml-2'
-                : 'w-72 text-sm items-center justify-center'
+                : 'w-72 text-xs items-center justify-center'
             }`}
             placeholder="Search by name, phone, or sales executive..."
             value={query}

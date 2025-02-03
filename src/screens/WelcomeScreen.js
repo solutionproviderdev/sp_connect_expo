@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
+import { StatusBar } from 'expo-status-bar';
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();
@@ -27,6 +28,11 @@ const WelcomeScreen = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white ">
+  {/* <StatusBar 
+        backgroundColor="purple" 
+        style="light" // or "dark" if you use a custom red color (not recommended)
+      /> */}
+
       {/* Main Content Container */}
       <View className="flex-1 justify-center items-center px-4">
         {/* Logo Section */}

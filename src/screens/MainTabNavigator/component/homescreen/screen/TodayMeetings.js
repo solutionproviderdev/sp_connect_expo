@@ -20,17 +20,15 @@ import {getDeviceType} from '../../../HomeScreen';
 
 const TodayMeetings = ({route}) => {
   const {user} = route?.params || {}; // Extract passed data
-  const userId = user?._id;
+  const userId = user?._id || '';
   // console.log('user is here----->',user._id);
   const today = new Date();
   const todayDate = today.toISOString().split('T')[0]; // Extract YYYY-MM-DD part
   const dateRange = `${todayDate}_${todayDate}`;
   const deviceType = getDeviceType();
-
-  // console.log('deviceType from today meeting----->', deviceType);
-  //  console.log('todayDate----->',dateRange);
-  const {
-    data: meetings,
+  // data: meetings = []
+   const {
+    data: meetings = [],
     isLoading,
     isError,
     refetch,
@@ -50,27 +48,70 @@ const TodayMeetings = ({route}) => {
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
-  const renderMeetingCard = ({item}) => <HomeMeetingCard item={item} />;
+  // const renderMeetingCard = ({item}) => <HomeMeetingCard item={item} />;
 
-  const handleLogout = async () => {
+  const renderMeetingCard = ({ item }) => {
     try {
-      // Remove the token from AsyncStorage
-      await AsyncStorage.removeItem('token');
-
-      navigationRef.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [
-            {
-              name: 'welcome', // Point directly to the welcome screen
-            },
-          ],
-        }),
-      );
+      return <HomeMeetingCard item={item} />;
     } catch (error) {
-      console.error('Error during logout:', error);
+      console.error('Error rendering meeting card:', error);
+      return (
+        <View className="p-4 bg-red-100 rounded-md">
+          <Text className="text-red-500">Failed to load meeting data.</Text>
+        </View>
+      );
     }
   };
+  
+
+  // const handleLogout = async () => {
+  //   try {
+  //     // Remove the token from AsyncStorage
+  //     await AsyncStorage.removeItem('token');
+
+  //     navigationRef.dispatch(
+  //       CommonActions.reset({
+  //         index: 0,
+  //         routes: [
+  //           {
+  //             name: 'welcome', // Point directly to the welcome screen
+  //           },
+  //         ],
+  //       }),
+  //     );
+  //   } catch (error) {
+  //     console.error('Error during logout:', error);
+  //   }
+  // };
+
+
+  if (isError) {
+    return (
+      <View className="flex-1 items-center justify-center bg-spBg">
+        <Text className="text-red-500 text-xl">Error loading meetings.</Text>
+        <TouchableOpacity
+          onPress={refetch}
+          className="bg-blue-500 p-3 rounded mt-4">
+          <Text className="text-white">Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  // if (!meetings || meetings.length === 0) {
+  //   return (
+  //     <View className="flex-1 items-center justify-center bg-spBg">
+  //       <TouchableOpacity
+  //         onPress={navigation.goBack()}
+  //         className="text-gray-500 text-xl">
+  //          <Text>go Back !</Text>
+  //       </TouchableOpacity>
+  //       <Text className="text-gray-500 text-xl">
+  //         No meetings scheduled today.
+  //       </Text>
+  //     </View>
+  //   );
+  // }
 
   return (
     <Provider>
@@ -129,7 +170,7 @@ const TodayMeetings = ({route}) => {
                 <Icon name="account-circle-outline" size={20} color="black" />
               )}
             />
-            <Menu.Item
+            {/* <Menu.Item
               onPress={() => {
                 closeMenu();
                 handleLogout();
@@ -137,17 +178,16 @@ const TodayMeetings = ({route}) => {
               title="Logout"
               titleStyle={{color: '#000000'}}
               leadingIcon={() => <Icon name="logout" size={20} color="red" />}
-            />
+            /> */}
           </Menu>
         </View>
         {/*  back button  */}
         <View
-        className={`${
-          deviceType === 'tablet'
-            ? 'flex-row items-center justify-between px-4'
-            : 'flex-row items-center justify-between'
-        }`}
-        >
+          className={`${
+            deviceType === 'tablet'
+              ? 'flex-row items-center justify-between px-4'
+              : 'flex-row items-center justify-between'
+          }`}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             {deviceType === 'tablet' ? (
               <Image
@@ -172,17 +212,35 @@ const TodayMeetings = ({route}) => {
 
           <Text></Text>
         </View>
+
         {/* Meetings Section */}
 
         {isLoading ? (
           <MeetingCardSkeleton />
         ) : (
-          <FlatList
-            data={sortedMeetings}
-            renderItem={renderMeetingCard}
-            keyExtractor={item => item._id.toString()}
-            contentContainerStyle={{paddingBottom: 60}}
-          />
+          //  <FlatList
+          //   data={sortedMeetings}
+          //   renderItem={renderMeetingCard}
+          //   keyExtractor={item => item?._id.toString()}
+          //   contentContainerStyle={{paddingBottom: 60}}
+          // />
+
+          meetings && meetings.length > 0 ? (
+            <FlatList
+              data={sortedMeetings}
+              renderItem={renderMeetingCard}
+              keyExtractor={item => item._id?.toString() || Math.random().toString()}
+              contentContainerStyle={{paddingBottom: 60}}
+            />
+          ) : (
+            <View className="flex-1 items-center justify-center">
+              <Text className="text-gray-500 text-xl mb-4">No meetings scheduled today.</Text>
+              <TouchableOpacity onPress={() => navigation.goBack()} className="bg-gray-300 p-3 rounded">
+                <Text className="text-black">Go Back</Text>
+              </TouchableOpacity>
+            </View>
+          )
+
         )}
       </View>
     </Provider>

@@ -23,20 +23,19 @@ const SalesCollectionBar = ({ deviceType }) => {
     items-center 
     justify-center 
     w-1/2
-  `;
+   `;
 
   // Common styles for text
   const textStyle = `
     text-spBlue 
     font-bold 
-    ${isTablet ? 'text-3xl' : 'text-sm'}
-  `;
+   `;
 
   return (
     <View className={`
       flex-1 
       mt-6 
-      ${isTablet ? 'gap-y-10' : 'gap-y-10 '}
+      ${isTablet ? 'gap-y-10' : 'gap-y-8 '}
     `}>
       {/* Sales Target Section */}
       <View className="border-2 border-spBlue w-full mx-auto rounded">
@@ -74,7 +73,7 @@ const SalesCollectionBar = ({ deviceType }) => {
             <Text 
               className={`
                 ${textStyle}
-                ${!isTablet ? 'px-2' : ''}
+                ${!isTablet ? '' : 'px-2'}
               `}
             >
               COLLECTION TARGET
