@@ -46,7 +46,7 @@ const LoginScreen = () => {
   };
 
   return (
-    <SafeAreaView>
+    <>
       <ImageBackground
         source={require('../assets/salesBgImg.jpg')}
         className="flex-1"
@@ -133,7 +133,7 @@ const LoginScreen = () => {
           </View>
         </View>
       </ImageBackground>
-    </SafeAreaView>
+    </>
   );
 };
 

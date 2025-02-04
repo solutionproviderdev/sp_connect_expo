@@ -22,11 +22,6 @@
       },
       "package": "com.solutionprovider.sp_sales"
     },
-    // "androidStatusBar": {
-    //   "barStyle": "dark-content",
-    //   "backgroundColor": "#6a51ae",
-    //   "translucent": true
-    // },
     "web": {
       "favicon": "./src/assets/sp_gear_icon.png",
       "bundler": "metro"
@@ -35,6 +30,12 @@
       "eas": {
         "projectId": "7dbfefca-2030-417a-8fea-fef2c8d54c26"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/7dbfefca-2030-417a-8fea-fef2c8d54c26"
     }
   }
 }

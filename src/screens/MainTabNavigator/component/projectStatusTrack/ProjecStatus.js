@@ -1,5 +1,3 @@
-
-
 import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
@@ -44,7 +42,9 @@ const ProjectStatus = ({projectStatus: initialStatus, leadId, deviceType}) => {
   const [comment, setComment] = useState('');
   const [projectStatus, setProjectStatus] = useState(initialStatus);
   const [isLoading, setIsLoading] = useState(false);
-  const spinValue = useRef(new Animated.Value(0)).current; 
+  const [commentError, setCommentError] = useState(false); // New state for error handling
+
+  const spinValue = useRef(new Animated.Value(0)).current;
 
   const [updateProjectStatus] = useUpdateProjectStatusMutation();
   const [addComment] = useAddCommentMutation();
@@ -86,6 +86,13 @@ const ProjectStatus = ({projectStatus: initialStatus, leadId, deviceType}) => {
   };
 
   const handleSubmit = async () => {
+    if (!comment.trim()) {
+      // Check if the comment is empty
+      setCommentError(true);
+      setIsLoading(false);
+      return;
+    }
+    setCommentError(false);
     setIsLoading(true);
     Animated.loop(
       Animated.timing(spinValue, {
@@ -109,7 +116,6 @@ const ProjectStatus = ({projectStatus: initialStatus, leadId, deviceType}) => {
       }).unwrap();
 
       // console.log('selectedStatus------<><>', selectedStatus);
-
       const commentResult = await addComment({
         leadId,
         comment,
@@ -245,25 +251,23 @@ const ProjectStatus = ({projectStatus: initialStatus, leadId, deviceType}) => {
         </View>
       </ScrollView>
       {selectedCircle !== null && selectedSectionIndex !== null && (
-        <View className="rounded-2xl p-4 bg-spCardGray">
-          <Text className="text-xl font-bold">Add Comment</Text>
+        <View className="rounded-2xl p-2 bg-spCardGray">
+          <Text className="text-lg font-bold">Add Comment</Text>
 
           <TextInput
-            className="rounded-md pb-2 items-center px-4 text-lg mb-4 bg-white font-bold text-spDepGray"
+            // className="rounded-md pb-2 items-center px-4 text-lg mb-4 bg-white font-bold text-spDepGray"
+            className={`rounded-md pb-2 items-center px-4 text-lg mb- bg-white font-bold text-spDepGray ${
+              commentError ? 'border-2 border-red-500' : ''
+            }`}
             multiline
             value={comment}
             onChangeText={setComment}
           />
-
+          {commentError && (
+            <Text className="text-spRed">Comment is empty !</Text>
+          )}
           <TouchableOpacity
-            style={{
-              paddingVertical: 10,
-              borderRadius: 8,
-              backgroundColor: '#333333',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexDirection: 'row',
-            }}
+            className="py-2 rounded-md mt-3 bg-spBlue flex items-center justify-center"
             onPress={handleSubmit}
             disabled={isLoading}>
             {isLoading ? (
@@ -277,9 +281,7 @@ const ProjectStatus = ({projectStatus: initialStatus, leadId, deviceType}) => {
                 </Text>
               </>
             ) : (
-              <Text style={{color: 'white', fontWeight: 'bold', fontSize: 16}}>
-                Submit
-              </Text>
+              <Text className="text-xl font-extrabold text-white">Submit</Text>
             )}
           </TouchableOpacity>
         </View>

@@ -33,8 +33,10 @@ import {getDeviceType} from '../HomeScreen';
 
 const SingleMeeting = ({route}) => {
   const navigation = useNavigation();
-  const {meeting} = route.params;
-  // console.log('singlemeeting meeting', meeting?.lead?._id);
+  // const {meeting} = route.params;
+  const {meeting = {}} = route.params || {};
+
+  console.log('singlemeeting meeting', meeting);
 
   const status = meeting?.lead?.projectStatus?.status || 'Unknown';
   const subStatus = meeting?.lead?.projectStatus?.subStatus || 'Unknown';
@@ -57,17 +59,48 @@ const SingleMeeting = ({route}) => {
     refetch: refetchMeeting,
   } = useGetMeetingByIdQuery(meetingId, {skip: !meetingId});
 
-  const comments = Array.isArray(meetingData?.lead?.comment)
-    ? meetingData.lead.comment
-    : [];
-  // console.log('comment type che is it array or not ',comments);
-  const deviceType = getDeviceType();
-  const skeleton = Array(7).fill(0);
+  // console.log('||<-----status',status,'subStatus',subStatus,'leadId',leadId,'meetingId',meetingId);
+  // console.log('meetingData======<>>',meetingData || {});
 
   const handleRetry = () => {
     refetchMeeting();
     refetchUser();
   };
+
+  if (!meetingData) {
+    return (
+      <View className="flex-1 justify-center items-center bg-gray-100">
+        <ActivityIndicator size="large" color="#4A90E2" />
+        <Text>Loading meeting details...</Text>
+        <View className='flex-row gap-2'>
+          <TouchableOpacity
+            onPress={handleRetry}
+            className="mt-4 px-6 py-3 bg-blue-500 rounded-lg">
+            <Text className="text-white text-center font-bold text-lg">Retry</Text>
+          </TouchableOpacity>
+          {/* go back new added */}
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            className="mt-4 px-6 py-3 bg-red-500 rounded-lg">
+            <Text className="text-white text-center font-bold text-lg">Go back !</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+
+  //need to uncomment with comment show
+  const comments = Array.isArray(meetingData?.lead?.comment)
+    ? meetingData.lead.comment
+    : [];
+  // console.log('comments from singlemeeting-<> ',comments);
+  const deviceType = getDeviceType();
+  const skeleton = Array(7).fill(0);
+
+  // const handleRetry = () => {
+  //   refetchMeeting();
+  //   refetchUser();
+  // };
 
   if (isError || userError) {
     return (
@@ -87,7 +120,7 @@ const SingleMeeting = ({route}) => {
   const phoneNumber = meeting?.lead?.phone?.[0] || '';
 
   return (
-    <View className="bg-spBg p-4" style={{flex: 1}}>
+    <View className="bg-spBg p-4 mt-4" style={{flex: 1}}>
       {/* Header Section */}
       <View className="flex-row items-center justify-between px-4 py-2">
         <TouchableOpacity>
@@ -131,19 +164,20 @@ const SingleMeeting = ({route}) => {
               ? 'text-3xl font-extrabold text-spBlue '
               : 'text-xl text-spBlue font-extraboldm p-0'
           }`}>
-          TODAY MEETINGS
+          MEETING DETAILS
         </Text>
         <Text />
       </View>
 
-      {isLoading || userLoading && (
+      {isLoading ||
+        (userLoading && (
           <View className="flex-1 justify-center items-center bg-gray-100">
             <ActivityIndicator size="large" color="#4A90E2" />
             <Text className="mt-2 text-gray-600 text-lg">
               Loading Meeting Details...
             </Text>
           </View>
-        )}
+        ))}
 
       <ScrollView className="" contentContainerStyle={{flexGrow: 1}}>
         <View className="flex-row rounded-xl  mb-3">
@@ -238,7 +272,6 @@ const SingleMeeting = ({route}) => {
         </View>
 
         <Text className="text-lg font-extrabold text-black mb-2">Comments</Text>
-        {/* </View> */}
 
         {isLoading ? (
           <ScrollView>
@@ -254,7 +287,6 @@ const SingleMeeting = ({route}) => {
                     alignItems: 'center',
                     padding: 10,
                   }}>
-                  {/* Left Section: Avatar */}
                   <View
                     style={{
                       width: 60,
@@ -264,7 +296,6 @@ const SingleMeeting = ({route}) => {
                     }}
                   />
 
-                  {/* Middle Section: Two Lines */}
                   <View style={{flex: 1, marginLeft: 20}}>
                     <View
                       style={{
@@ -285,7 +316,6 @@ const SingleMeeting = ({route}) => {
                     />
                   </View>
 
-                  {/* Right Section: Two Small Lines */}
                   <View style={{justifyContent: 'space-between', height: 20}}>
                     <View
                       style={{
@@ -312,10 +342,7 @@ const SingleMeeting = ({route}) => {
           </ScrollView>
         ) : (
           <View className={`${deviceType === 'tablet' ? 'pb-20' : 'pb-12'}`}>
-            {/* { comments > 0 && comments.map(item => (
-              <SingleMeetingComment key={item?._id} comment={item} />
-            ))} */}
-            {comments.length > 0 ? (
+            {comments?.length > 0 ? (
               comments.map(item => (
                 <SingleMeetingComment key={item?._id} comment={item} />
               ))
@@ -326,7 +353,6 @@ const SingleMeeting = ({route}) => {
             )}
           </View>
         )}
-        {/* </ScrollView> */}
       </ScrollView>
     </View>
   );

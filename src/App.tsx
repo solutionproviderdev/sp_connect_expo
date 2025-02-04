@@ -10,6 +10,7 @@ import { usePreventScreenCapture } from "expo-screen-capture";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AppState, Alert, View, Text, SafeAreaView } from "react-native";
 import NetInfo from '@react-native-community/netinfo';
+import * as Updates from 'expo-updates';
 
 // ✅ Import createNavigationContainerRef to use global navigation
 import { createNavigationContainerRef } from '@react-navigation/native';
@@ -25,10 +26,26 @@ export function navigate(name, params) {
   }
 }
 
+
+
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const appState = useRef(AppState.currentState);
   const [isOffline, setIsOffline] = useState(false);
+
+
+  async function checkForUpdate() {
+    const update = await Updates.checkForUpdateAsync();
+    if (update.isAvailable) {
+      await Updates.fetchUpdateAsync();
+      await Updates.reloadAsync();
+    }
+  }
+
+  // ✅ Monitor Network Status
+  useEffect(() => {
+    checkForUpdate()
+  }, []);
 
   // ✅ Monitor Network Status
   useEffect(() => {
@@ -39,17 +56,17 @@ const App = () => {
   }, []);
 
   // ✅ Logout function
-  const handleLogout = async () => {
+   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('user');
-
+      
+      setIsLoggedIn(false);  // Update login state
       navigationRef.reset({
         index: 0,
         routes: [{ name: 'welcome' }],
       });
 
-      setIsLoggedIn(false);  // Update login state
       console.log('🔒 Logged out successfully.');
     } catch (error) {
       console.error('Error during logout:', error);
@@ -99,8 +116,8 @@ const App = () => {
         console.log('🟢 App is in the foreground (Inside the app)');
       } else if (nextAppState === 'background' || nextAppState === 'inactive') {
         console.log('🔴 App is in the background (Outside the app)');
-        // await handleLogout();
-        Alert.alert('Session Expired', 'You have been logged out due to inactivity.');
+        await handleLogout();
+        // Alert.alert('Session Expired', 'You have been logged out due to inactivity.');
       }
 
       appState.current = nextAppState;
@@ -128,6 +145,10 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer ref={navigationRef}>
         <SafeAreaView style={{ flex: 1 }}>
+          <StatusBar
+            backgroundColor="rgb(4, 98, 138)"
+            style="light" // or "dark" if you use a custom red color (not recommended)
+          />
           {isOffline && (
             <View className="bg-yellow-300 py-2 mt-6 rounded-md">
               <Text className="text-yellow-800 text-xl font bold text-center">

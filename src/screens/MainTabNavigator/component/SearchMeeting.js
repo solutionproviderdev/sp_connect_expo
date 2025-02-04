@@ -91,7 +91,7 @@ const SearchMeetingScreen = ({route}) => {
   return (
     <View className="flex-1 pt-8 px-4 bg-spBg mb-4">
       {/* ✅ Search Input */}
-      <View className="flex-row items-center mb-2">
+      <View className="flex-row items-center mb-2 pt-2">
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={require('../../../assets/backArrowImg.png')}

@@ -112,7 +112,9 @@ const MeetingList = () => {
   const renderMeetingCard = ({item}) => (
     <MeetingCard
       item={item}
-      onpress={() => navigation.navigate('SingleMeeting', {meeting: item})}
+      // onpress={() => navigation.navigate('SingleMeeting', {meeting: item})}
+      onpress={() => navigation.navigate('SingleMeeting', { meeting: item || {} })}
+
     />
   );
 
@@ -132,7 +134,7 @@ const MeetingList = () => {
         ${
           deviceType === 'tablet'
             ? 'flex-1 bg-spBg px-4'
-            : 'flex-1 bg-spBg px-4 mt-8'
+            : 'flex-1 bg-spBg px-4'
         }
         `}>
           {/* Header */}
@@ -141,7 +143,7 @@ const MeetingList = () => {
           ${
             deviceType === 'tablet'
               ? 'flex-row items-center justify-between px-4 py-2 mt-4 bg-spBg rounded-lg'
-              : 'flex-row items-center justify-between px-4 py-2 bg-spBg rounded-lg'
+              : 'flex-row items-center justify-between py-2 bg-spBg rounded-lg'
           }
           `}>
           <TouchableOpacity>

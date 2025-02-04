@@ -1,6 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
-import {View, Text, TouchableOpacity} from 'react-native';
+import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Tasks = ({meeting, user, deviceType}) => {
@@ -39,9 +39,21 @@ const Tasks = ({meeting, user, deviceType}) => {
     },
   ];
 
+
   const handleNavigation = (route, params) => {
-    navigation.navigate(route, params); // Navigate with specific params
+    if (!params?.user) {
+      console.warn('User data is missing. Navigation stopped.');
+      // ✅ Show an alert for production
+      Alert.alert(
+        'Navigation Error',
+        'User data is missing. Please try again later.',
+        [{ text: 'OK' }]
+      );
+      return;
+    }
+    navigation.navigate(route, params);
   };
+
 
   const TaskItem = ({icon, title, count, route, params}) => (
     <View
@@ -78,6 +90,7 @@ const Tasks = ({meeting, user, deviceType}) => {
           <Text className="text-white font-bold">{count}</Text>
         </View>
         <TouchableOpacity onPress={() => handleNavigation(route, params)}>
+          
           <Text
             className={`text-spDarkGray ${
               deviceType === 'tablet'

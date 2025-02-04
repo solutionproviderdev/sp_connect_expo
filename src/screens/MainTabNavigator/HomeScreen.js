@@ -108,6 +108,7 @@ const HomeScreen = () => {
         index: 0,
         routes: [{name: 'welcome'}],
       });
+
     } catch (error) {
       console.error('Error during logout:', error);
     }
@@ -125,7 +126,7 @@ const HomeScreen = () => {
         ${
           deviceType === 'tablet'
             ? 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
-            : 'flex-row items-center justify-between px-4 pt-2 mt-8 bg-spBg rounded-lg'
+            : 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
         }
         `}
         source={require('../../assets/orrangeEmojie.gif')}>
@@ -296,6 +297,7 @@ const HomeScreen = () => {
         {/* section 3 */}
         {/* <Tasks meeting={todayMeetings} /> */}
         {/* <Tasks meeting={meetings} user={userData} isLoading={isLoading} /> */}
+         
         <Tasks
           meeting={meetings}
           user={userData}

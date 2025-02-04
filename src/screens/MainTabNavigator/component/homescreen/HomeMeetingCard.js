@@ -6,22 +6,23 @@ import {useNavigation} from '@react-navigation/native';
 import {getDeviceType} from '../../HomeScreen';
 
 const HomeMeetingCard = ({item}) => {
-  //   console.log('HomeMeetingCard--<><>', item);
+  console.log('HomeMeetingCard item--<><>', item);
   const navigation = useNavigation();
 
   const deviceType = getDeviceType();
 
-  console.log('deviceType from home meeting card----->', deviceType);
-  // Extract the necessary data
-  // const {lead, slot, date, salesExecutive, visitCharge} = item || {};
-  // const {name, address, requirements} = lead || {};
-  // const {area, district} = address || {};
+  // console.log('deviceType from home meeting card----->', deviceType);
+  const {
+    lead = {},
+    slot = 'N/A',
+    date = 'N/A',
+    salesExecutive = {},
+    visitCharge = 0,
+  } = item || {};
+  const {name = 'Unknown Name', address = {}, requirements = []} = lead || {};
+  const {area = 'Unknown Area', district = 'Unknown District'} = address || {};
 
-  const { lead = {}, slot = 'N/A', date = 'N/A', salesExecutive = {}, visitCharge = 0 } = item;
-  const { name = 'Unknown Name', address = {}, requirements = [] } = lead;
-  const { area = 'Unknown Area', district = 'Unknown District' } = address;
-
-console.log('homemeetng card validation--->',item)
+  // console.log('homemeetng card validation--->',item)
 
   return (
     <TouchableOpacity
@@ -32,15 +33,24 @@ console.log('homemeetng card validation--->',item)
             : 'flex-row items-start rounded-xl p-2 mt-2 border border-gray-300 bg-spCardGray'
         }
       `}
-      onPress={() =>
-        navigation.navigate('meeting', {
-          screen: 'SingleMeeting',
-          params: {meeting: item},
-        })
-      }
+      // onPress={() =>
+      //   navigation.navigate('meeting', {
+      //     screen: 'SingleMeeting',
+      //     params: {meeting: item},
+      //   })
+      // }
 
-      // onPress={() => console.log('onpress onpress---->')}
-    >
+      onPress={() => {
+        if (item && item.lead) {
+          navigation.navigate('meeting', {
+            screen: 'SingleMeeting',
+            params: { meeting: item },
+          });
+        } else {
+          console.warn('Invalid meeting data');
+        }
+      }}
+     >
       {/* Left Section */}
       <View className="flex-1 pr-3">
         {/* Name */}
@@ -117,7 +127,6 @@ console.log('homemeetng card validation--->',item)
               {requirements.map((req, index) => (
                 <Text
                   key={index}
-                  className="text-white bg-gray-700 px-2 mr-2 rounded-md text-xl"
                   className={`
                     ${
                       deviceType === 'tablet'
@@ -189,7 +198,7 @@ console.log('homemeetng card validation--->',item)
         {/* CID */}
         <View className="bg-gray-200 border border-gray-400 mb-1 w-full overflow-hidden rounded-md">
           <Text
-             className={`
+            className={`
             ${
               deviceType === 'tablet'
                 ? 'bg-spDarkGray text-center font-bold px-2 py-0.5 text-white'
@@ -203,7 +212,7 @@ console.log('homemeetng card validation--->',item)
         {/* Time and Date */}
         <View className="bg-white border border-gray-400 mb-1 rounded-md overflow-hidden w-full">
           <Text
-             className={`
+            className={`
             ${
               deviceType === 'tablet'
                 ? 'bg-spRed text-center font-bold px-2 py-0.5 text-white text-lg'
