@@ -9,6 +9,7 @@ import {
   Platform,
   ActivityIndicator,
   Image,
+  SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MeetingCard from './MeetingCard';
@@ -89,7 +90,7 @@ const SearchMeetingScreen = ({route}) => {
   );
 
   return (
-    <View className="flex-1 pt-8 px-4 bg-spBg mb-4">
+    <View className="flex-1 pt-16 px-4 bg-spBg mb-4 ">
       {/* ✅ Search Input */}
       <View className="flex-row items-center mb-2 pt-2">
         <TouchableOpacity onPress={() => navigation.goBack()}>

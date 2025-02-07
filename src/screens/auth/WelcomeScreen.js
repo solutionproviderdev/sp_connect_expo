@@ -38,7 +38,7 @@ const WelcomeScreen = () => {
         {/* Logo Section */}
         <View className="justify-center items-center mt-80 mb-32">
           <Image
-            source={require('../assets/solutionprovider_logo-removebg-preview.png')}
+             source={require('../../assets/solutionprovider_logo-removebg-preview.png')}
             style={{
               width: width * 0.8,
               height: undefined,
@@ -51,7 +51,7 @@ const WelcomeScreen = () => {
         {/* Welcome Text Section */}
         <View className="items-center mb-12 ">
           <Image
-            source={require('../assets/varify_your_identity.png')}
+            source={require('../../assets/varify_your_identity.png')}
             style={{
               width: width * 0.5,
               height: undefined,
@@ -70,7 +70,7 @@ const WelcomeScreen = () => {
             alignItems: 'center',
           }}>
           <Image
-            source={require('../assets/varify_button.png')}
+            source={require('../../assets/varify_button.png')}
             style={{
               width: width * 0.7,
               height: undefined,
