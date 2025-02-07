@@ -5,6 +5,7 @@ import {
   Text,
   Image,
   RefreshControl,
+  SafeAreaView,
 } from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -32,7 +33,7 @@ import isBetween from 'dayjs/plugin/isBetween';
 import MeetingCardSkeleton from './component/homescreen/MeetingCardSkeleton';
 import {getDeviceType} from './HomeScreen';
 import {StatusBar} from 'expo-status-bar';
-import {SafeAreaView} from 'react-native-safe-area-context';
+
 dayjs.extend(isBetween);
 
 const MeetingList = () => {

@@ -106,7 +106,7 @@ export default function MainTabNavigator() {
       renderCircle={({selectedTab, navigate}) => (
         <Animated.View style={styles.btnCircleUp}>
           <TouchableOpacity
-            onPress={() => Alert.alert('Center Button Clicked!')}>
+            onPress={() => navigationRef.navigate('add')}>
             <Ionicons name="add-outline" size={50} color="white" />
           </TouchableOpacity>
         </Animated.View>
@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   screen1: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'start',
+    alignItems: 'center',
     backgroundColor: '#BFEFFF',
   },
   screen2: {

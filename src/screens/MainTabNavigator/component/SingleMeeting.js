@@ -120,9 +120,9 @@ const SingleMeeting = ({route}) => {
   const phoneNumber = meeting?.lead?.phone?.[0] || '';
 
   return (
-    <View className="bg-spBg p-4 mt-4" style={{flex: 1}}>
+    <View className="bg-spBg px-4 py-2" style={{flex: 1}}>
       {/* Header Section */}
-      <View className="flex-row items-center justify-between px-4 py-2">
+      <View className="flex-row items-center justify-between px-4">
         <TouchableOpacity>
           <Icon name="menu" size={24} color="#000" />
         </TouchableOpacity>

@@ -20,6 +20,7 @@ import {getDeviceType} from '../HomeScreen';
 
 const SearchMeetingScreen = ({route}) => {
   const {meetings} = route.params; // Initial suggestions
+  // console.log('meetings-----<>',meetings);
   const [userId, setUserId] = useState(null);
   const navigation = useNavigation();
   const [query, setQuery] = useState('');
@@ -57,6 +58,7 @@ const SearchMeetingScreen = ({route}) => {
     }
   }, [meetings]);
 
+ 
   // ✅ Handle Search Logic
   const handleSearch = text => {
     setQuery(text);
@@ -90,7 +92,7 @@ const SearchMeetingScreen = ({route}) => {
   );
 
   return (
-    <View className="flex-1 pt-16 px-4 bg-spBg mb-4 ">
+    <View className="flex-1 px-4 bg-spBg mb-4 ">
       {/* ✅ Search Input */}
       <View className="flex-row items-center mb-2 pt-2">
         <TouchableOpacity onPress={() => navigation.goBack()}>

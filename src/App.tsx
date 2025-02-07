@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import store from './redux/store';
 import { usePreventScreenCapture } from "expo-screen-capture";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { AppState, Alert, View, Text, SafeAreaView } from "react-native";
+import { AppState, Alert, View, Text } from "react-native";
 import NetInfo from '@react-native-community/netinfo';
 import * as Updates from 'expo-updates';
 
@@ -16,6 +16,7 @@ import * as Updates from 'expo-updates';
 import { createNavigationContainerRef } from '@react-navigation/native';
 import { jwtDecode } from "jwt-decode";
 import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 // ✅ Create a global navigation reference
 export const navigationRef = createNavigationContainerRef();
@@ -25,7 +26,6 @@ export function navigate(name, params) {
     navigationRef.navigate(name, params);
   }
 }
-
 
 
 const App = () => {
