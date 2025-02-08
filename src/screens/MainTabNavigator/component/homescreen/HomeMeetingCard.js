@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {getDeviceType} from '../../HomeScreen';
 
 const HomeMeetingCard = ({item}) => {
-  console.log('HomeMeetingCard item--<><>', item);
+  // console.log('HomeMeetingCard item--<><>', item);
   const navigation = useNavigation();
 
   const deviceType = getDeviceType();

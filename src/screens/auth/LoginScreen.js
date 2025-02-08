@@ -33,19 +33,6 @@ const LoginScreen = () => {
   const [error, setError] = useState(null);
   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const isSupported = await checkBiometricSupport();
-  //     setIsBiometricAvailable(isSupported);
-
-  //     // Load stored email and password
-  //     const storedCredentials = await getUserCredentials();
-  //     if (storedCredentials) {
-  //       setEmail(storedCredentials.email);
-  //       setPassword(storedCredentials.password);
-  //     }
-  //   })();
-  // }, []);
 
   const handleLogin = async () => {
     try {
@@ -68,61 +55,8 @@ const LoginScreen = () => {
     } catch (error) {
       setError(error?.data?.msg);
       console.error('Login failed:', error);
-    }
+     }
   };
-
-  // const handleBiometricLogin = async () => {
-  //   const biometricEnabled = await AsyncStorage.getItem('biometric_enabled');
-  //   console.log('biometricEnabled--->', biometricEnabled);
-  //   if (!biometricEnabled) {
-  //     Alert.alert(
-  //       'Biometric Login Disabled',
-  //       'Please log in manually first to enable biometric login.',
-  //     );
-  //     return;
-  //   }
-
-  //   const isAuthenticated = await authenticateWithBiometrics();
-  //   if (isAuthenticated) {
-  //     const credentials = await getUserCredentials();
-
-  //     if (credentials?.email && credentials?.password) {
-  //       try {
-  //         // Call API with stored credentials to get a new token
-  //         const response = await login({
-  //           email: credentials.email,
-  //           password: credentials.password,
-  //         }).unwrap();
-  //         const token = response.token;
-  //         const user = response?.user?._id;
-
-  //         // Save token in Redux
-  //         dispatch(loginSuccess({token, user: response.user}));
-
-  //         // Save new token in AsyncStorage
-  //         await AsyncStorage.setItem('token', token);
-  //         await AsyncStorage.setItem('user', user);
-
-  //         navigation.reset({index: 0, routes: [{name: 'main'}]});
-  //       } catch (error) {
-  //         Alert.alert(
-  //           'Login Failed',
-  //           'Biometric authentication was successful, but login failed.',
-  //         );
-  //       }
-  //     } else {
-  //       Alert.alert(
-  //         'No Credentials Found',
-  //         'Please log in manually first to save your credentials for biometric login.',
-  //       );
-  //     }
-  //   } else {
-  //     Alert.alert(
-  //       'Authentication Failed',
-  //       'Biometric authentication was not successful.',
-  //     );
-  //   }
-  // };
 
   return (
     <>
@@ -188,17 +122,6 @@ const LoginScreen = () => {
                 {isLoading ? 'Logging in...' : 'Log In'}
               </Text>
             </TouchableOpacity>
-
-            {/* Biometric Login Button */}
-            {/* {isBiometricAvailable && (
-              <TouchableOpacity
-                onPress={handleBiometricLogin}
-                className="bg-gray-800 w-full h-14 rounded-full flex items-center justify-center mt-4">
-                <Text className="text-white text-2xl font-extrabold">
-                  ꩜ Login with Fingerprint
-                </Text>
-              </TouchableOpacity>
-            )} */}
 
             <Text className="text-red-500 text-center pt-1">{error}</Text>
           </View>

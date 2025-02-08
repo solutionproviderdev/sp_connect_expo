@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Alert,
   Animated,
@@ -16,28 +16,30 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import MeetingStack from './MeetingStack';
 import HomeStack from './HomeStack';
 import {navigationRef} from '../App';
+import ClientInfoStack from './CalculatorStack';
+import CalculatorStack from './CalculatorStack';
  
 const Screen1 = () => (
   <View style={styles.screen1}>
-     <Text>Screen 1</Text>
+    <Text>Screen 1</Text>
   </View>
 );
 
 const Screen2 = () => (
   <View style={styles.screen2}>
-      <Text>Screen 2</Text>
+    <Text>Screen 2</Text>
   </View>
 );
 
-const Screen3 = () => (
-  <View style={styles.screen3}>
-      <Text>Screen 3</Text>
-  </View>
-);
-
+// Wrapper for CalculatorStack to accept props
+const CalculatorStackWrapper = props => {
+  return <CalculatorStack {...props} bottomTabRef={props.bottomTabRef} />;
+};
 export default function MainTabNavigator() {
+  const bottomTabRef = useRef(null);
+
   const handleTabPress = (routeName, selectedTab, navigate) => {
-    if (selectedTab === routeName) return;  
+    if (selectedTab === routeName) return;
     switch (routeName) {
       case 'home':
         navigationRef.navigate('home', {
@@ -52,11 +54,11 @@ export default function MainTabNavigator() {
       case 'add':
         navigate('add');
         break;
-      case 'search':
-        navigate('search');
+      case 'followup':
+        navigate('followup');
         break;
-      case 'profile':
-        navigate('profile');
+      case 'ClientInfo':
+        navigate('ClientInfo');
         break;
       default:
         navigate(routeName);
@@ -68,11 +70,11 @@ export default function MainTabNavigator() {
       home: 'home-outline',
       meeting: 'calendar-outline',
       add: 'add-outline',
-      search: 'alarm-outline',
-      profile: 'calculator-outline',
+      followup: 'alarm-outline',
+      calculator: 'calculator-outline',
     };
 
-    const icon = iconMap[routeName] || 'circle-outline';
+    const icon = iconMap[routeName] || 'add-outline';
     return (
       <Ionicons
         name={icon}
@@ -92,6 +94,7 @@ export default function MainTabNavigator() {
 
   return (
     <CurvedBottomBarExpo.Navigator
+      ref={bottomTabRef}
       type="DOWN"
       screenOptions={{
         headerShown: false,
@@ -105,8 +108,7 @@ export default function MainTabNavigator() {
       borderTopLeftRight
       renderCircle={({selectedTab, navigate}) => (
         <Animated.View style={styles.btnCircleUp}>
-          <TouchableOpacity
-            onPress={() => navigationRef.navigate('add')}>
+          <TouchableOpacity onPress={() => navigationRef.navigate('add')}>
             <Ionicons name="add-outline" size={50} color="white" />
           </TouchableOpacity>
         </Animated.View>
@@ -131,18 +133,25 @@ export default function MainTabNavigator() {
         position="CIRCLE"
       />
       <CurvedBottomBarExpo.Screen
-        name="search"
+        name="followup"
         component={Screen2}
         options={{unmountOnBlur: true}}
         position="RIGHT"
       />
+      {/* <CurvedBottomBarExpo.Screen
+        name="ClientInfo"
+        // component={ClientInfoStack}
+         options={{unmountOnBlur: true}}
+        position="RIGHT"
+      /> */}
       <CurvedBottomBarExpo.Screen
-        name="profile"
-        component={Screen3}
-        options={{unmountOnBlur: true}}
+        name="calculator"
+        component={props => (
+          <CalculatorStackWrapper {...props} bottomTabRef={bottomTabRef} />
+        )}
         position="RIGHT"
       />
-     </CurvedBottomBarExpo.Navigator>
+    </CurvedBottomBarExpo.Navigator>
   );
 }
 
@@ -176,20 +185,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#BFEFFF',
+    backgroundColor: 'rgb(255, 254, 246)',
   },
   screen2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFEBCD',
-  },
-  screen3: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#D3D3D3',
+    backgroundColor: 'rgb(255, 254, 246)',
   },
 });
-
-

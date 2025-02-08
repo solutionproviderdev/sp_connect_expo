@@ -1,5 +1,3 @@
- 
-
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -9,7 +7,7 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import {Avatar, Menu, Provider} from 'react-native-paper';
+import {ActivityIndicator, Avatar, Menu, Provider} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import HomeMeetingCard from '../HomeMeetingCard';
 import {CommonActions, useNavigation} from '@react-navigation/native';
@@ -24,8 +22,8 @@ import {getDeviceType} from '../../../HomeScreen';
 const TodayMeetings = ({route = {}}) => {
   // need to validate the route
   const {user} = route?.params || {}; // Extract passed data
-  console.log('todaymeeting route user- is here----->', user);
-  
+  // console.log('todaymeeting route user- is here----->', user);
+
   // console.log('todaymeeting user----->', user);
   const userId = user?._id || '';
   // console.log('todaymeeting userId----->', userId);
@@ -33,16 +31,6 @@ const TodayMeetings = ({route = {}}) => {
   const todayDate = today.toISOString().split('T')[0]; // Extract YYYY-MM-DD part
   const dateRange = `${todayDate}_${todayDate}`;
   const deviceType = getDeviceType();
-  // console.log(
-  //   'todaymeeting user is today----->',
-  //   today,
-  //   'todayDate',
-  //   todayDate,
-  //   'dateRange',
-  //   dateRange,
-  //   'deviceType',
-  //   deviceType,
-  // );
 
   const {
     data: meetings = [],
@@ -50,23 +38,6 @@ const TodayMeetings = ({route = {}}) => {
     isError,
     refetch,
   } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
-
-  // } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
-  // console.log(
-  //   'todaymeeting meetings----->',
-  //   meetings,
-  //   'isLoading',
-  //   isLoading,
-  //   'iserror',
-  //   isError,
-  // );
-
-  // console.log(
-  //   'meetings && meetings?.length-->',
-  //   meetings,
-  //   'meetings?.length-->',
-  //   meetings?.length,
-  // );
 
   const sortedMeetings = meetings?.slice().sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt), // Newest first
@@ -124,17 +95,24 @@ const TodayMeetings = ({route = {}}) => {
     );
   }
 
-   if (!meetings || meetings.length === 0) {
+  if (!meetings || meetings.length === 0) {
     return (
       <View className="flex-1 items-center justify-center bg-spBg">
+        <View>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="rgb(4, 98, 138)" />
+          ) : (
+            <Text className="text-gray-500 text-xl">
+              No meetings scheduled today.
+            </Text>
+          )}
+        </View>
         <TouchableOpacity
           onPress={() => navigation.goBack()}
-          className="text-xl bg-red-500 rounded-md">
+          className="flex-row text-xl bg-red-500 rounded-md">
+          {/* <Text className="px-4 py-3 text-white">{isloading }</Text> */}
           <Text className="px-4 py-3 text-white">Go Back !</Text>
         </TouchableOpacity>
-        <Text className="text-gray-500 text-xl">
-          No meetings scheduled today.
-        </Text>
       </View>
     );
   }
@@ -143,7 +121,7 @@ const TodayMeetings = ({route = {}}) => {
     return (
       <View className="flex-1 items-center justify-center bg-spBg">
         <Text className="text-red-500 text-xl">Invalid meeting data.</Text>
-        <View className='flex-row'>
+        <View className="flex-row">
           <TouchableOpacity
             onPress={refetch}
             className="bg-blue-500 p-3 rounded mt-4">

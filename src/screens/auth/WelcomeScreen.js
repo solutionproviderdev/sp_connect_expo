@@ -72,6 +72,7 @@ const WelcomeScreen = () => {
               'Login Failed',
               'Biometric authentication was successful, but login failed.',
             );
+            navigation.navigate('login');
           }
         } else {
           Alert.alert(

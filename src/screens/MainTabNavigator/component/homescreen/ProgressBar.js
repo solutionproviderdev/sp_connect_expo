@@ -41,7 +41,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({completed, total}) => {
       style: 'decimal',
     }) + '/-';
   const deviceType = getDeviceType();
-  console.log('deviceType---->from progress||', deviceType);
+  // console.log('deviceType---->from progress||', deviceType);
   const svgHeight = deviceType === 'tablet' ? '50' : '25';
   const textHeight = deviceType === 'tablet' ? '30' : '17';
 

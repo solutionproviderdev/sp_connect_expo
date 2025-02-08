@@ -28,7 +28,7 @@ const SearchMeetingScreen = ({route}) => {
   const [initialMeetings, setInitialMeetings] = useState([]);
 
   const deviceType = getDeviceType();
-  console.log('deviceType:</-> ', deviceType);
+  // console.log('deviceType:</-> ', deviceType);
 
   // ✅ Fetch User ID from AsyncStorage
   useEffect(() => {
