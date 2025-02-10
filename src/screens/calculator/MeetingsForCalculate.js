@@ -1,17 +1,3 @@
-// import { StyleSheet, Text, View } from 'react-native'
-// import React from 'react'
-
-// const MeetingsForCalculate = () => {
-//   return (
-//     <View>
-//       <Text>MeetingsForCalculate</Text>
-//     </View>
-//   )
-// }
-
-// export default MeetingsForCalculate
-
-// const styles = StyleSheet.create({})
 
 import React, {useState, useEffect} from 'react';
 import {
@@ -34,7 +20,7 @@ const MeetingsForCalculate = () => {
   const deviceType = getDeviceType();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const {userId} = useUserCredentials();
-  console.log('useUserCredentials from meetingsforcalculate-<>', userId);
+ 
   // Get today's date range for the query
   const today = new Date();
   const todayDate = today.toISOString().split('T')[0];
@@ -46,7 +32,7 @@ const MeetingsForCalculate = () => {
     isError,
     refetch,
   } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
-  console.log('mtcalculate', meetings);
+  // console.log('mtcalculate', meetings);
   const sortedMeetings = meetings
     ?.slice()
     .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -59,7 +45,7 @@ const MeetingsForCalculate = () => {
   }, [isLoading]);
 
   const handleMeetingPress = meeting => {
-    if (meeting && meeting.lead) {
+     if (meeting && meeting.lead) {
       navigation.navigate('client-info', {meeting});
     }
   };

@@ -98,7 +98,7 @@ const HomeScreen = () => {
     isError,
     refetch,
   } = useGetMeetingsQuery({date: '', userId}, {skip: !userId});
-// console.log('meetigs----->',meetings );
+  // console.log('meetigs----->',meetings );
   // const handleLogout = async () => {
   //   try {
   //     await AsyncStorage.removeItem('token');
@@ -113,7 +113,6 @@ const HomeScreen = () => {
   //   }
   // };
 
-
   const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('token');
@@ -124,7 +123,7 @@ const HomeScreen = () => {
           console.log('✅ Navigation is ready. Resetting to welcome screen...');
           navigationRef.reset({
             index: 0,
-            routes: [{ name: 'welcome' }],
+            routes: [{name: 'welcome'}],
           });
         } else {
           console.warn('🚨 Navigation not ready yet. Will retry.');
@@ -156,7 +155,7 @@ const HomeScreen = () => {
         }
         `}
         // source={require('../../assets/orrangeEmojie.gif')}>
-        >
+      >
         <TouchableOpacity>
           <Image
             source={require('../../assets/sp_gear_icon.png')}
@@ -169,13 +168,11 @@ const HomeScreen = () => {
           onPress={() =>
             navigation.navigate('meeting', {
               screen: 'SearchMeeting',
-              params: { meetings: meetings || [] }
+              params: {meetings: meetings || []},
             })
           }>
-
-            {/*  params: {meetings} */}
-{/* onPress={() => navigation.navigate('meeting', { screen: 'SearchMeeting' })}> */}
-
+          {/*  params: {meetings} */}
+          {/* onPress={() => navigation.navigate('meeting', { screen: 'SearchMeeting' })}> */}
 
           <Icon name="magnify" size={22} color="gray" />
           <View className=" ml-2 flex-row">

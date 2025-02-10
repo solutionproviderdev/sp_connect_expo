@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useGetUserbyIDQuery } from '../redux/services/api';
 
 export const useUserCredentials = () => {
   const [userId, setUserId] = useState(null);
@@ -19,7 +20,10 @@ export const useUserCredentials = () => {
     fetchUser();
   }, []);
 
-  return { userId };
+    const {data: userData} = useGetUserbyIDQuery(userId, {skip: !userId});
+  
+
+  return { userId,userData };
 };
 
 

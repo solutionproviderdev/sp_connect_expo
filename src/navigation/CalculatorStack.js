@@ -16,7 +16,7 @@ export default function CalculatorStack({bottomTabRef}) {
       const routeName = navigationRef?.current?.getCurrentRoute()?.name; // ✅ Get Active Route
       console.log('Current Route:', routeName);
 
-      if (routeName === 'choose-project') {
+      if (routeName === 'choose-project' || routeName === 'client-info') {
         bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
       } else {
         bottomTabRef?.current?.setVisible(true); // ❌ Hide Bottom Tab on all other screens

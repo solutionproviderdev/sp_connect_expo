@@ -35,8 +35,12 @@ const SingleMeeting = ({route}) => {
   const navigation = useNavigation();
   // const {meeting} = route.params;
   const {meeting = {}} = route.params || {};
-
-  console.log('singlemeeting meeting', meeting);
+  
+  console.log('singlemeeting meeting check for address-<>', division ,district ,area ,address);
+  
+  // const {division ,district ,area ,address}=meeting?.lead?.address
+  const { division = "" ,district = "" ,area = "" ,address = ""}=meeting?.lead?.address
+  
 
   const status = meeting?.lead?.projectStatus?.status || 'Unknown';
   const subStatus = meeting?.lead?.projectStatus?.subStatus || 'Unknown';
@@ -201,11 +205,10 @@ const SingleMeeting = ({route}) => {
               </Text>
             </View>
 
-            <View className="flex-row items-center mb-2">
-              <Icon name="map-marker" size={16} color="#6B7280" />
-              <Text className=" text-gray-600 ml-2 max-w-[180px]">
-                {meeting.lead?.address?.area || 'No Area'},{' '}
-                {meeting.lead?.address?.district || 'No District'}
+            <View className="flex-row items-start mb-2">
+              <Icon name="map-marker" style={{marginTop:2}} size={16} color="#6B7280" />
+              <Text className=" text-gray-700 ml-2 max-w-[180px]">
+                {division} - {district} - {area} - {address}
               </Text>
             </View>
 
@@ -247,7 +250,7 @@ const SingleMeeting = ({route}) => {
                 {user?.nameAsPerNID || 'Unknown CRE'}
               </Text>
               <Text className="bg-spDepGray text-center text-xs font-medium px-2 py-0.5 text-white">
-                {meeting.visitCharge ? `${meeting.visitCharge}/-` : 'Free/-'}
+                {meeting.visitCharge  === 0 ? 'Free/-' : `${meeting.visitCharge}/-`}
               </Text>
             </View>
           </View>

@@ -27,8 +27,9 @@ const CalculateMeetingCard = ({item}) => {
   const {area = 'Unknown Area', district = 'Unknown District'} = address || {};
 
   const handleCalculatePress = () => {
-    if (item && item.lead) {
-      navigation.navigate('client-info', { meeting: item });
+    if (item && item.lead._id) {
+      console.log('calcluatemeetincard',);
+      // navigation.navigate('client-info', { meeting: item });
     } else {
       console.warn('Invalid meeting data');
     }
