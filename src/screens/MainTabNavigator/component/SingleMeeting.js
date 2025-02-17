@@ -35,8 +35,9 @@ const SingleMeeting = ({route}) => {
   const navigation = useNavigation();
   // const {meeting} = route.params;
   const {meeting = {}} = route.params || {};
-  
-  console.log('singlemeeting meeting check for address-<>', division ,district ,area ,address);
+    // console.log('visit charge-+>',item.visitCharge);
+
+  console.log('singlemeeting visitcharge-<>', meeting.visitCharge);
   
   // const {division ,district ,area ,address}=meeting?.lead?.address
   const { division = "" ,district = "" ,area = "" ,address = ""}=meeting?.lead?.address

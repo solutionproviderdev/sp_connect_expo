@@ -70,7 +70,7 @@ export default function MainTabNavigator() {
       home: 'home-outline',
       meeting: 'calendar-outline',
       add: 'add-outline',
-      followup: 'alarm-outline',
+      followup: 'telescope-outline',
       calculator: 'calculator-outline',
     };
 

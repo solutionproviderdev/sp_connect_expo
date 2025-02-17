@@ -5,18 +5,22 @@ import {navigationRef} from '../App';
 import ClientInfo from '../screens/calculator/ClientInfo';
 import ChoosProject from '../screens/calculator/ChoosProject';
 import MeetingsForCalculate from '../screens/calculator/MeetingsForCalculate';
+import { Presentation } from 'lucide-react-native';
+import AddProduct from '../screens/calculator/AddProduct';
+import CalculatorHeader from '../screens/calculator/components/shared/CalculatorHeader';
 
 const Stack = createNativeStackNavigator();
 
 export default function CalculatorStack({bottomTabRef}) {
   const navigation = useNavigation(); // ✅ Get current route
+  const allowedRoutes = ['choose-project', 'client-info', 'AddProduct'];
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('state', () => {
       const routeName = navigationRef?.current?.getCurrentRoute()?.name; // ✅ Get Active Route
-      console.log('Current Route:', routeName);
-
-      if (routeName === 'choose-project' || routeName === 'client-info') {
+   
+      // if (routeName === 'choose-project' || routeName === 'client-info') {
+      if (allowedRoutes.includes(routeName)) {
         bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
       } else {
         bottomTabRef?.current?.setVisible(true); // ❌ Hide Bottom Tab on all other screens
@@ -24,16 +28,22 @@ export default function CalculatorStack({bottomTabRef}) {
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation,allowedRoutes,bottomTabRef]);
 
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        contentStyle: {backgroundColor: "rgb(24, 33, 44)" },
+         header:()=>(
+          <CalculatorHeader />
+         )  
+        // header:<CalculatorHeader />
       }}>
-      <Stack.Screen name="meeting-calculate" component={MeetingsForCalculate} />
-      <Stack.Screen name="client-info" component={ClientInfo} />
-      <Stack.Screen name="choose-project" component={ChoosProject} />
+      <Stack.Screen name="meeting-calculate" options={{Presentation:"modal"}} component={MeetingsForCalculate} />
+      <Stack.Screen name="client-info" options={{Presentation:"modal"}} component={ClientInfo} />
+      <Stack.Screen name="choose-project" options={{Presentation:"modal"}} component={ChoosProject} />
+      <Stack.Screen name="AddProduct" options={{Presentation:"modal"}} component={AddProduct} />
     </Stack.Navigator>
   );
 }

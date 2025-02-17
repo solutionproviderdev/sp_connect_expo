@@ -7,6 +7,7 @@ import {useGetUserbyIDQuery} from '../../../redux/services/api';
 const MeetingCard = ({item, onpress}) => {
   const {data: user} = useGetUserbyIDQuery(item.lead.creName);
   // console.log('meetign card----------',item?.lead?._id);
+  // console.log('visit charge-+>',item);
   return (
     <TouchableOpacity onPress={onpress} activeOpacity={0.8}>
       <View className="flex-row items-start rounded-xl p-2 mb-3 border border-gray-300">
@@ -107,7 +108,8 @@ const MeetingCard = ({item, onpress}) => {
               {user?.nameAsPerNID?.toUpperCase() || 'unknown cre'}
             </Text>
             <Text className="bg-spDepGray text-center text-xs font-medium px-2 py-0.5 text-white">
-              {item.visitCharge ? `${item.visitCharge}/-` : '550/-'}
+              {/* {item.visitCharge ? `${item.visitCharge}/-` : '550/-'} */}
+              {item.visitCharge  === 0 ? 'Free/-' : `${item.visitCharge}/-`}
             </Text>
           </View>
         </View>

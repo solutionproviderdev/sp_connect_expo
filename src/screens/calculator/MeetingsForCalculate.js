@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -20,7 +19,8 @@ const MeetingsForCalculate = () => {
   const deviceType = getDeviceType();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const {userId} = useUserCredentials();
- 
+  const [error, setError] = useState();
+
   // Get today's date range for the query
   const today = new Date();
   const todayDate = today.toISOString().split('T')[0];
@@ -45,7 +45,8 @@ const MeetingsForCalculate = () => {
   }, [isLoading]);
 
   const handleMeetingPress = meeting => {
-     if (meeting && meeting.lead) {
+    console.log('meeting for calculate->', meeting);
+    if (meeting && meeting.lead) {
       navigation.navigate('client-info', {meeting});
     }
   };
@@ -54,6 +55,7 @@ const MeetingsForCalculate = () => {
     try {
       await refetch();
     } catch (error) {
+      setError(error)
       console.error('Refresh error:', error);
     }
   };
@@ -62,7 +64,7 @@ const MeetingsForCalculate = () => {
     item ? (
       <CalculateMeetingCard
         item={item}
-        onPress={() => handleMeetingPress(item)}
+        // onPress={() => handleMeetingPress(item)}
       />
     ) : null;
 
@@ -149,12 +151,12 @@ const MeetingsForCalculate = () => {
 
   // Main Content
   return (
-    <View className="flex-1 bg-spBg">
+    <View className="flex-1 ">
       {/* Header */}
       <View
         className={`
         ${deviceType === 'tablet' ? 'py-6' : 'py-4'}
-        px-4 bg-white border-b border-gray-200
+        px-4 bg-calCardgray border-b border-gray-200
       `}>
         <Text
           className={`
@@ -176,14 +178,13 @@ const MeetingsForCalculate = () => {
           <Text className="ml-2 text-gray-500">Search meetings...</Text>
         </TouchableOpacity>
       </View>
-          <Text
-            className={`
+      <Text
+        className={`
             ${deviceType === 'tablet' ? 'text-xl' : 'text-lg'}
-            font-semibold text-gray-700 mb-3 px-4
+            font-semibold text-white mb-3 px-4
           `}>
-            Today's Meetings
-          </Text>
-        
+        Today's Meetings
+      </Text>
 
       {/* Meetings List */}
       <FlatList
@@ -191,7 +192,7 @@ const MeetingsForCalculate = () => {
         renderItem={renderMeetingCard}
         keyExtractor={item => item._id?.toString() || Math.random().toString()}
         contentContainerStyle={{paddingHorizontal: 16, paddingBottom: 60}}
-        ItemSeparatorComponent={() => <View className="h-3" />}
+        ItemSeparatorComponent={() => <View className="h-2" />}
         onRefresh={handleRefresh}
         refreshing={isLoading}
       />

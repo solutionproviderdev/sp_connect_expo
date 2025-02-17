@@ -6,7 +6,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 const Tasks = ({meeting, user, deviceType}) => {
   const navigation = useNavigation();
   const todayDate = new Date().toISOString().split('T')[0];
-  const todayMeetings = meeting?.filter(m => m.date.startsWith(todayDate));
+  // const todayMeetings = meeting?.filter(m => m.date.startsWith(todayDate));
+  const todayMeetings = meeting?.filter(m => m.date.startsWith(todayDate) && m.status !== 'Postponed' && m.status !== 'Canceled' );
 
   const taskItems = [
     {

@@ -212,12 +212,12 @@ const ClientInfo = ({ route }) => {
   
   // ✅ Safe address formatting to avoid crashes
   const addresses = `${division} - ${district} - ${area} - ${address}`.trim();
-  console.log('client info meeiting', addresses);
-
-  console.log('name:', name, 'phoneNumber:', phoneNumber, 'addresses:', addresses);
-
+  // console.log('client info meeiting', addresses);
+  
+  // console.log('name:', name, 'phoneNumber:', phoneNumber, 'addresses:', addresses);
+ 
   return (
-    <View className="flex-1 bg-gray-900 px-4 pt-2 pb-6">
+    <View className="flex-1  px-4 pt-2 pb-6">
       <CalculatorHeader />
       <Text className="text-gray-200 text-2xl font-bold py-6">Client's Information</Text>
 

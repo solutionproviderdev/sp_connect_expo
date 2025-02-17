@@ -3,8 +3,8 @@ import React from 'react';
 import IconE from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
-import { getDeviceType } from '../../../MainTabNavigator/HomeScreen';
- 
+import {getDeviceType} from '../../../MainTabNavigator/HomeScreen';
+
 const CalculateMeetingCard = ({item}) => {
   const navigation = useNavigation();
   const deviceType = getDeviceType();
@@ -16,20 +16,21 @@ const CalculateMeetingCard = ({item}) => {
     salesExecutive = {},
     visitCharge = 0,
   } = item || {};
-  
   const {
-    name = 'Unknown Name', 
-    address = {}, 
+    name = 'Unknown Name',
+    address = {},
     requirements = [],
-    projectStatus = {}
+    projectStatus = {},
   } = lead || {};
-  
+
   const {area = 'Unknown Area', district = 'Unknown District'} = address || {};
+console.log('visitCharge--->',visitCharge);
+  // {item.visitCharge  === 0 ? 'Free/-' : `${item.visitCharge}/-`}
 
   const handleCalculatePress = () => {
     if (item && item.lead._id) {
-      console.log('calcluatemeetincard',);
-      // navigation.navigate('client-info', { meeting: item });
+      // console.log('calcluatemeetincard',);
+      navigation.navigate('client-info', {meeting: item});
     } else {
       console.warn('Invalid meeting data');
     }
@@ -38,17 +39,19 @@ const CalculateMeetingCard = ({item}) => {
   return (
     <TouchableOpacity
       className={`
-        ${deviceType === 'tablet' 
-          ? 'rounded-xl p-4 mt-4 border-2 border-blue-300 bg-white shadow-md' 
-          : 'rounded-xl p-3 mt-3 border-2 border-blue-300 bg-white shadow-sm'}
+        ${
+          deviceType === 'tablet'
+            ? 'rounded-xl p-4 mt-4 border-2 border-blue-300 bg-calCardgray shadow-md'
+            : 'rounded-xl p-3 mt-3 border-2 border-blue-300 bg-calCardgray shadow-sm'
+        }
       `}
       onPress={handleCalculatePress}>
-      
       {/* Header Section */}
       <View className="flex-row justify-between items-center mb-2">
         <View className="flex-row items-center">
           <Icon name="calculator" size={24} color="#2563EB" />
-          <Text className={`
+          <Text
+            className={`
             ${deviceType === 'tablet' ? 'text-2xl' : 'text-lg'} 
             font-bold text-blue-600 ml-2
           `}>
@@ -56,7 +59,8 @@ const CalculateMeetingCard = ({item}) => {
           </Text>
         </View>
         <View className="bg-blue-100 px-3 py-1 rounded-full">
-          <Text className={`
+          <Text
+            className={`
             ${deviceType === 'tablet' ? 'text-lg' : 'text-sm'}
             font-semibold text-blue-700
           `}>
@@ -68,41 +72,59 @@ const CalculateMeetingCard = ({item}) => {
       {/* Client Details */}
       <View className="border-b border-gray-200 pb-2 mb-2">
         <View className="flex-row items-center mb-1">
-          <Icon name="account" size={20} color="#4B5563" />
-          <Text className={`
+          <Icon name="account" size={20} color="#fff" />
+          <Text
+            className={`
             ${deviceType === 'tablet' ? 'text-xl' : 'text-base'}
-            font-semibold text-gray-800 ml-2
+            font-semibold text-white ml-2
           `}>
             {name}
           </Text>
         </View>
 
         <View className="flex-row items-center mb-1">
-          <Icon name="map-marker" size={20} color="#4B5563" />
-          <Text className={`
+          <Icon name="map-marker" size={20} color="#fff" />
+          <Text
+            className={`
             ${deviceType === 'tablet' ? 'text-lg' : 'text-sm'}
-            text-gray-600 ml-2
+            text-white ml-2 w-[80%]
           `}>
             {area}, {district}
           </Text>
         </View>
 
-        <View className="flex-row items-center">
-          <Icon name="clipboard-list" size={20} color="#4B5563" />
-          <Text className={`
+        <View className="flex-row items-center justify-between">
+          <View className='flex-row'>
+            <Icon name="clipboard-list" size={20} color="#fff" />
+            <Text
+              className={`
             ${deviceType === 'tablet' ? 'text-lg' : 'text-sm'}
-            text-gray-600 ml-2
+            text-white ml-2
           `}>
-            Project Status: {projectStatus?.status || 'Not Specified'}
-          </Text>
+              Project Status: {projectStatus?.status || 'Not Specified'}
+            </Text>
+          </View>
+
+          <View className='flex-row items-center'>
+            <Icon name="cash" size={25} color="#fff" />
+            <Text
+              className={`
+            ${deviceType === 'tablet' ? 'text-lg' : 'text-sm'}
+            text-white ml-2
+          `}>
+               {/* {visitCharge || 'visitcharge'} */}
+               {visitCharge  === 0 ? 'Free/-' : `${visitCharge}/-`}
+            </Text>
+          </View>
         </View>
       </View>
 
       {/* Requirements Section */}
       <View className="mb-3">
-        <Text className={`
+        <Text
+          className={`
           ${deviceType === 'tablet' ? 'text-lg' : 'text-base'}
-          font-semibold text-gray-700 mb-1
+          font-semibold text-white mb-1
         `}>
           Requirements:
         </Text>
@@ -110,7 +132,8 @@ const CalculateMeetingCard = ({item}) => {
           {requirements?.length > 0 ? (
             requirements.map((req, index) => (
               <View key={index} className="bg-gray-100 rounded-full px-3 py-1">
-                <Text className={`
+                <Text
+                  className={`
                   ${deviceType === 'tablet' ? 'text-base' : 'text-sm'}
                   text-gray-700
                 `}>
@@ -127,20 +150,22 @@ const CalculateMeetingCard = ({item}) => {
       {/* Footer Section */}
       <View className="flex-row justify-between items-center mt-2 pt-2 border-t border-gray-200">
         <View className="flex-row items-center">
-          <Icon name="account-tie" size={20} color="#4B5563" />
-          <Text className={`
+          <Icon name="account-tie" size={20} color="#fff" />
+          <Text
+            className={`
             ${deviceType === 'tablet' ? 'text-lg' : 'text-sm'}
-            font-medium text-gray-700 ml-2
+            font-medium text-white ml-2
           `}>
-            CRE: {salesExecutive?.nickname?.toUpperCase() || 'Unknown'}
+            {salesExecutive?.nickname?.toUpperCase() || 'Unknown'}
           </Text>
         </View>
-        
-        <TouchableOpacity 
+
+        <TouchableOpacity
           className="bg-blue-600 px-4 py-2 rounded-lg flex-row items-center"
           onPress={handleCalculatePress}>
           <Icon name="calculator-variant" size={20} color="white" />
-          <Text className={`
+          <Text
+            className={`
             ${deviceType === 'tablet' ? 'text-lg' : 'text-sm'}
             font-bold text-white ml-2
           `}>

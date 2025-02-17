@@ -19,6 +19,8 @@ module.exports = {
         spBlue: 'rgb(4, 98, 138)',
         spNavGray: 'rgb(227, 226, 220)',
         spGreen:'#67A74A',
+        calCardgray:"rgb(57, 70, 86)",
+        calBg:"rgb(24, 33, 44)",
         primary: {
           50: '#EDF3FF',
           100: '#DFE7FF',

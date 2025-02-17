@@ -38,10 +38,14 @@ const TodayMeetings = ({route = {}}) => {
     isError,
     refetch,
   } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
-
-  const sortedMeetings = meetings?.slice().sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.createdAt), // Newest first
-  );
+console.log('meetings---<>',meetings);
+  // const sortedMeetings = meetings?.slice().sort(
+  //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt), // Newest first
+  // );
+  const sortedMeetings = meetings
+  ?.filter(meeting => meeting.status !== 'Postponed' && meeting.status !== 'Canceled') // ✅ Exclude unwanted statuses
+  .slice()
+  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // ✅ Sort newest first
   // console.log('todaymeeting sortedMeetings----->', sortedMeetings);
 
   // console.log('meeting, isLoading----->', meetings, isLoading);
@@ -209,8 +213,8 @@ const TodayMeetings = ({route = {}}) => {
         <View
           className={`${
             deviceType === 'tablet'
-              ? 'flex-row items-center justify-between px-4'
-              : 'flex-row items-center justify-between'
+              ? 'flex-row items-center justify-between px-4 '
+              : 'flex-row items-center justify-between py-2'
           }`}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             {deviceType === 'tablet' ? (
