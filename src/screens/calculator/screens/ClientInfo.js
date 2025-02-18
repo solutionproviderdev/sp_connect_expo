@@ -1,4 +1,3 @@
-
 // import React, {useState} from 'react';
 // import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
 // import {useNavigation} from '@react-navigation/native';
@@ -13,7 +12,7 @@
 // const ClientInfo = ({route}) => {
 //   const navigation = useNavigation();
 //   const {meeting} = route.params;
-//   // const {address, area, district, division} = meeting?.lead?.address 
+//   // const {address, area, district, division} = meeting?.lead?.address
 //   const { division = "" ,district = "" ,area = "" ,address = ""}=meeting?.lead?.address || {};
 // const name =meeting?.lead?.name || '';
 // const phoneNumber = meeting?.lead?.phone?.[0] || '';
@@ -27,10 +26,7 @@
 //   const {userId, userData} = useUserCredentials();
 
 //   // const MeetingAdress={`${address} ${area} ${district} ${division}};
-  
 
-  
- 
 //   // const handleRetry = () => {
 //   //   refetchMeeting();
 //   //   refetchUser();
@@ -67,13 +63,13 @@
 //           //   })
 //           // }
 //         >
-           
+
 //           <Icon name="magnify" size={22} color="white" />
 //           <View className=" ml-2 flex-row mb-1">
 //             <Text className="text-lg font-extrabold text-spBg">
 //               Find Solutions
 //             </Text>
-          
+
 //           </View>
 //         </TouchableOpacity>
 //          <TouchableOpacity className="mr-2">
@@ -159,8 +155,6 @@
 //         </View>
 //       </View>
 
-     
-
 //       {/* Navigation Buttons */}
 //       <View className="flex-row justify-between items-center mt-auto">
 //         <TouchableOpacity
@@ -181,27 +175,19 @@
 
 // export default ClientInfo;
 
+import React, {useState} from 'react';
+import {View, Text, TextInput, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {useUserCredentials} from '../../../utils/UserCredentials';
+import CalculatorHeader from '../components/shared/CalculatorHeader';
 
-
-
-
-
-
-
-
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useUserCredentials } from '../../utils/UserCredentials';
-import CalculatorHeader from './components/shared/CalculatorHeader';
-
-const ClientInfo = ({ route }) => {
+const ClientInfo = ({route}) => {
   const navigation = useNavigation();
-  const { meeting } = route.params || {}; // Ensure meeting exists
+  const {meeting} = route.params || {}; // Ensure meeting exists
   // ✅ Validate meeting and its properties
   const lead = meeting?.lead || {};
   const leadAddress = lead?.address || {};
-  
+
   // ✅ Assign default values to prevent undefined issues
   const division = leadAddress?.division || '';
   const district = leadAddress?.district || '';
@@ -209,17 +195,19 @@ const ClientInfo = ({ route }) => {
   const address = leadAddress?.address || '';
   const name = lead?.name || '';
   const phoneNumber = lead?.phone?.[0] || '';
-  
+
   // ✅ Safe address formatting to avoid crashes
   const addresses = `${division} - ${district} - ${area} - ${address}`.trim();
   // console.log('client info meeiting', addresses);
-  
+
   // console.log('name:', name, 'phoneNumber:', phoneNumber, 'addresses:', addresses);
- 
+
   return (
     <View className="flex-1  px-4 pt-2 pb-6">
       <CalculatorHeader />
-      <Text className="text-gray-200 text-2xl font-bold py-6">Client's Information</Text>
+      <Text className="text-gray-200 text-2xl font-bold py-6">
+        Client's Information
+      </Text>
 
       <View className="gap-4 w-full">
         {/* Name Input */}
@@ -258,11 +246,15 @@ const ClientInfo = ({ route }) => {
 
       {/* Navigation Buttons */}
       <View className="flex-row justify-between items-center mt-auto">
-        <TouchableOpacity className="mr-2 bg-spBlue rounded-lg py-3 w-1/3" onPress={() => navigation.goBack()}>
+        <TouchableOpacity
+          className="mr-2 bg-spBlue rounded-lg py-3 w-1/3"
+          onPress={() => navigation.goBack()}>
           <Text className="text-center font-extrabold text-white">Back</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="ml-2 bg-[#669933] rounded-lg py-3 w-1/3" onPress={() => navigation.navigate('choose-project')}>
+        <TouchableOpacity
+          className="ml-2 bg-[#669933] rounded-lg py-3 w-1/3"
+          onPress={() => navigation.navigate('choose-project')}>
           <Text className="text-center font-extrabold text-white">Next</Text>
         </TouchableOpacity>
       </View>
@@ -271,4 +263,3 @@ const ClientInfo = ({ route }) => {
 };
 
 export default ClientInfo;
-

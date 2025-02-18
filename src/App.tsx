@@ -17,6 +17,8 @@ import { createNavigationContainerRef } from '@react-navigation/native';
 import { jwtDecode } from "jwt-decode";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Font from 'expo-font';
+import {ActivityIndicator, PaperProvider} from 'react-native-paper';
 
 // ✅ Create a global navigation reference
 export const navigationRef = createNavigationContainerRef();
@@ -141,8 +143,34 @@ const App = () => {
     checkLoginStatus();
   }, []);
 
+  //font related codes
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+   // Load fonts
+   useEffect(() => {
+    async function loadFonts() {
+      await Font.loadAsync({
+        'RobotoCondensed-Regular': require('./assets/fonts/Roboto_Condensed/static/RobotoCondensed-Regular.ttf'),
+        'RobotoCondensed-SemiBold': require('./assets/fonts/Roboto_Condensed/static/RobotoCondensed-SemiBold.ttf'),
+        'RobotoCondensed-ExtraBold': require('./assets/fonts/Roboto_Condensed/static/RobotoCondensed-ExtraBold.ttf'),
+        'RobotoCondensed-Italic': require('./assets/fonts/Roboto_Condensed/static/RobotoCondensed-Italic.ttf'),
+      });
+      setFontsLoaded(true);
+    }
+    loadFonts();
+  }, []);
+
+  if (!fontsLoaded) {
+    return (
+      <View className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
   return (
     <Provider store={store}>
+      {/* <PaperProvider> */}
       <NavigationContainer ref={navigationRef}>
         <SafeAreaView style={{ flex: 1 }}>
           <StatusBar
@@ -150,7 +178,7 @@ const App = () => {
             style="light" // or "dark" if you use a custom red color (not recommended)
           />
           {isOffline && (
-            <View className="bg-yellow-300 py-2 mt-6 rounded-md">
+            <View className="bg-yellow-300 py-2 rounded-md">
               <Text className="text-yellow-800 text-xl font bold text-center">
                 ⚠️ You are offline.
               </Text>
@@ -159,6 +187,7 @@ const App = () => {
           {isLoggedIn ? <MainTabNavigator /> : <AuthStack />}
         </SafeAreaView>
       </NavigationContainer>
+      {/* </PaperProvider> */}
     </Provider>
   );
 };

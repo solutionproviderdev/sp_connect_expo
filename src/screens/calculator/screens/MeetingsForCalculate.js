@@ -1,3 +1,5 @@
+
+
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -9,10 +11,10 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {getDeviceType} from '../MainTabNavigator/HomeScreen';
-import {useGetMeetingsQuery} from '../../redux/services/api';
-import {useUserCredentials} from '../../utils/UserCredentials';
-import CalculateMeetingCard from './components/meetingsforcalculate/CalculateMeetingCard';
+import {getDeviceType} from '../../MainTabNavigator/HomeScreen';
+import {useGetMeetingsQuery} from '../../../redux/services/api';
+import {useUserCredentials} from '../../../utils/UserCredentials';
+import CalculateMeetingCard from '../components/meetingsforcalculate/CalculateMeetingCard';
 
 const MeetingsForCalculate = () => {
   const navigation = useNavigation();
@@ -55,14 +57,14 @@ const MeetingsForCalculate = () => {
     try {
       await refetch();
     } catch (error) {
-      setError(error)
+      setError(error);
       console.error('Refresh error:', error);
     }
   };
 
   const renderMeetingCard = ({item}) =>
     item ? (
-      <CalculateMeetingCard
+      <cPv
         item={item}
         // onPress={() => handleMeetingPress(item)}
       />
@@ -100,6 +102,11 @@ const MeetingsForCalculate = () => {
             className="bg-gray-500 px-6 py-3 rounded-lg">
             <Text className="text-white font-semibold">Go Back</Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            className="bg-gray-500 px-6 py-3 rounded-lg">
+            <Text className="text-white font-semibold">Choose project</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );
@@ -130,7 +137,7 @@ const MeetingsForCalculate = () => {
             No meetings available
           </Text>
           <Text className="text-gray-400 text-center mb-6">
-            There are no meetings scheduled for today
+            There is no meetings for Calculate
           </Text>
           <View className="flex-row gap-4">
             <TouchableOpacity

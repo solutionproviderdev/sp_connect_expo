@@ -134,7 +134,7 @@ const SingleMeeting = ({route}) => {
 
         <TouchableOpacity className="flex-1 mx-3 flex-row items-center justify-center border border-gray-400 h-10 px-4 rounded-3xl">
           <Icon name="magnify" size={20} color="#6B7280" />
-          <Text className="text-gray-500 ml-2">Area, Product, Client...</Text>
+          <Text className="text-gray-500 ml-2 font-robotoCondensedExtraBold">Area, Product, Client...</Text>
         </TouchableOpacity>
 
         <TouchableOpacity>
@@ -167,7 +167,7 @@ const SingleMeeting = ({route}) => {
           className={`${
             deviceType === 'tablet'
               ? 'text-3xl font-extrabold text-spBlue '
-              : 'text-xl text-spBlue font-extraboldm p-0'
+              : 'text-xl text-spBlue font-robotoCondensedExtraBold p-0'
           }`}>
           MEETING DETAILS
         </Text>

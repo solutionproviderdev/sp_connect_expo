@@ -175,11 +175,11 @@ const HomeScreen = () => {
           {/* onPress={() => navigation.navigate('meeting', { screen: 'SearchMeeting' })}> */}
 
           <Icon name="magnify" size={22} color="gray" />
-          <View className=" ml-2 flex-row">
-            <Text className="text-xl font-extrabold text-spDarkGray">
+          <View className="ml-2 flex-row ">
+            <Text className="text-xl font-robotoCondensedSemiBold text-spDarkGray">
               Find{' '}
             </Text>
-            <Text className="text-xl font-extrabold text-spBlue">
+            <Text className="text-xl text-spBlue font-robotoCondensedSemiBold">
               Solutions
             </Text>
           </View>

@@ -1,5 +1,3 @@
-
-
 import React, {useState} from 'react';
 import {
   View,
@@ -11,7 +9,7 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation, useRoute} from '@react-navigation/native';
-import CalculatorHeader from './components/shared/CalculatorHeader';
+import CalculatorHeader from '../components/shared/CalculatorHeader';
 import {Picker} from '@react-native-picker/picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 

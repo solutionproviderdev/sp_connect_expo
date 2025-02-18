@@ -5,7 +5,7 @@ module.exports = {
     './src/**/*.{js,jsx,ts,tsx}',
     './src/**/**/*.{js,jsx,ts,tsx}',
   ],
-  presets: [require("nativewind/preset")],
+  presets: [require('nativewind/preset')],
   theme: {
     // TODO: These are from the previous project, need to be updated
     extend: {
@@ -18,9 +18,9 @@ module.exports = {
         spRed: 'rgb(140, 19, 0)',
         spBlue: 'rgb(4, 98, 138)',
         spNavGray: 'rgb(227, 226, 220)',
-        spGreen:'#67A74A',
-        calCardgray:"rgb(57, 70, 86)",
-        calBg:"rgb(24, 33, 44)",
+        spGreen: '#67A74A',
+        calCardgray: 'rgb(57, 70, 86)',
+        calBg: 'rgb(24, 33, 44)',
         primary: {
           50: '#EDF3FF',
           100: '#DFE7FF',
@@ -102,6 +102,10 @@ module.exports = {
       },
       fontFamily: {
         'roboto-flex': ['Roboto Flex', 'sans-serif'],
+        robotoCondensed: ['RobotoCondensed-Regular'],
+        robotoCondensedSemiBold: ['RobotoCondensed-SemiBold'],
+        robotoCondensedExtraBold: ['RobotoCondensed-ExtraBold'],
+        robotoCondensedItalic: ['RobotoCondensed-Italic'],
       },
       fontSize: {
         overline: ['10px', {lineHeight: '150%'}],

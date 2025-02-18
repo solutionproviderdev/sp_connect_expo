@@ -1,30 +1,29 @@
-
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
-import CalculatorHeader from './components/shared/CalculatorHeader';
+import CalculatorHeader from '../components/shared/CalculatorHeader';
 
 const projectTypes = [
   {
     id: 1,
     name: 'Single Apartment',
-    image: require('../../assets/projects-types/single-apartment.png'),
-  },
+    image: require('../../../assets/projects-types/single-apartment.png'),
+   },
   {
     id: 2,
     name: 'Duplex Apartment',
-    image: require('../../assets/projects-types/duplex-apartment.png'),
+    image: require('../../../assets/projects-types/duplex-apartment.png'),
   },
   {
     id: 3,
     name: 'Commercial Office',
-    image: require('../../assets/projects-types/comercial.png'),
+    image: require('../../../assets/projects-types/comercial.png'),
   },
   {
     id: 4,
     name: 'Restaurant',
-    image: require('../../assets/projects-types/resturant.png'),
+    image: require('../../../assets/projects-types/resturant.png'),
   },
 ];
 
@@ -73,7 +72,9 @@ const ChooseProject = () => {
 
         <TouchableOpacity
           className="ml-2 bg-spGreen rounded-lg py-3 w-1/3"
-          onPress={() => navigation.navigate('AddProduct',{params:selectedProject.name})}
+          onPress={() =>
+            navigation.navigate('AddProduct', {params: selectedProject.name})
+          }
           disabled={!selectedProject}>
           <Text className="text-center font-extrabold text-white">Next</Text>
         </TouchableOpacity>

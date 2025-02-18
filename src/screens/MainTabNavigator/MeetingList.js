@@ -158,11 +158,11 @@ const MeetingList = () => {
             className="flex-1 mx-3 flex-row items-center justify-center border border-spBlue h-10 px-4 rounded-3xl bg-spBg"
             onPress={() => navigation.navigate('SearchMeeting', {meetings})}>
             <Icon name="magnify" size={22} color="gray" />
-            <View className="ml-2 flex-row">
-              <Text className="text-xl font-extrabold text-spDarkGray">
+            <View className="ml-2 flex-row ">
+              <Text className="text-xl font-robotoCondensedSemiBold text-spDarkGray">
                 Find{' '}
               </Text>
-              <Text className="text-xl font-extrabold text-spBlue">
+              <Text className="text-xl text-spBlue font-robotoCondensedSemiBold">
                 Solutions
               </Text>
             </View>
@@ -217,7 +217,7 @@ const MeetingList = () => {
               : 'flex-row justify-center items-center shadow-md'
           }`}>
           <View className="flex-row items-center justify-center rounded-full w-52 bg-spCardGray p-2 gap-2">
-            <Text className="text-2xl font-extrabold text-center text-spBlue">
+            <Text className="text-2xl font-robotoCondensedExtraBold text-center text-spBlue">
               Meetings
             </Text>
             <Icon name="account" size={20} color="rgb(4, 98, 138)" />

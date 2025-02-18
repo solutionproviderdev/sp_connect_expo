@@ -18,10 +18,10 @@ const Tasks = ({meeting, user, deviceType}) => {
       params: {user}, // Send specific data
     },
     {
-      icon: 'alarm',
+      icon: 'telescope',
       title: 'Today Follow-up',
       count: 10,
-      route: 'followUps',
+      route: 'TodayFollowUp',
       params: {user, followUps: meeting?.filter(m => m.followUp)}, // Example data
     },
     {

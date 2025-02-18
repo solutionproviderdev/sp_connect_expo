@@ -233,7 +233,7 @@ console.log('meetings---<>',meetings);
             className={`${
               deviceType === 'tablet'
                 ? 'text-3xl font-extrabold text-spBlue'
-                : 'text-xl text-spBlue font-extrabold'
+                : 'text-xl text-spBlue font-robotoCondensedExtraBold'
             }`}>
             TODAY MEETINGS
           </Text>

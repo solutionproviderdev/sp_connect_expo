@@ -18,6 +18,8 @@ import HomeStack from './HomeStack';
 import {navigationRef} from '../App';
 import ClientInfoStack from './CalculatorStack';
 import CalculatorStack from './CalculatorStack';
+import FollowUp from '../screens/followUp/screens/FollowUp';
+import FollowUpStack from './FollowUpStack';
  
 const Screen1 = () => (
   <View style={styles.screen1}>
@@ -25,15 +27,13 @@ const Screen1 = () => (
   </View>
 );
 
-const Screen2 = () => (
-  <View style={styles.screen2}>
-    <Text>Screen 2</Text>
-  </View>
-);
-
 // Wrapper for CalculatorStack to accept props
 const CalculatorStackWrapper = props => {
   return <CalculatorStack {...props} bottomTabRef={props.bottomTabRef} />;
+};
+// Wrapper for CalculatorStack to accept props
+const FollowUpStackWrapper = props => {
+  return <FollowUpStack {...props} bottomTabRef={props.bottomTabRef} />;
 };
 export default function MainTabNavigator() {
   const bottomTabRef = useRef(null);
@@ -54,11 +54,8 @@ export default function MainTabNavigator() {
       case 'add':
         navigate('add');
         break;
-      case 'followup':
-        navigate('followup');
-        break;
-      case 'ClientInfo':
-        navigate('ClientInfo');
+      case 'FollowUp':
+        navigate('FollowUp');
         break;
       default:
         navigate(routeName);
@@ -70,7 +67,7 @@ export default function MainTabNavigator() {
       home: 'home-outline',
       meeting: 'calendar-outline',
       add: 'add-outline',
-      followup: 'telescope-outline',
+      FollowUp: 'telescope-outline',
       calculator: 'calculator-outline',
     };
 
@@ -131,19 +128,16 @@ export default function MainTabNavigator() {
         component={Screen1}
         options={{unmountOnBlur: true}}
         position="CIRCLE"
-      />
+        />
       <CurvedBottomBarExpo.Screen
-        name="followup"
-        component={Screen2}
+        name="FollowUp"
+        // component={FollowUpStack}
+        component={props => (
+          <FollowUpStackWrapper {...props} bottomTabRef={bottomTabRef} />
+        )}
         options={{unmountOnBlur: true}}
         position="RIGHT"
       />
-      {/* <CurvedBottomBarExpo.Screen
-        name="ClientInfo"
-        // component={ClientInfoStack}
-         options={{unmountOnBlur: true}}
-        position="RIGHT"
-      /> */}
       <CurvedBottomBarExpo.Screen
         name="calculator"
         component={props => (
