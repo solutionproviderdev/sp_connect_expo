@@ -8,6 +8,7 @@ import MeetingsForCalculate from '../screens/calculator/screens/MeetingsForCalcu
 import {Presentation} from 'lucide-react-native';
 import AddProduct from '../screens/calculator/screens/AddProduct';
 import CalculatorHeader from '../screens/calculator/components/shared/CalculatorHeader';
+import {Provider} from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,33 +32,22 @@ export default function CalculatorStack({bottomTabRef}) {
   }, [navigation, allowedRoutes, bottomTabRef]);
 
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        // contentStyle: {backgroundColor: 'rgb(24, 33, 44)'},
-        header: () => <CalculatorHeader />,
-        // header:<CalculatorHeader />
-      }}>
-      <Stack.Screen
-        name="meeting-calculate"
-        options={{Presentation: 'modal'}}
-        component={MeetingsForCalculate}
-      />
-      <Stack.Screen
-        name="client-info"
-        options={{Presentation: 'modal'}}
-        component={ClientInfo}
-      />
-      <Stack.Screen
-        name="choose-project"
-        options={{Presentation: 'modal'}}
-        component={ChoosProject}
-      />
-      <Stack.Screen
-        name="AddProduct"
-        options={{Presentation: 'modal'}}
-        component={AddProduct}
-      />
-    </Stack.Navigator>
+    <Provider>
+      <Stack.Navigator
+        initialRouteName="meeting-calculate"
+        screenOptions={{
+          headerShown: true,
+          contentStyle: {backgroundColor: 'rgb(24, 33, 44)'},
+          header: () => <CalculatorHeader />,
+        }}>
+        <Stack.Screen
+          name="meeting-calculate"
+          component={MeetingsForCalculate}
+        />
+        <Stack.Screen name="client-info" component={ClientInfo} />
+        <Stack.Screen name="choose-project" component={ChoosProject} />
+        <Stack.Screen name="AddProduct" component={AddProduct} />
+      </Stack.Navigator>
+    </Provider>
   );
 }

@@ -7,6 +7,7 @@ import FollowUp from '../screens/followUp/screens/FollowUp';
 import FollowUpDetails from '../screens/followUp/screens/FollowUpDetails';
 import { navigationRef } from '../App';
 import FollowUpHeader from '../screens/MainTabNavigator/component/homescreen/FollowUpHeader';
+import { Provider } from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ export default function FollowUpStack({bottomTabRef}) {
   }, [navigation, allowedRoutes, bottomTabRef]);
 
   return (
+    <Provider>
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
@@ -47,5 +49,6 @@ export default function FollowUpStack({bottomTabRef}) {
         component={FollowUpDetails}
       />
     </Stack.Navigator>
+    </Provider>
   );
 }

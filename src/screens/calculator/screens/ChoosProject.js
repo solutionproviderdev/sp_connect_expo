@@ -32,11 +32,11 @@ const ChooseProject = () => {
   const [selectedProject, setSelectedProject] = useState(null);
 
   return (
-    <View className="flex-1 px-4 pt-2 pb-6">
+    <View className="flex-1 px-4 pt-2 pb-4">
       {/* Header */}
-      <CalculatorHeader />
+      {/* <CalculatorHeader /> */}
 
-      <Text className="text-gray-200 text-2xl font-bold py-6">
+      <Text className="text-gray-200 text-2xl font-bold pt-2 pb-4">
         Select Project Type
       </Text>
 

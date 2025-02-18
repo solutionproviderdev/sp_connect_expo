@@ -19,8 +19,8 @@ const CalculatorHeader = () => {
     <SafeAreaView
       className={`${
         deviceType === 'tablet'
-          ? 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
-          : 'flex-row items-center justify-between px-1 bg- rounded-lg'
+          ? 'flex-row items-center justify-between px-4 pt-2 bg-calBg rounded-lg'
+          : 'flex-row items-center justify-between px-4 py-2 bg-calBg rounded-lg'
       }`}
     >
       {/* ⚙️ Gear Icon */}

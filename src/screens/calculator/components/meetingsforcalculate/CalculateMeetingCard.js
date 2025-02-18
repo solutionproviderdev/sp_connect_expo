@@ -42,10 +42,11 @@ console.log('visitCharge--->',visitCharge);
         ${
           deviceType === 'tablet'
             ? 'rounded-xl p-4 mt-4 border-2 border-blue-300 bg-calCardgray shadow-md'
-            : 'rounded-xl p-3 mt-3 border-2 border-blue-300 bg-calCardgray shadow-sm'
+            : 'rounded-xl p-3 mt-3 bg-calCardgray shadow-sm'
         }
       `}
-      onPress={handleCalculatePress}>
+      // onPress={handleCalculatePress}
+      >
       {/* Header Section */}
       <View className="flex-row justify-between items-center mb-2">
         <View className="flex-row items-center">

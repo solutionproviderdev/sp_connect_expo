@@ -203,9 +203,9 @@ const ClientInfo = ({route}) => {
   // console.log('name:', name, 'phoneNumber:', phoneNumber, 'addresses:', addresses);
 
   return (
-    <View className="flex-1  px-4 pt-2 pb-6">
-      <CalculatorHeader />
-      <Text className="text-gray-200 text-2xl font-bold py-6">
+    <View className="flex-1 px-4 pb-4">
+      {/* <CalculatorHeader /> */}
+      <Text className="text-gray-200 text-2xl font-bold py-4">
         Client's Information
       </Text>
 

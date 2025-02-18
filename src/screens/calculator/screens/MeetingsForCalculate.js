@@ -15,7 +15,7 @@ import {getDeviceType} from '../../MainTabNavigator/HomeScreen';
 import {useGetMeetingsQuery} from '../../../redux/services/api';
 import {useUserCredentials} from '../../../utils/UserCredentials';
 import CalculateMeetingCard from '../components/meetingsforcalculate/CalculateMeetingCard';
-
+ 
 const MeetingsForCalculate = () => {
   const navigation = useNavigation();
   const deviceType = getDeviceType();
@@ -44,7 +44,7 @@ const MeetingsForCalculate = () => {
     if (!isLoading && isInitialLoad) {
       setIsInitialLoad(false);
     }
-  }, [isLoading]);
+  }, []);
 
   const handleMeetingPress = meeting => {
     console.log('meeting for calculate->', meeting);
@@ -64,7 +64,8 @@ const MeetingsForCalculate = () => {
 
   const renderMeetingCard = ({item}) =>
     item ? (
-      <cPv
+      // <cPv
+      <CalculateMeetingCard
         item={item}
         // onPress={() => handleMeetingPress(item)}
       />
@@ -115,7 +116,7 @@ const MeetingsForCalculate = () => {
   // Empty State
   if (meetings.length === 0) {
     return (
-      <View className="flex-1 bg-spBg">
+      <View className="flex-1 ">
         {/* Keep the header consistent */}
         <View
           className={`
@@ -159,38 +160,12 @@ const MeetingsForCalculate = () => {
   // Main Content
   return (
     <View className="flex-1 ">
-      {/* Header */}
-      <View
-        className={`
-        ${deviceType === 'tablet' ? 'py-6' : 'py-4'}
-        px-4 bg-calCardgray border-b border-gray-200
-      `}>
-        <Text
-          className={`
-          ${deviceType === 'tablet' ? 'text-3xl' : 'text-xl'}
-          font-bold text-spBlue text-center
-        `}>
-          Calculate Meetings
-        </Text>
-      </View>
-
-      {/* Search Bar */}
-      <View className="px-4 py-3">
-        <TouchableOpacity
-          className="flex-row items-center bg-white p-3 rounded-lg border border-gray-200"
-          onPress={() => {
-            /* Implement search functionality */
-          }}>
-          <Icon name="magnify" size={24} color="gray" />
-          <Text className="ml-2 text-gray-500">Search meetings...</Text>
-        </TouchableOpacity>
-      </View>
       <Text
         className={`
-            ${deviceType === 'tablet' ? 'text-xl' : 'text-lg'}
-            font-semibold text-white mb-3 px-4
+            ${deviceType === 'tablet' ? 'text-xl' : 'text-xl'}
+            font-semibold text-white mb-3 px-4 pt-4
           `}>
-        Today's Meetings
+         Meetings for calculate
       </Text>
 
       {/* Meetings List */}
@@ -208,3 +183,7 @@ const MeetingsForCalculate = () => {
 };
 
 export default MeetingsForCalculate;
+
+
+
+ 

@@ -3,7 +3,7 @@ import React from 'react'
 
 const FollowUp = () => {
   return (
-    <View className='flex-1 justify-center items-center border-t-2 bg-spBlue border-white border-spBlue '>
+    <View className='flex-1 justify-center items-center border-t-2 bg-spBg border-white '>
       <Text>FollowUp</Text>
     </View>
   )
