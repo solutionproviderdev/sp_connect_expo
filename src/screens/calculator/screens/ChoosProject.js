@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import CalculatorHeader from '../components/shared/CalculatorHeader';
 
 const projectTypes = [
@@ -29,6 +29,10 @@ const projectTypes = [
 
 const ChooseProject = () => {
   const navigation = useNavigation();
+    const {params} = useRoute();
+  //  const clientifo = params?.params;
+  // console.log('chooseproject to clientdata--',params);
+   
   const [selectedProject, setSelectedProject] = useState(null);
 
   return (
@@ -73,7 +77,7 @@ const ChooseProject = () => {
         <TouchableOpacity
           className="ml-2 bg-spGreen rounded-lg py-3 w-1/3"
           onPress={() =>
-            navigation.navigate('AddProduct', {params: selectedProject.name})
+            navigation.navigate('AddProduct', {ProjectType: selectedProject.name,clientInfo:params})
           }
           disabled={!selectedProject}>
           <Text className="text-center font-extrabold text-white">Next</Text>

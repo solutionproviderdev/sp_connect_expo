@@ -9,6 +9,7 @@ import {Presentation} from 'lucide-react-native';
 import AddProduct from '../screens/calculator/screens/AddProduct';
 import CalculatorHeader from '../screens/calculator/components/shared/CalculatorHeader';
 import {Provider} from 'react-native-paper';
+import PrintQuote from '../screens/calculator/components/PrintQuote/PrintQuote';
 
 const Stack = createNativeStackNavigator();
 
@@ -47,6 +48,7 @@ export default function CalculatorStack({bottomTabRef}) {
         <Stack.Screen name="client-info" component={ClientInfo} />
         <Stack.Screen name="choose-project" component={ChoosProject} />
         <Stack.Screen name="AddProduct" component={AddProduct} />
+        <Stack.Screen name="PrintQuote" component={PrintQuote} />
       </Stack.Navigator>
     </Provider>
   );

@@ -1,7 +1,7 @@
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
-import { navigationRef } from "../../App";
+import { navigationRef, resetNavigation } from "../../App";
 
  
 export const checkTokenAndLogout = async token => {
@@ -15,13 +15,14 @@ export const checkTokenAndLogout = async token => {
         console.log('⛔ Token has expired! Logging out.',decodedToken.exp ,'----', currentTime);
         await AsyncStorage.removeItem('token');
         // Redirect user to login screen
-        navigationRef.reset({
-          index: 0,
-          routes: [{name: 'welcome'}],
-        });
+        // navigationRef.reset({
+        //   index: 0,
+        //   routes: [{name: 'welcome'}],
+        // });
+        resetNavigation()
         return false;
       }
-      return true;
+       return true;
     } catch (error) {
       console.error('Token decoding error:', error);
       await AsyncStorage.removeItem('token');

@@ -3,28 +3,28 @@ import React from 'react';
 
 const SalesOverview = () => {
   return (
-    <View className="flex-row items justify-around drop-shadow-md">
-      <View className="border border-2 border-spBlue rounded-xl">
-        <Text className="text-2xl font-robotoCondensedExtraBold text-spBlue border-b-2 border-spBlue text-center">
+    <View className="flex-row gap-4 items justify-around drop-shadow-md">
+      <View className="border border-spBlue rounded-xl">
+        <Text className="text-2xl font-robotoCondensedExtraBold text-spBlue border-b border-spBlue text-center">
           SOLD
         </Text>
-        <Text className="text-2xl font-robotoCondensedExtraBold text-center py-2 px-2">
+        <Text className="text-2xl font-robotoCondensedSemiBold text-center py-1 px-2">
           8,89,000
         </Text>
       </View>
-      <View className="border border-2 border-spBlue rounded-xl">
-        <Text className="text-2xl font-robotoCondensedExtraBold text-spBlue border-b-2 border-spBlue text-center px-4">
+      <View className="border border-spBlue rounded-xl">
+        <Text className="text-2xl font-robotoCondensedExtraBold text-spBlue border-b border-spBlue text-center px-4">
           PROSPECT
         </Text>
-        <Text className="text-2xl font-robotoCondensedExtraBold text-center py-2 px-2">
+        <Text className="text-2xl font-robotoCondensedSemiBold text-center py-1 px-2">
           18,89,000
         </Text>
       </View>
-      <View className="border border-2 border-spBlue rounded-xl">
-        <Text className="text-2xl font-robotoCondensedExtraBold text-spBlue border-b-2 border-spBlue text-center">
+      <View className="border border-spBlue rounded-xl">
+        <Text className="text-2xl font-robotoCondensedExtraBold text-spBlue border-b border-spBlue text-center">
           LOST
         </Text>
-        <Text className="text-2xl font-robotoCondensedExtraBold text-center py-2 px-2">
+        <Text className="text-2xl font-robotoCondensedSemiBold text-center py-1 px-2">
           2,11,000
         </Text>
       </View>

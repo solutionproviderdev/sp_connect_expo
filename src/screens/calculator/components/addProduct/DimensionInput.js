@@ -11,28 +11,30 @@ const DimensionInput = ({formData, setFormData}) => {
           placeholderTextColor="#9CA3AF"
           value={formData.height}
           onChangeText={value => setFormData({...formData, height: value})}
-          className="bg-calBg text-white p-2 rounded-lg border border-white w-[32%]"
+          className=" text-white p-2 rounded-lg border border-white w-[32%] "
           keyboardType="numeric"
           defaultValue=""
+          required={true}
         />
         <TextInput
           placeholder="Width"
           placeholderTextColor="#9CA3AF"
           value={formData.width}
           onChangeText={value => setFormData({...formData, width: value})}
-          className="bg-calBg text-white p-2 rounded-lg border border-white w-[32%]"
+          className=" text-white p-2 rounded-lg border border-white w-[32%]"
           keyboardType="numeric"
           defaultValue=""
+          required={true}
         />
         <TextInput
           placeholder="Depth"
           placeholderTextColor="#9CA3AF"
           value={formData.depth}
           onChangeText={value => setFormData({...formData, depth: value})}
-          className="bg-calBg text-white p-2 rounded-lg border border-white w-[32%]"
+          className=" text-white p-2 rounded-lg border border-white w-[32%]"
           keyboardType="numeric"
           defaultValue=""
-        />
+         />
       </View>
     </View>
   );

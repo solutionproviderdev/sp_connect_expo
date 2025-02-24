@@ -25,22 +25,21 @@ const ProductList = ({selectedProducts, onEditPart, onRemovePart}) => {
   };
 
   const organizedProducts = organizeProductsByTitle();
-  
   return (
     <>
       {organizedProducts.map((product, idx) => (
-        <View key={idx} className="bg-calCardgray rounded-lg p-4 mb-4">
-          <Text className="text-white text-lg font-semibold mb-2">
+        <View key={idx} className=" rounded-lg p-2">
+          <Text className="text-white font-bold mb-2">
             {product.title}
           </Text>
           {product.parts.map((part, index) => (
             <View
               key={index}
-              className="flex-row justify-between items-center mb-2">
-              <Text className="text-white w-24">{part.name}</Text>
-              <Text className="text-white w-16">{part.sqft} SqFt</Text>
-              <Text className="text-white w-16">*{part.rate}</Text>
-              <Text className="text-white w-20">{part.total}</Text>
+              className="flex-row justify-between items-center mb-1">
+              <Text className="text-xs text-white w-24">{part.name}</Text>
+              <Text className="text-xs text-white w-16">{part.sqft} SqFt</Text>
+              <Text className="text-xs text-white w-16">*{part.rate}</Text>
+              <Text className="text-xs text-white w-20">{part.total}</Text>
               <View className="flex-row space-x-2">
                 <TouchableOpacity onPress={() => onEditPart(product.title, index)}>
                   <Icon name="pencil" size={20} color="white" />

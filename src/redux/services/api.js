@@ -9,7 +9,7 @@ export const api = createApi({
     baseUrl: 'https://crm.solutionprovider.com.bd/api',
     prepareHeaders: async (headers, {getState}) => {
       let token = getState().auth.token;
-      console.log("token from redux api",token);
+      // console.log("token from redux api",token);
       if (!token) {
         token = await AsyncStorage.getItem('token');
       }

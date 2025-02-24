@@ -33,7 +33,7 @@ const MeetingsForCalculate = () => {
     isLoading,
     isError,
     refetch,
-  } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
+  } = useGetMeetingsQuery({date: '', userId}, {skip: !userId});
   // console.log('mtcalculate', meetings);
   const sortedMeetings = meetings
     ?.slice()

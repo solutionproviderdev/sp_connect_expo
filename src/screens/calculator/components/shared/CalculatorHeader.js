@@ -37,7 +37,7 @@ const CalculatorHeader = () => {
       >
         <Icon name="magnify" size={22} color="white" />
         <View className="ml-2 flex-row mb-1">
-          <Text className="text-lg font-extrabold text-spBg">Find Solutions</Text>
+          <Text className="text-lg font-robotoCondensedExtraBold text-spBg">Find Solutions</Text>
         </View>
       </TouchableOpacity>
 

@@ -29,6 +29,18 @@ export function navigate(name, params) {
   }
 }
 
+//recently addede in 4:49 2/22/35
+export function resetNavigation() {
+  if (navigationRef.isReady()) {
+    navigationRef.reset({
+      index: 0,
+      routes: [{ name: "welcome" }],
+    });
+  } else {
+    console.warn("⚠️ Navigation is not ready yet.");
+  }
+}
+
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

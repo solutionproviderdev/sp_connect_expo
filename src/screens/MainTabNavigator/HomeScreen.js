@@ -27,7 +27,7 @@ import {
 } from '../../redux/services/api';
 import MeetingCard from './component/MeetingCard';
 import SearchMeetingScreen from './component/SearchMeeting';
-import {navigationRef} from '../../App';
+import {navigationRef, resetNavigation} from '../../App';
 import {Video} from 'expo-av';
 import ProgressBar from './component/homescreen/ProgressBar';
 import store from '../../redux/store';
@@ -118,17 +118,19 @@ const HomeScreen = () => {
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('user');
 
-      setTimeout(() => {
-        if (navigationRef.isReady()) {
-          console.log('✅ Navigation is ready. Resetting to welcome screen...');
-          navigationRef.reset({
-            index: 0,
-            routes: [{name: 'welcome'}],
-          });
-        } else {
-          console.warn('🚨 Navigation not ready yet. Will retry.');
-        }
-      }, 300);
+      // setTimeout(() => {
+      //   if (navigationRef.isReady()) {
+      //     console.log('✅ Navigation is ready. Resetting to welcome screen...');
+      //     navigationRef.reset({
+      //       index: 0,
+      //       routes: [{name: 'welcome'}],
+      //     });
+      //   } else {
+      //     console.warn('🚨 Navigation not ready yet. Will retry.');
+      //   }
+      // }, 300);
+
+      resetNavigation()
 
       // navigationRef.reset({
       //   index: 0,

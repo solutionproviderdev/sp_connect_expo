@@ -24,8 +24,8 @@ const TodayFollowUp = () => {
 
   return (
     <Provider>
-      <SafeAreaView className=" flex-1 bg-spBg p-4">
         <FollowUpHeader />
+      <SafeAreaView className=" flex-1 bg-spBg px-4">
         <View
           className={` ${
             deviceType === 'tablet'

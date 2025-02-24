@@ -231,7 +231,7 @@ const ProjectStatus = ({projectStatus: initialStatus, leadId, deviceType}) => {
     <View>
       <ScrollView
         horizontal={!isTablet}
-        showsHorizontalScrollIndicator={!isTablet}>
+        showsHorizontalScrollIndicator={false}>
         <View
           style={{
             flex: 1,

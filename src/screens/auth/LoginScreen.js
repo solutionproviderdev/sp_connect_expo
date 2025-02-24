@@ -1,4 +1,3 @@
-
 import React, {useState, useEffect} from 'react';
 import {
   View,
@@ -33,13 +32,13 @@ const LoginScreen = () => {
   const [error, setError] = useState(null);
   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
 
-
   const handleLogin = async () => {
     try {
       const response = await login({email, password}).unwrap();
+      console.log('salman fursi-1')
       const token = response.token;
       const user = response?.user?._id;
-
+      console.log('response is here ok --->', response);
       // Save token in Redux
       dispatch(loginSuccess({token, user: response.user}));
 
@@ -54,8 +53,15 @@ const LoginScreen = () => {
       navigation.reset({index: 0, routes: [{name: 'main'}]});
     } catch (error) {
       setError(error?.data?.msg);
-      console.error('Login failed:', error);
-     }
+      const response = await login({email, password}).unwrap();
+
+      console.log('response is here ok --->', response);
+
+      console.log('Login failed:', error.error);
+      if (error?.error == 'TypeError: Network request failed') {
+        setError('Something went wrong !');
+      }
+    }
   };
 
   return (
@@ -138,18 +144,6 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
-
-
-
-
-
-
-
-
-
-
-
-
 
 // import React, {useState} from 'react';
 // import {
@@ -291,6 +285,3 @@ export default LoginScreen;
 // };
 
 // export default LoginScreen;
-
-
-
