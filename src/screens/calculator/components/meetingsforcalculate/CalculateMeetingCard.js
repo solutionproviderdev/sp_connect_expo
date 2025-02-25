@@ -24,7 +24,7 @@ const CalculateMeetingCard = ({item}) => {
   } = lead || {};
 
   const {area = 'Unknown Area', district = 'Unknown District'} = address || {};
-console.log('visitCharge--->',visitCharge);
+// console.log('visitCharge--->',visitCharge);
   // {item.visitCharge  === 0 ? 'Free/-' : `${item.visitCharge}/-`}
 
   const handleCalculatePress = () => {

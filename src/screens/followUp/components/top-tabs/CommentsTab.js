@@ -3,7 +3,7 @@ import React from 'react'
 
 const CommentsTab = () => {
   return (
-    <View>
+    <View className='flex-1 '>
       <Text>CommentsTab</Text>
     </View>
   )

@@ -6,9 +6,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const ActionButtons = () => {
   return (
-    <View className="w-full">
+    <View className="w-full px-4">
       {/* Action Buttons */}
-      <View className="flex-row gap-2 mb-4">
+      <View className="flex-row gap-2 mb-">
         <TouchableOpacity 
           className="flex-1 flex-row items-center justify-center bg-spRed py-1 px-4 rounded-md"
           onPress={() => {/* Handle call */}}

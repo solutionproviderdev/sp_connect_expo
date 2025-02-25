@@ -8,12 +8,13 @@ import FollowUpDetails from '../screens/followUp/screens/FollowUpDetails';
 import { navigationRef } from '../App';
 import FollowUpHeader from '../screens/MainTabNavigator/component/homescreen/FollowUpHeader';
 import { Provider } from 'react-native-paper';
+import AddFollowUp from '../screens/followUp/screens/AddFollowUp';
 
 const Stack = createNativeStackNavigator();
 
 export default function FollowUpStack({bottomTabRef}) {
   const navigation = useNavigation(); // ✅ Get current route
-  const allowedRoutes = ['FollowUpDetails'];
+  const allowedRoutes = ['FollowUpDetails','AddFollowUp'];
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('state', () => {
@@ -47,6 +48,11 @@ export default function FollowUpStack({bottomTabRef}) {
         name="FollowUpDetails"
         options={{Presentation: 'card'}}
         component={FollowUpDetails}
+      />
+      <Stack.Screen
+        name="AddFollowUp"
+        options={{Presentation: 'card'}}
+        component={AddFollowUp}
       />
     </Stack.Navigator>
     </Provider>
