@@ -3,7 +3,7 @@ import React from 'react'
 
 const CheckInsTab = () => {
   return (
-    <View>
+    <View className='flex-1'>
       <Text>CheckInsTab</Text>
     </View>
   )

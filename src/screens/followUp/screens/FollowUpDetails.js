@@ -1,187 +1,305 @@
+// import {
+//   Pressable,
+//   ScrollView,
+//   StyleSheet,
+//   Text,
+//   TouchableOpacity,
+//   View,
+// } from 'react-native';
+// import React from 'react';
+// import {useNavigation} from '@react-navigation/native';
+// import FollowUpTopTab from '../../../navigation/FollowUpTopTab';
+// import {Image} from 'react-native';
+// import {getDeviceType} from '../../MainTabNavigator/HomeScreen';
+
+// import Ionicons from 'react-native-vector-icons/Ionicons';
+// import IconE from 'react-native-vector-icons/Entypo';
+// import ProjectStatus from '../../MainTabNavigator/component/projectStatusTrack/ProjecStatus';
+// import ActionButtons from '../components/followUpDetails/ActionButtons';
+
+// const FollowUpDetails = () => {
+//   const navigation = useNavigation();
+//   const deviceType = getDeviceType();
+
+//   return (
+//      <View className="flex-1 px-4">
+//       <View className="flex-row items-center justify-between py-2 ">
+//         <TouchableOpacity onPress={() => navigation.goBack()}>
+//           {deviceType === 'tablet' ? (
+//             <Image
+//               source={require('../../../assets/backArrowImg.png')}
+//               style={{width: 55, height: 40}}
+//             />
+//           ) : (
+//             <Image
+//               source={require('../../../assets/backArrowImg.png')}
+//               style={{width: 40, height: 25}}
+//             />
+//           )}
+//         </TouchableOpacity>
+
+//         {/* <Text className="text-3xl font-extrabold text-spBlue">
+//                     TODAY MEETINGS
+//                   </Text> */}
+//         <Text
+//           className={`${
+//             deviceType === 'tablet'
+//               ? 'text-3xl font-extrabold text-spBlue '
+//               : 'text-2xl text-spBlue font-robotoCondensedExtraBold p-0'
+//           }`}>
+//           Client Information
+//         </Text>
+//         <Text />
+//       </View>
+//        <View
+//         // onPress={() => navigation.navigate('FollowUpDetails')}
+//         className=" border">
+//         <View className="flex-row justify-center gap-2 ">
+//           {/* Left Side Content */}
+//           <View className="w-2/3">
+//             {/* Customer Details */}
+//             <View className="flex-row items-center mb-">
+//               <Ionicons name="person-outline" size={20} color="#666" />
+//               <Text className="ml-2 text-xl font-robotoCondensedSemiBold">
+//                 Mr. Momin Hossain
+//               </Text>
+//             </View>
+
+//             <View className="flex-row items-center mb-">
+//               <Ionicons name="call-outline" size={20} color="#666" />
+//               <Text className="ml-2 text-lg font-robotoCondensedSemiBold ">
+//                 01345653287
+//               </Text>
+//             </View>
+
+//             <View className="flex-row items-center mb-1">
+//               <Ionicons name="location-outline" size={20} color="#666" />
+//               <Text className="ml-2 font-robotoCondensedSemiBold text-lg">
+//                 Adabor, Dhaka - North
+//               </Text>
+//             </View>
+
+//             {/* Products */}
+//             <View className="flex-row items-center mt-">
+//               <IconE name="info-with-circle" size={20} color="#666" />
+//               <View className="flex-row ml-2 gap-2">
+//                 <Text className="bg-gray-800  text-gray-100 font-robotoCondensedSemiBold p-1">
+//                   Kitchen
+//                 </Text>
+//                 <Text className="bg-gray-800 text-gray-100 font-robotoCondensedSemiBold p-1">
+//                   Folding Door
+//                 </Text>
+//               </View>
+//             </View>
+
+//             {/* Budget & Value */}
+//             <View className="mt-2">
+//               <Text className="font-robotoCondensedSemiBold text-lg">
+//                 Budget: 1,20,000/-
+//               </Text>
+//               <Text className="font-robotoCondensedSemiBold text-lg">
+//                 Value: 80,000/-
+//               </Text>
+//             </View>
+//           </View>
+//           {/* Right Side Badges */}
+//           <View className=" w-1/3 gap-2">
+//             {/* RITU text positioned at top */}
+
+//             <View className="bg-spRed p-2 ">
+//               <Text className="text-white font-robotoCondensedSemiBold">
+//                 Measurements Not Taken{' '}
+//                 <Text className="text-xs">(Ongoing)</Text>
+//               </Text>
+//             </View>
+
+//             <View className=" gap-1 ">
+//               <View className="bg-gray-800 px-3 py-1 rounded-t-md">
+//                 <Text className="text-white font-robotoCondensedSemiBold">
+//                   11:30 AM
+//                 </Text>
+//               </View>
+
+//               <View className="bg-spRed px-3 py-1 rounded-b-md">
+//                 <Text className="text-white font-robotoCondensedSemiBold">
+//                   16 DEC 24
+//                 </Text>
+//               </View>
+//             </View>
+
+//             <View className="bg-spBlue ">
+//               <Text className="text-white  p-2 font-robotoCondensedSemiBold">
+//                 Handed Over
+//               </Text>
+//             </View>
+//           </View>
+//         </View>
+
+//       </View>
+
+//       {/* projecstatus here --- */}
+//       <View className="flex-row items-center justify-center mt-8 ">
+//         <ProjectStatus
+
+//           projectStatus={{status: '', subStatus: ''}}
+//           leadId={''}
+//         />
+//       </View>
+//       {/* actions buttons */}
+//       <ActionButtons />
+
+//       {/* followup top tabs */}
+//       <View className="flex-1">
+//         {/* Existing Content */}
+//         <FollowUpTopTab />
+//       </View>
+//      </View>
+//    );
+// };
+
+// export default FollowUpDetails;
+
+// const styles = StyleSheet.create({});
+
+import React from 'react';
 import {
-  Pressable,
-  StyleSheet,
+  ScrollView,
+  View,
   Text,
   TouchableOpacity,
-  View,
+  Image,
+  useWindowDimensions,
 } from 'react-native';
-import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import FollowUpTopTab from '../../../navigation/FollowUpTopTab';
-import {Image} from 'react-native';
-import {getDeviceType} from '../../MainTabNavigator/HomeScreen';
-
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconE from 'react-native-vector-icons/Entypo';
 import ProjectStatus from '../../MainTabNavigator/component/projectStatusTrack/ProjecStatus';
+import {getDeviceType} from '../../MainTabNavigator/HomeScreen';
+import FollowUpTopTab from '../../../navigation/FollowUpTopTab';
 import ActionButtons from '../components/followUpDetails/ActionButtons';
+
+// Dummy Screens
+const FirstRoute = () => <View style={{flex: 1, backgroundColor: '#ff4081'}} />;
+const SecondRoute = () => (
+  <View style={{flex: 1, backgroundColor: '#673ab7'}} />
+);
+const ThirdRoute = () => <View style={{flex: 1, backgroundColor: '#009688'}} />;
+const FourthRoute = () => (
+  <View style={{flex: 1, backgroundColor: '#3F51B5'}} />
+);
+const FifthRoute = () => <View style={{flex: 1, backgroundColor: '#F44336'}} />;
+const SixthRoute = () => <View style={{flex: 1, backgroundColor: '#8BC34A'}} />;
+
+// Mapping the routes
+const renderScene = SceneMap({
+  first: FirstRoute,
+  second: SecondRoute,
+  third: ThirdRoute,
+  fourth: FourthRoute,
+  fifth: FifthRoute,
+  sixth: SixthRoute,
+});
+
+// Define tab routes
+const routes = [
+  {key: 'first', title: 'Comments'},
+  {key: 'second', title: 'Follow-Up'},
+  {key: 'third', title: 'Call Logs'},
+  {key: 'fourth', title: 'Check-Ins'},
+  {key: 'fifth', title: 'Extra 1'},
+  {key: 'sixth', title: 'Extra 2'},
+];
 
 const FollowUpDetails = () => {
   const navigation = useNavigation();
   const deviceType = getDeviceType();
+  const layout = useWindowDimensions();
+  const [index, setIndex] = React.useState(0);
 
   return (
-    <View className="flex-1 px-4">
-      <View className="flex-row items-center justify-between py-2 ">
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          {deviceType === 'tablet' ? (
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <ScrollView>
+        {/* Header */}
+        <View className="flex-row items-center justify-between py-2 px-4">
+          <TouchableOpacity onPress={() => navigation.goBack()}>
             <Image
               source={require('../../../assets/backArrowImg.png')}
-              style={{width: 55, height: 40}}
+              style={{
+                width: deviceType === 'tablet' ? 55 : 40,
+                height: deviceType === 'tablet' ? 40 : 25,
+              }}
             />
-          ) : (
-            <Image
-              source={require('../../../assets/backArrowImg.png')}
-              style={{width: 40, height: 25}}
-            />
-          )}
-        </TouchableOpacity>
+          </TouchableOpacity>
+          <Text
+            className={`text-${
+              deviceType === 'tablet' ? '3xl' : '2xl'
+            } font-extrabold text-spBlue`}>
+            Client Information
+          </Text>
+          <Text />
+        </View>
 
-        {/* <Text className="text-3xl font-extrabold text-spBlue">
-                    TODAY MEETINGS
-                  </Text> */}
-        <Text
-          className={`${
-            deviceType === 'tablet'
-              ? 'text-3xl font-extrabold text-spBlue '
-              : 'text-2xl text-spBlue font-robotoCondensedExtraBold p-0'
-          }`}>
-          Client Information
-        </Text>
-        <Text />
-      </View>
-
-      <View
-        // onPress={() => navigation.navigate('FollowUpDetails')}
-        className=" border">
-        <View className="flex-row justify-center gap-2 ">
-          {/* Left Side Content */}
-          <View className="w-2/3">
-            {/* Customer Details */}
-            <View className="flex-row items-center mb-">
-              <Ionicons name="person-outline" size={20} color="#666" />
-              <Text className="ml-2 text-xl font-robotoCondensedSemiBold">
-                Mr. Momin Hossain
-              </Text>
-            </View>
-
-            <View className="flex-row items-center mb-">
-              <Ionicons name="call-outline" size={20} color="#666" />
-              <Text className="ml-2 text-lg font-robotoCondensedSemiBold ">
-                01345653287
-              </Text>
-            </View>
-
-            <View className="flex-row items-center mb-1">
-              <Ionicons name="location-outline" size={20} color="#666" />
-              <Text className="ml-2 font-robotoCondensedSemiBold text-lg">
-                Adabor, Dhaka - North
-              </Text>
-            </View>
-
-            {/* Products */}
-            <View className="flex-row items-center mt-">
-              <IconE name="info-with-circle" size={20} color="#666" />
-              <View className="flex-row ml-2 gap-2">
-                <Text className="bg-gray-800  text-gray-100 font-robotoCondensedSemiBold p-1">
-                  Kitchen
-                </Text>
-                <Text className="bg-gray-800 text-gray-100 font-robotoCondensedSemiBold p-1">
-                  Folding Door
+        {/* Client Information Section */}
+        <View className="border px-4">
+          <View className="flex-row justify-center gap-2">
+            <View className="w-2/3">
+              <View className="flex-row items-center">
+                <Ionicons name="person-outline" size={20} color="#666" />
+                <Text className="ml-2 text-xl font-robotoCondensedSemiBold">
+                  Mr. Momin Hossain
                 </Text>
               </View>
-            </View>
-
-            {/* Budget & Value */}
-            <View className="mt-2">
-              <Text className="font-robotoCondensedSemiBold text-lg">
-                Budget: 1,20,000/-
-              </Text>
-              <Text className="font-robotoCondensedSemiBold text-lg">
-                Value: 80,000/-
-              </Text>
-            </View>
-          </View>
-          {/* Right Side Badges */}
-          <View className=" w-1/3 gap-2">
-            {/* RITU text positioned at top */}
-
-            <View className="bg-spRed p-2 ">
-              <Text className="text-white font-robotoCondensedSemiBold">
-                Measurements Not Taken{' '}
-                <Text className="text-xs">(Ongoing)</Text>
-              </Text>
-            </View>
-
-            <View className=" gap-1 ">
-              <View className="bg-gray-800 px-3 py-1 rounded-t-md">
-                <Text className="text-white font-robotoCondensedSemiBold">
-                  11:30 AM
+              <View className="flex-row items-center">
+                <Ionicons name="call-outline" size={20} color="#666" />
+                <Text className="ml-2 text-lg font-robotoCondensedSemiBold">
+                  01345653287
                 </Text>
               </View>
-
-              <View className="bg-spRed px-3 py-1 rounded-b-md">
-                <Text className="text-white font-robotoCondensedSemiBold">
-                  16 DEC 24
+              <View className="flex-row items-center mb-1">
+                <Ionicons name="location-outline" size={20} color="#666" />
+                <Text className="ml-2 font-robotoCondensedSemiBold text-lg">
+                  Adabor, Dhaka - North
                 </Text>
               </View>
-            </View>
-
-            <View className="bg-spBlue ">
-              <Text className="text-white  p-2 font-robotoCondensedSemiBold">
-                Handed Over
-              </Text>
+              <View className="flex-row items-center">
+                <IconE name="info-with-circle" size={20} color="#666" />
+                <View className="flex-row ml-2 gap-2">
+                  <Text className="bg-gray-800 text-gray-100 font-robotoCondensedSemiBold p-1">
+                    Kitchen
+                  </Text>
+                  <Text className="bg-gray-800 text-gray-100 font-robotoCondensedSemiBold p-1">
+                    Folding Door
+                  </Text>
+                </View>
+              </View>
+              <View className="mt-2">
+                <Text className="font-robotoCondensedSemiBold text-lg">
+                  Budget: 1,20,000/-
+                </Text>
+                <Text className="font-robotoCondensedSemiBold text-lg">
+                  Value: 80,000/-
+                </Text>
+              </View>
             </View>
           </View>
         </View>
 
-        {/* Staff Section */}
-        {/* <Text className="text-right text-xl py-1 font-robotoCondensedSemiBold ">
-            RITU
-          </Text> */}
+        {/* Project Status */}
+        <View className="flex-row items-center justify-center mt-8">
+          <ProjectStatus
+            projectStatus={{status: '', subStatus: ''}}
+            leadId={''}
+          />
+        </View>
 
-        {/* <View className="flex-row mt-1 items-center ">
-            <Image
-              source={{uri: 'https://via.placeholder.com/40'}}
-              className="w-14 h-14 rounded-full border-2 border-yellow-500"
-            />
-            <View className="ml-3 flex-1 ">
-              <View className="flex-row justify-between items-center">
-                <Text className="font-robotoCondensedSemiBold font-semibold text-xl">
-                  Supto Bala Kumar
-                </Text>
-                <Text className="text-gray-700 font-robotoCondensed text-">
-                  02 February, 2025
-                </Text>
-              </View>
-              <Text className="font-robotoCondensedSemiBold ">
-                6 tarikh call dite hobe.
-              </Text>
-            </View>
-          </View> */}
-      </View>
+        {/* Action Buttons */}
+        <ActionButtons />
 
-      {/* projecstatus here --- */}
-      <View className="flex-row items-center justify-center mt-8 ">
-        <ProjectStatus
-          // projectStatus={{status: status, subStatus: subStatus}}
-          // leadId={leadId}
-          projectStatus={{status: '', subStatus: ''}}
-          leadId={''}
-        />
-      </View>
-      {/* actions buttons */}
-      <ActionButtons />
-
-      {/* followup top tabs */}
-      <View className="flex-1">
-        {/* Existing Content */}
         <FollowUpTopTab />
-      </View>
+      </ScrollView>
     </View>
   );
 };
 
 export default FollowUpDetails;
-
-const styles = StyleSheet.create({}); 
