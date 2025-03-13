@@ -11,16 +11,14 @@ import {
 import {Checkbox} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNavigation} from '@react-navigation/native';
-import {useLoginMutation} from '../../redux/services/api';
+// import {useLoginMutation} from '../../redux/services/api';
 import {useDispatch} from 'react-redux';
 import {loginSuccess} from '../../redux/authSlice';
 import {
-  checkBiometricSupport,
-  authenticateWithBiometrics,
-  getUserCredentials,
   saveUserCredentials,
 } from './BiometricAuth';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import { useLoginMutation } from '../../redux/auth/authApi';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -35,7 +33,7 @@ const LoginScreen = () => {
   const handleLogin = async () => {
     try {
       const response = await login({email, password}).unwrap();
-      console.log('salman fursi-1')
+      // console.log('salman fursi-1')
       const token = response.token;
       const user = response?.user?._id;
       console.log('response is here ok --->', response);

@@ -4,7 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconE from 'react-native-vector-icons/Entypo';
 import {Image} from 'react-native';
-const FollowUpCard = () => {
+const TodayFollowUpCard = () => {
   const navigation = useNavigation();
 
   return (
@@ -107,6 +107,6 @@ const FollowUpCard = () => {
   );
 };
 
-export default FollowUpCard;
+export default TodayFollowUpCard;
 
 const styles = StyleSheet.create({});

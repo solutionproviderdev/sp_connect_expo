@@ -19,10 +19,7 @@ import IconP from 'react-native-vector-icons/MaterialIcons';
 import IconE from 'react-native-vector-icons/Entypo';
 import IconF from 'react-native-vector-icons/Feather';
 
-import {
-  useGetMeetingByIdQuery,
-  useGetUserbyIDQuery,
-} from '../../../redux/services/api';
+ 
 import {useNavigation} from '@react-navigation/native';
 import ProjecStatus from './projectStatusTrack/ProjecStatus';
 import {ActivityIndicator} from 'react-native-paper';
@@ -30,6 +27,8 @@ import SingleMeetingComment from './SingleMeetingComment';
 
 import SkeletonLoading from 'expo-skeleton-loading';
 import {getDeviceType} from '../HomeScreen';
+import { useGetUserbyIDQuery } from '../../../redux/auth/authApi';
+import { useGetMeetingByIdQuery } from '../../../redux/meeting/meetingApi';
 
 const SingleMeeting = ({route}) => {
   const navigation = useNavigation();

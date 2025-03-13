@@ -15,7 +15,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ChevronDown} from 'lucide-react-native';
 import IconE from 'react-native-vector-icons/Entypo';
-import FollowUpCard from '../today-follow-up/FollowUpCard';
+import TodayFollowUpCard from '../today-follow-up/TodayFollowUpCard';
 
 const TodayFollowUp = () => {
   const navigation = useNavigation();
@@ -24,7 +24,7 @@ const TodayFollowUp = () => {
 
   return (
     <Provider>
-        <FollowUpHeader />
+      <FollowUpHeader />
       <SafeAreaView className=" flex-1 bg-spBg px-4">
         <View
           className={` ${
@@ -161,13 +161,10 @@ const TodayFollowUp = () => {
           </Text>
         </View> */}
 
-<FollowUpCard />
-
+        <TodayFollowUpCard />
       </SafeAreaView>
     </Provider>
   );
 };
 
 export default TodayFollowUp;
-
- 

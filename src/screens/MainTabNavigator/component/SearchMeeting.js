@@ -13,10 +13,11 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import MeetingCard from './MeetingCard';
-import {useGetMeetingsQuery} from '../../../redux/services/api';
+// import {useGetMeetingsQuery} from '../../../redux/services/api';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {getDeviceType} from '../HomeScreen';
+import { useGetMeetingsQuery } from '../../../redux/meeting/meetingApi';
 
 const SearchMeetingScreen = ({route}) => {
   const {meetings} = route.params; // Initial suggestions

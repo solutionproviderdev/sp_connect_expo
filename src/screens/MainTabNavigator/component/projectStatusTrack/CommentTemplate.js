@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { useAddCommentMutation, useUpdateProjectStatusMutation } from '../../../../redux/services/api';
+import { useAddCommentMutation, useUpdateProjectStatusMutation } from '../../../../redux/meeting/meetingApi';
+// import { useAddCommentMutation, useUpdateProjectStatusMutation } from '../../../../redux/services/api';
  
 interface CommentTemplateProps {
   leadId: string;

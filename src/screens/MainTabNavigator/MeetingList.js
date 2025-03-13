@@ -19,10 +19,10 @@ import {
   Provider,
   ActivityIndicator,
 } from 'react-native-paper';
-import {
-  useGetMeetingsQuery,
-  useGetUserbyIDQuery,
-} from '../../redux/services/api';
+// import {
+//   useGetMeetingsQuery,
+//   // useGetUserbyIDQuery,
+// } from '../../redux/services/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FlatList} from 'react-native';
 import MeetingCard from './component/MeetingCard';
@@ -33,18 +33,21 @@ import isBetween from 'dayjs/plugin/isBetween';
 import MeetingCardSkeleton from './component/homescreen/MeetingCardSkeleton';
 import {getDeviceType} from './HomeScreen';
 import {StatusBar} from 'expo-status-bar';
+// import { useGetUserbyIDQuery } from '../../redux/auth/authApi';
+import {useGetMeetingsQuery} from '../../redux/meeting/meetingApi';
+import {useGetUserbyIDQuery} from '../../redux/auth/authApi';
 
 dayjs.extend(isBetween);
 
 const MeetingList = () => {
   const [dateRange, setDateRange] = useState({startDate: null, endDate: null});
-  const [isPickerVisible, setPickerVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [profileMenuVisible, setProfileMenuVisible] = useState(false);
   const [statusFilter, setStatusFilter] = useState('All');
   const [userId, setUserId] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [filteredMeetings, setFilteredMeetings] = useState([]);
+  const [isPickerVisible, setPickerVisible] = useState(false);
 
   const navigation = useNavigation();
   // console.log('dateRange',dateRange);
@@ -62,15 +65,14 @@ const MeetingList = () => {
   }, []);
 
   const {data: userData} = useGetUserbyIDQuery(userId, {skip: !userId});
-  // console.log('userData---->',userData);
+  console.log('userData---->', userData);
   const {
     data: meetings,
     isLoading,
     isError,
     refetch,
   } = useGetMeetingsQuery({date: '', userId: userId}, {skip: !userId});
-  // console.log('meetings',meetings);
-  // const isLoading=true
+
   useEffect(() => {
     if (meetings) {
       applyFilters();
@@ -114,8 +116,9 @@ const MeetingList = () => {
     <MeetingCard
       item={item}
       // onpress={() => navigation.navigate('SingleMeeting', {meeting: item})}
-      onpress={() => navigation.navigate('SingleMeeting', { meeting: item || {} })}
-
+      onpress={() =>
+        navigation.navigate('SingleMeeting', {meeting: item || {}})
+      }
     />
   );
 
@@ -138,7 +141,7 @@ const MeetingList = () => {
             : 'flex-1 bg-spBg px-4'
         }
         `}>
-          {/* Header */}
+        {/* Header */}
         <View
           className={`
           ${
@@ -200,12 +203,7 @@ const MeetingList = () => {
                 <Icon name="account-circle-outline" size={20} color="black" />
               )}
             />
-            {/* <Menu.Item
-              onPress={closeProfileMenu}
-              title="Logout"
-              titleStyle={{ color: '#000000' }}
-              leadingIcon={() => <Icon name="logout" size={20} color="red" />}
-            /> */}
+    
           </Menu>
         </View>
 

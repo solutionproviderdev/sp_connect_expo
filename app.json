@@ -4,11 +4,11 @@
     "slug": "sp_sales",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/sp_gear_icon.png",
+    "icon": "./src/assets/icons/spSalesIcon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./src/assets/sp_gear_icon.png",
+      "image": "./src/assets/icons/spSalesIcon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,7 +17,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/sp_gear_icon.png",
+        "foregroundImage": "./src/assets/icons/spSalesIcon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.solutionprovider.sp_sales"

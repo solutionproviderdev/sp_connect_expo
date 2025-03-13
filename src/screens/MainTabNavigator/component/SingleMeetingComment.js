@@ -1,8 +1,9 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { useGetUserbyIDQuery } from '../../../redux/auth/authApi';
  
-import { useGetUserbyIDQuery } from '../../../redux/services/api';
+// import { useGetUserbyIDQuery } from '../../../redux/services/api';
 
 const SingleMeetingComment = ({comment}) => {
   // console.log('comment ',comment);

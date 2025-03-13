@@ -12,12 +12,13 @@ import {
   Easing,
 } from 'react-native';
 import Svg, {Path, Circle} from 'react-native-svg';
-import {
-  useAddCommentMutation,
-  useUpdateProjectStatusMutation,
-} from '../../../../redux/services/api';
+// import {
+//   useAddCommentMutation,
+//   useUpdateProjectStatusMutation,
+// } from '../../../../redux/services/api';
 import {Platform} from 'react-native';
 import {ActivityIndicator} from 'react-native-paper';
+import { useAddCommentMutation, useUpdateProjectStatusMutation } from '../../../../redux/meeting/meetingApi';
 
 const statuses = {
   Ongoing: [

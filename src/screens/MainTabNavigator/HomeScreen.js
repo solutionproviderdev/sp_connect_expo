@@ -21,10 +21,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icons from 'react-native-vector-icons/Ionicons';
 
 import {Avatar, Menu, Provider} from 'react-native-paper';
-import {
-  useGetMeetingsQuery,
-  useGetUserbyIDQuery,
-} from '../../redux/services/api';
+// import {
+//   // useGetMeetingsQuery,
+//   // useGetUserbyIDQuery,
+// } from '../../redux/services/api';
 import MeetingCard from './component/MeetingCard';
 import SearchMeetingScreen from './component/SearchMeeting';
 import {navigationRef, resetNavigation} from '../../App';
@@ -37,6 +37,8 @@ import TodayMeetings from './component/homescreen/screen/TodayMeetings';
 import SalesCollectionBar from './component/homescreen/SalesCollectionBar';
 import {StatusBar} from 'expo-status-bar';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import { useGetUserbyIDQuery } from '../../redux/auth/authApi';
+import { useGetMeetingsQuery } from '../../redux/meeting/meetingApi';
 
 // import { decode } from 'expo-jwt';
 

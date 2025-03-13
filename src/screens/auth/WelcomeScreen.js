@@ -17,9 +17,10 @@ import {
   checkBiometricSupport,
   getUserCredentials,
 } from './BiometricAuth';
-import {useLoginMutation} from '../../redux/services/api';
+// import {useLoginMutation} from '../../redux/services/api';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {ActivityIndicator} from 'react-native-paper';
+import { useLoginMutation } from '../../redux/auth/authApi';
 
 const WelcomeScreen = () => {
   const navigation = useNavigation();

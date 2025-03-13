@@ -2,7 +2,8 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconE from 'react-native-vector-icons/Entypo';
-import {useGetUserbyIDQuery} from '../../../redux/services/api';
+import { useGetUserbyIDQuery } from '../../../redux/auth/authApi';
+// import {useGetUserbyIDQuery} from '../../../redux/services/api';
 
 const MeetingCard = ({item, onpress}) => {
   const {data: user} = useGetUserbyIDQuery(item.lead.creName);

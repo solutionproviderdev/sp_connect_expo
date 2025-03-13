@@ -13,10 +13,11 @@ import HomeMeetingCard from '../HomeMeetingCard';
 import {CommonActions, useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {navigationRef} from '../../../../../App';
-import {useGetMeetingsQuery} from '../../../../../redux/services/api';
+// import {useGetMeetingsQuery} from '../../../../../redux/services/api';
 import SkeletonLoading from 'expo-skeleton-loading';
 import MeetingCardSkeleton from '../MeetingCardSkeleton';
 import {getDeviceType} from '../../../HomeScreen';
+import { useGetMeetingsQuery } from '../../../../../redux/meeting/meetingApi';
 
 // const TodayMeetings = ({route}) => {
 const TodayMeetings = ({route = {}}) => {

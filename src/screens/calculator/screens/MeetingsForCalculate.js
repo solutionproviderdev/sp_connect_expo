@@ -12,9 +12,10 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getDeviceType} from '../../MainTabNavigator/HomeScreen';
-import {useGetMeetingsQuery} from '../../../redux/services/api';
+// import {useGetMeetingsQuery} from '../../../redux/services/api';
 import {useUserCredentials} from '../../../utils/UserCredentials';
 import CalculateMeetingCard from '../components/meetingsforcalculate/CalculateMeetingCard';
+import { useGetMeetingsQuery } from '../../../redux/meeting/meetingApi';
  
 const MeetingsForCalculate = () => {
   const navigation = useNavigation();

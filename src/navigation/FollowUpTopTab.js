@@ -3,13 +3,13 @@
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
 import { TabView, SceneMap, TabBar } from 'react-native-tab-view';
+
 import CommentsTab from '../screens/followUp/components/top-tabs/CommentsTab';
 import CallLogsTab from '../screens/followUp/components/top-tabs/CallLogsTab';
 import FollowUpTab from '../screens/followUp/components/top-tabs/FollowUpTab';
 import CheckInsTab from '../screens/followUp/components/top-tabs/CheckInsTab';
 
-
-// Mapping the routes
+  
 const renderScene = SceneMap({
   first: CommentsTab,
   second: FollowUpTab,
@@ -32,6 +32,7 @@ const FollowUpTopTab = () => {
   return (
     <View style={{  height: layout.height * 0.8, flex: 1}}>
       <TabView
+      key={index}
         navigationState={{ index, routes }}
         renderScene={renderScene}
         onIndexChange={setIndex}
@@ -58,3 +59,21 @@ const FollowUpTopTab = () => {
 };
 
 export default FollowUpTopTab;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

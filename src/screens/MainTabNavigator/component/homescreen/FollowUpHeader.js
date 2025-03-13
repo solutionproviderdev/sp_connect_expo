@@ -14,8 +14,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {navigationRef} from '../../../../App';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useUserCredentials} from '../../../../utils/UserCredentials';
-import {useGetUserbyIDQuery} from '../../../../redux/services/api';
-
+import { useGetUserbyIDQuery } from '../../../../redux/auth/authApi';
+ 
 const FollowUpHeader = () => {
   const navigation = useNavigation();
   const DeviceType = getDeviceType();
@@ -53,7 +53,7 @@ const FollowUpHeader = () => {
 
   // Helper function to check token validity
   const {userId} = useUserCredentials();
-  console.log(userId);
+  console.log('userId',userId);
   const {data: userData} = useGetUserbyIDQuery(userId, {skip: !userId});
   // console.log('user data is here ---------><>', userData);
 
