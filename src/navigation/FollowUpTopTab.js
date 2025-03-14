@@ -9,25 +9,38 @@ import CallLogsTab from '../screens/followUp/components/top-tabs/CallLogsTab';
 import FollowUpTab from '../screens/followUp/components/top-tabs/FollowUpTab';
 import CheckInsTab from '../screens/followUp/components/top-tabs/CheckInsTab';
 
-  
-const renderScene = SceneMap({
-  first: CommentsTab,
-  second: FollowUpTab,
-  third: CallLogsTab,
-  fourth: CheckInsTab,
-});
+
 
 // Define tab routes
-const routes = [
-  { key: 'first', title: 'Comments' },
-  { key: 'second', title: 'Follow-Ups' },
-  { key: 'third', title: 'Call Logs' },
-  { key: 'fourth', title: 'Check-ins' },
-];
 
-const FollowUpTopTab = () => {
+const FollowUpTopTab = ({followUp}) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
+  const {comment,salesFollowUp} =followUp
+  
+  console.log('followup followup here >', followUp);
+
+  const routes = [
+    { key: 'first', title: 'Comments' },
+    { key: 'second', title: 'Follow-Ups' },
+    { key: 'third', title: 'Call Logs' },
+    { key: 'fourth', title: 'Check-ins' },
+  ];
+   
+  const renderScene = ({ route }) => {
+      switch (route.key) {
+        case 'first':
+          return <CommentsTab comment={comment} />;
+        case 'second':
+          return <FollowUpTab salesFollowUp={salesFollowUp} />;
+        case 'third':
+          return <CallLogsTab  />;
+        case 'fourth':
+          return <CheckInsTab  />;
+        default:
+          return null;
+      }
+    };
 
   return (
     <View style={{  height: layout.height * 0.8, flex: 1}}>

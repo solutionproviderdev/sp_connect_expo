@@ -22,7 +22,7 @@ export default function FollowUpStack({bottomTabRef}) {
  
     if (allowedRoutes.includes(routeName)) {
         bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
-        console.log('bottom tab make false-->',bottomTabRef)
+        // console.log('bottom tab make false-->',bottomTabRef)
       } else {
         bottomTabRef?.current?.setVisible(true); // ❌ Hide Bottom Tab on all other screens
       }

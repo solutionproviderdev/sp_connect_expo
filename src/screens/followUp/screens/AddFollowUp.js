@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FollowUpMeetingTab from '../components/addFollowUp/FollowUpMeetingTab';
+import FollowUpCall from '../components/addFollowUp/FollowUpCall';
 
 const AddFollowUp = () => {
   const navigation = useNavigation();
@@ -32,14 +33,14 @@ const AddFollowUp = () => {
       </View>
 
       {/* Tabs */}
-      <View className="flex-row w-full rounded-md overflow-hidden mb-4 bg-spCardGray">
+      <View className="flex-row w-full rounded-md overflow-hidden mb-2 bg-spCardGray">
         <TouchableOpacity
           onPress={() => setActiveTab('Call')}
-          className={`flex-1 flex-row items-center justify-between p-3 ${
+          className={`flex-1 flex-row items-center justify-between px-3 py-2 ${
             activeTab === 'Call' ? 'bg-spBlue rounded-md' : 'bg-spCardGray'
           }`}>
           <Text
-            className={`text-2xl font-robotoCondensedSemiBold ${
+            className={`text-xl font-robotoCondensedSemiBold ${
               activeTab === 'Call' ? 'text-white' : 'text-spBlue'
             }`}>
             Call
@@ -54,11 +55,11 @@ const AddFollowUp = () => {
 
         <TouchableOpacity
           onPress={() => setActiveTab('Meeting')}
-          className={`flex-1 flex-row items-center justify-between p-3 ${
+          className={`flex-1 flex-row items-center justify-between px-3 py-2 ${
             activeTab === 'Meeting' ? 'bg-spBlue rounded-md' : 'bg-spCardGray'
           }`}>
           <Text
-            className={`text-2xl font-robotoCondensedSemiBold ${
+            className={`text-xl font-robotoCondensedSemiBold ${
               activeTab === 'Meeting' ? 'text-white' : 'text-spBlue'
             }`}>
             Meeting
@@ -73,58 +74,12 @@ const AddFollowUp = () => {
       </View>
 
       {/* Call Section */}
-      {activeTab === 'Call' && (
-        <View className="flex-1">
-          {/* Date & Time Box */}
-          <View className="w-full bg-spCardGray p-3 rounded-md flex-row items-center justify-between">
-            <Text className="text-2xl font-robotoCondensedSemiBold text-spBlue">
-              1-Jan <Text className="text-spBlue">Friday</Text>{' '}
-              <Text className="text-spBlue">01:00 Pm</Text>
-            </Text>
-            <Icon name="clock-outline" size={26} color="#04628A" />
-          </View>
-
-          {/* Comment Box */}
-          <View className="w-full bg-spCardGray px-2 mt-3 rounded-md">
-            <TextInput
-              placeholder="Add Comment..."
-              placeholderTextColor="gray"
-              multiline
-              className="text-lg font-robotoCondensed text-gray-800 min-h-[100px]"
-            />
-          </View>
-          <TouchableOpacity
-             className="bg-red-800 flex-row justify-center items-center rounded py-2 mt-auto">
-            <Icon name="calendar-clock" size={24} color="#fff" />
-            <Text className="text-white font-bold text-lg ml-2">
-              Add Follow Up Call
-            </Text>
-          </TouchableOpacity>
-        </View>
+      {activeTab === 'Call' ? (
+        <FollowUpCall />
+      ) : (
+        <FollowUpMeetingTab />
       )}
-
-      {/* Meeting Section */}
-      {activeTab === 'Meeting' && (
-        // <View className="flex-1">
-        //   {/* Meeting Info Box */}
-        //   <View className="w-full bg-spCardGray p-3 rounded-md flex-row items-center justify-between">
-        //     <Text className="text-2xl font-robotoCondensedSemiBold text-spBlue">
-        //       Meeting is here
-        //     </Text>
-        //   </View>
-        //   <TouchableOpacity
-        //      className="bg-red-800 flex-row justify-center items-center rounded py-2 mt-auto">
-        //     <Icon name="calendar-clock" size={24} color="#fff" />
-        //     <Text className="text-white font-bold text-lg ml-2">
-        //       Add Follow Up Meeting
-        //     </Text>
-        //   </TouchableOpacity>
-        // </View>
-        <FollowUpMeetingTab/>
-      )}
-
-      {/* Add Follow Up Button (Always at Bottom) */}
-    </View>
+     </View>
   );
 };
 

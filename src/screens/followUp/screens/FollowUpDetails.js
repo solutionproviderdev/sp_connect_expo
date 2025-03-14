@@ -1,31 +1,54 @@
+
+
 import React from 'react';
-import {
-  ScrollView,
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  useWindowDimensions,
-} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconE from 'react-native-vector-icons/Entypo';
-import ProjectStatus from '../../MainTabNavigator/component/projectStatusTrack/ProjecStatus';
-import {getDeviceType} from '../../MainTabNavigator/HomeScreen';
+import { getDeviceType } from '../../MainTabNavigator/HomeScreen';
 import FollowUpTopTab from '../../../navigation/FollowUpTopTab';
+import ProjectStatus from '../../MainTabNavigator/component/projectStatusTrack/ProjecStatus';
 import ActionButtons from '../components/followUpDetails/ActionButtons';
+import dayjs from 'dayjs';
+
+// Formatting helper functions
+const formatDate = isoString => {
+  if (!isoString) return 'N/A';
+  const date = new Date(isoString);
+  return date.toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+};
+
+const formatTime = isoString => {
+  if (!isoString) return 'N/A';
+  const date = new Date(isoString);
+  return date.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+};
 
 const FollowUpDetails = () => {
   const navigation = useNavigation();
+  const { params } = useRoute();
+  const { followUp } = params; // followUp data passed via navigation
   const deviceType = getDeviceType();
 
-  return (
-    <View style={{flex: 1, backgroundColor: '#fff'}}>
-      {/* <ScrollView> */}
+  // Calculate last comment if available
+  const lastCommentIndex = followUp?.comment ? followUp.comment.length - 1 : null;
+  const comment =
+    lastCommentIndex != null
+      ? followUp.comment[lastCommentIndex]?.comment || 'No comment yet!'
+      : 'No comment yet!';
 
+  return (
+    <View className="flex-1 bg-white">
       {/* Header */}
-      <View className="flex-row items-center justify-between py-2 px-4">
+      <View className="flex-row items-center justify-between py-1 px-3">
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={require('../../../assets/backArrowImg.png')}
@@ -35,114 +58,111 @@ const FollowUpDetails = () => {
             }}
           />
         </TouchableOpacity>
-        <Text
-          className={`text-${
-            deviceType === 'tablet' ? '3xl' : '2xl'
-          } font-extrabold text-spBlue`}>
+        <Text className={`text-${deviceType === 'tablet' ? '3xl' : '2xl'} font-extrabold text-spBlue`}>
           Client Information
         </Text>
         <Text />
       </View>
-      {/* <ScrollView> */}
-      <View
-        // onPress={() => navigation.navigate('FollowUpDetails')}
-        className="px-4 pb-1">
-        <View className="flex-row justify-center gap-2 ">
-          {/* Left Side Content */}
+
+      {/* Main Details */}
+      <View className="px-3 pb-1 px-4">
+        <View className="flex-row justify-center gap-2">
+          {/* Left Side: Customer & Product Details */}
           <View className="w-2/3">
-            {/* Customer Details */}
-            <View className="flex-row items-center mb-">
-              <Ionicons name="person-outline" size={20} color="#666" />
-              <Text className="ml-2 text-xl font-robotoCondensed">
-                Mr. Momin Hossain
-              </Text>
-            </View>
-
-            <View className="flex-row items-center mb-">
-              <Ionicons name="call-outline" size={20} color="#666" />
-              <Text className="ml-2 text-lg font-robotoCondensed ">
-                01345653287
-              </Text>
-            </View>
-
+            {/* Customer Name */}
             <View className="flex-row items-center mb-1">
-              <Ionicons name="location-outline" size={20} color="#666" />
-              <Text className="ml-2 font-robotoCondensed text-lg">
-                Adabor, Dhaka - North
+              <Ionicons name="person-outline" size={18} color="#666" />
+              <Text className="ml-1 text-lg font-robotoCondensed">
+                {followUp?.name || 'Unknown'}
               </Text>
             </View>
-
-            {/* Products */}
-            <View className="flex-row items-center mt-">
-              <IconE name="info-with-circle" size={20} color="#666" />
-              <View className="flex-row ml-2 gap-2">
-                <Text className="bg-gray-800  text-gray-100 font-robotoCondensed p-1">
-                  Kitchen
-                </Text>
-                <Text className="bg-gray-800 text-gray-100 font-robotoCondensed p-1">
-                  Folding Door
-                </Text>
+            {/* Phone */}
+            <View className="flex-row items-center mb-1">
+              <Ionicons name="call-outline" size={18} color="#666" />
+              <Text className="ml-1 text-base font-robotoCondensed">
+                {followUp?.phone?.[0] || 'No Phone'}
+              </Text>
+            </View>
+            {/* Address */}
+            <View className="flex-row items-center mb-1">
+              <Ionicons name="location-outline" size={18} color="#666" />
+              <Text className="ml-1 font-robotoCondensed text-base">
+                {followUp?.address?.area || 'Unknown Area'},{' '}
+                {followUp?.address?.district || ''}
+              </Text>
+            </View>
+            {/* Product Requirements */}
+            {followUp?.requirements?.length > 0 && (
+              <View className="flex-row items-center mt-1">
+                <IconE name="info-with-circle" size={18} color="#666" />
+                <View className="flex-row ml-1 gap-1">
+                  {followUp.requirements.map((req, index) => (
+                    <Text key={index} className="bg-gray-800 text-gray-100 font-robotoCondensed p-1">
+                      {req}
+                    </Text>
+                  ))}
+                </View>
               </View>
-            </View>
-
+            )}
             {/* Budget & Value */}
-            <View className="mt-2">
-              <Text className="font-robotoCondensed text-lg">
-                Budget: 1,20,000/-
+            <View className="mt-1">
+              <Text className="font-robotoCondensed text-base">
+                Budget: {followUp?.finance?.clientsBudget || 'N/A'}/-
               </Text>
-              <Text className="font-robotoCondensed text-lg">
-                Value: 80,000/-
+              <Text className="font-robotoCondensed text-base">
+                Value: {followUp?.finance?.projectValue || 'N/A'}/-
               </Text>
             </View>
           </View>
-          {/* Right Side Badges */}
-          <View className=" w-1/3 gap-2">
-            {/* RITU text positioned at top */}
-
-            <View className="bg-spRed p-2 ">
-              <Text className="text-white font-robotoCondensed">
-                Measurements Not Taken{' '}
+          {/* Right Side: Meeting, Status, and Badges */}
+          <View className="w-1/3 gap-1">
+            {/* Project Status Badge */}
+            <View className="bg-spRed p-1">
+              <Text className="text-white font-robotoCondensed text-sm">
+                {followUp?.projectStatus?.subStatus || 'No Status'}{' '}
                 <Text className="text-xs">(Ongoing)</Text>
               </Text>
             </View>
-
-            <View className=" gap-1 ">
-              <View className="bg-gray-800 px-3 py-1 rounded-t-md">
-                <Text className="text-white font-robotoCondensed">
-                  11:30 AM
+            {/* Meeting Time & Date */}
+            <View className="gap-0.5">
+              <View className="bg-gray-800 px-2 py-1 rounded-t-md">
+                <Text className="text-white font-robotoCondensed text-sm">
+                  {formatTime(followUp?.salesFollowUp?.[0]?.time)}
                 </Text>
               </View>
-
-              <View className="bg-spRed px-3 py-1 rounded-b-md">
-                <Text className="text-white font-robotoCondensed">
-                  16 DEC 24
+              <View className="bg-spRed px-2 py-1 rounded-b-md">
+                <Text className="text-white font-robotoCondensed text-sm">
+                  {formatDate(followUp?.salesFollowUp?.[0]?.time)}
                 </Text>
               </View>
             </View>
-
-            <View className="bg-spBlue ">
-              <Text className="text-white  p-2 font-robotoCondensed">
-                Handed Over
+            {/* Follow Up Overall Status */}
+            <View className="bg-spBlue">
+              <Text className="text-white p-1 font-robotoCondensed text-sm">
+                {followUp?.status || 'Unknown Status'}
               </Text>
             </View>
           </View>
         </View>
       </View>
 
-      {/* Project Status */}
-      <View className="flex-row items-center justify-center pt-2 px-2">
-        <ProjectStatus
-          projectStatus={{status: '', subStatus: ''}}
-          leadId={''}
-        />
+      {/* Staff Section */}
+      <Text className="text-right text-lg px-4 py-1 font-robotoCondensed">
+        {followUp?.creName?.nameAsPerNID || 'N/A'}
+      </Text>
+
+      {/* Project Status Tracking */}
+      <View className="flex-row items-center justify-center pt-1 px-2">
+        <ProjectStatus projectStatus={followUp?.projectStatus || {}} leadId={followUp?._id || ''} />
       </View>
 
       {/* Action Buttons */}
       <ActionButtons />
-      <View className="flex-1 px-4">
-        <FollowUpTopTab />
+
+      {/* Follow Up Top Tabs */}
+      <View className="flex-1 px-3">
+        <FollowUpTopTab followUp={followUp} />
       </View>
-      {/* </ScrollView> */}
     </View>
   );
 };

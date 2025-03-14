@@ -1,4 +1,4 @@
-import {api} from '../services/api';
+ import {api} from '../services/api';
 
 export const followUpApi = api.injectEndpoints({
   endpoints: builder => ({
@@ -11,7 +11,16 @@ export const followUpApi = api.injectEndpoints({
       },
        providesTags: ['followUp'],
     }),
+    AddFollowUpCall: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `/lead/sales/follow-up/${id}`,
+        method: 'POST', // Use PUT if that's what your API expects
+        body,
+      }),
+      // Invalidate followUp tag so that any queries re-fetch updated data.
+      invalidatesTags: ['followUp'],
+    }),
   }),
 });
 
-export const {useGetAllFollowupQuery} = followUpApi;
+export const {useGetAllFollowupQuery,useAddFollowUpCallMutation} = followUpApi;
