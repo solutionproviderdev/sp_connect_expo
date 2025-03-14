@@ -53,7 +53,7 @@ const FollowUpHeader = () => {
 
   // Helper function to check token validity
   const {userId} = useUserCredentials();
-  console.log('userId',userId);
+  // console.log('userId',userId);
   const {data: userData} = useGetUserbyIDQuery(userId, {skip: !userId});
   // console.log('user data is here ---------><>', userData);
 

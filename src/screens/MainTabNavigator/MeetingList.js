@@ -65,8 +65,7 @@ const MeetingList = () => {
   }, []);
 
   const {data: userData} = useGetUserbyIDQuery(userId, {skip: !userId});
-  console.log('userData---->', userData);
-  const {
+   const {
     data: meetings,
     isLoading,
     isError,

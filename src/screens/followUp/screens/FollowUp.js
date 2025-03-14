@@ -15,47 +15,70 @@ import {Image} from 'react-native';
 import SalesOverview from '../../MainTabNavigator/component/homescreen/today-follow-up/SalesOverview';
 import {useGetAllFollowupQuery} from '../../../redux/followUp/followUpApi';
 import FollowUpCard from '../components/FollowUpCard';
-import {useEffect, useState} from 'react';
+import {useCallback, useState} from 'react';
 import {FlatList} from 'react-native';
 import {useUserCredentials} from '../../../utils/UserCredentials';
-import DateTimePicker from 'react-native-ui-datepicker';
-import Icons from 'react-native-vector-icons/Ionicons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import dayjs from 'dayjs';
+import DateRangePicker from '../components/DateRangePicker';
+import FollowUpStatusMenu from '../components/FollowUpStatusMenu';
 
 const FollowUp = () => {
   const [errorModal, setErrorModal] = useState(false);
   const [isPickerVisible, setPickerVisible] = useState(false);
+  // Initialize dateRange as an object with empty strings
   const [dateRange, setDateRange] = useState({startDate: null, endDate: null});
-  const [statusFilter, setStatusFilter] = useState('All');
+
+  const [statusFilter, setStatusFilter] = useState('');
 
   const navigation = useNavigation();
   const deviceType = getDeviceType();
-  const user = useUserCredentials();
-  const user_Id = user?.userId;
-
-  const {data, error, isLoading} = useGetAllFollowupQuery(user_Id, {
-    skip: !user_Id,
-  });
-  const insets = useSafeAreaInsets();
+  const {userId} = useUserCredentials();
 
   const handleDateChange = ({startDate, endDate}) => {
+    // Store the raw Date objects
     setDateRange({startDate, endDate});
     if (startDate && endDate) {
       setPickerVisible(false);
     }
   };
 
-  // console.log('date range is here->', dateRange);
+  // Format date range string if both dates exist
+  const formattedDateRange =
+    dateRange.startDate && dateRange.endDate
+      ? `${dayjs(dateRange.startDate).format('YYYY-MM-DD')}_${dayjs(
+          dateRange.endDate,
+        ).format('YYYY-MM-DD')}`
+      : '';
+
+  // Pass an object with all parameters to the query hook
+  const {data, error, isLoading} = useGetAllFollowupQuery(
+    {
+      Id: userId,
+      dateRange: formattedDateRange,
+      status: statusFilter,
+    },
+    {skip: !userId},
+  );
+
+  const insets = useSafeAreaInsets();
+  const togglePicker = useCallback(() => setPickerVisible(prev => !prev), []);
+
+  console.log('UserId is ->', userId);
+  console.log('Current Filter Params ->', {
+    Id: userId,
+    dateRange: formattedDateRange,
+    status: statusFilter,
+  });
+
   return (
     <Provider>
-      <SafeAreaView className=" flex-1 bg-spBg px-4">
-        {/* <FollowUpHeader /> */}
+      <SafeAreaView className="flex-1 bg-spBg px-4">
+        {/* Header */}
         <View
-          className={` ${
+          className={`${
             deviceType === 'tablet'
-              ? 'flex-row items-center justify-between px-4 '
-              : 'flex-row items-center justify-between py-4 '
+              ? 'flex-row items-center justify-between px-4'
+              : 'flex-row items-center justify-between py-4'
           }`}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             {deviceType === 'tablet' ? (
@@ -70,7 +93,6 @@ const FollowUp = () => {
               />
             )}
           </TouchableOpacity>
-
           <Text
             className={`${
               getDeviceType === 'tablet'
@@ -79,83 +101,50 @@ const FollowUp = () => {
             }`}>
             FOLLOW UP
           </Text>
-
           <Text></Text>
         </View>
 
-        {/*  SalesOverview matrix cards here  */}
+        {/* Sales Overview Cards */}
         <SalesOverview />
 
-        {/* here for remain of today followup */}
-        <TouchableOpacity className="bg-spCardGray px-3 py-2 my-2 rounded-xl flex-row items-center justify-between">
-          <Text className="text-2xl font-robotoCondensed text-spBlue mx-auto">
-            Quotation Send
-          </Text>
-          <SimpleLineIcons
-            name="arrow-down"
-            size={25}
-            color="rgb(4, 98, 138)"
-          />
-        </TouchableOpacity>
+        {/* Quotation Send Header */}
 
-        {/* Date Range */}
+        <FollowUpStatusMenu  
+          status={statusFilter || 'Pending'} // show 'Pending' if no filter selected
+          onStatusChange={setStatusFilter}
+         />
 
-        {/* Date Range Picker Button */}
+        {/* Date Picker Button */}
         <TouchableOpacity
-          onPress={() => setPickerVisible(true)}
-          className="bg-spCardGray px-3 py-2 mb-2 rounded-xl flex-row items-center">
-          {/* <TouchableOpacity> */}
-          <Text className="text-2xl font-robotoCondensed text-spBlue mx-auto">
+          onPress={togglePicker}
+          className="flex justify-center gap-x-2"
+          style={{
+            backgroundColor: '#e0e0e0',
+            padding: 8,
+            borderRadius: 8,
+            flexDirection: 'row',
+            alignItems: 'center',
+            marginBottom: 8,
+          }}>
+          <Ionicons name="calendar-outline" size={30} color="rgb(4, 98, 138)" />
+          <Text className="text-xl font-robotoCondensed text-spBlue">
             {dateRange.startDate && dateRange.endDate
               ? `${dayjs(dateRange.startDate).format('D-MMM')} - ${dayjs(
                   dateRange.endDate,
                 ).format('D-MMM')}`
               : 'Select Date Range'}
           </Text>
-
-          <Ionicons name="calendar-outline" size={30} color="rgb(4, 98, 138)" />
-          {/* </TouchableOpacity> */}
         </TouchableOpacity>
 
-        <Portal>
-          <Modal
-            visible={isPickerVisible}
-            onDismiss={() => setPickerVisible(false)}
-            contentContainerStyle={{
-              backgroundColor: 'white',
-              marginHorizontal: 20,
-              padding: 16,
-              borderRadius: 8,
-              elevation: 5,
-              zIndex: 10,
-            }}>
-            <DateTimePicker
-              mode="range"
-              startDate={dateRange.startDate}
-              endDate={dateRange.endDate}
-              onChange={handleDateChange}
-              customStyles={{
-                headerTextStyle: {
-                  color: 'rgb(4, 98, 138)',
-                  fontWeight: 'bold',
-                },
-                calendarTextStyle: {color: '#000'},
-                selectedItemColor: 'rgb(4, 98, 138)',
-                dayContainerStyle: {borderRadius: 5},
-              }}
-            />
-            <Button
-              mode="contained"
-              onPress={() => setPickerVisible(false)}
-              className="mt-4 bg-spBlue">
-              Close
-            </Button>
-          </Modal>
-        </Portal>
-      
-        {/* Header - Quotation Send */}
+        <DateRangePicker
+          isVisible={isPickerVisible}
+          startDate={dateRange.startDate}
+          endDate={dateRange.endDate}
+          onDateChange={handleDateChange}
+          onClose={() => setPickerVisible(false)}
+        />
 
-        {/* ✅ Handle Loading State */}
+        {/* Loading State */}
         {isLoading && (
           <View className="flex-1 justify-center items-center">
             <ActivityIndicator size="large" color="#2563EB" />
@@ -163,7 +152,7 @@ const FollowUp = () => {
           </View>
         )}
 
-        {/* ✅ Handle Data with FlatList */}
+        {/* Data List */}
         {!isLoading && !error && data?.length > 0 && (
           <FlatList
             data={data}
@@ -171,13 +160,11 @@ const FollowUp = () => {
               item.id?.toString() || Math.random().toString()
             }
             renderItem={({item}) => <FollowUpCard followUp={item} />}
-            // contentContainerStyle={{ paddingBottom: 50 }}
-            contentContainerStyle={{paddingBottom: insets.bottom + 50}} // Dynamic bottom padding
-            // showsVerticalScrollIndicator={false}
+            contentContainerStyle={{paddingBottom: insets.bottom + 100}}
           />
         )}
 
-        {/* ✅ Error Modal */}
+        {/* Error Modal */}
         <Modal visible={errorModal} transparent animationType="slide">
           <View className="flex-1 justify-center items-center bg-black bg-opacity-50">
             <View className="bg-white p-5 rounded-lg w-80 shadow-lg items-center">
@@ -192,12 +179,10 @@ const FollowUp = () => {
               </TouchableOpacity>
             </View>
           </View>
-        </Modal> 
+        </Modal>
       </SafeAreaView>
     </Provider>
   );
 };
 
 export default FollowUp;
-
-
