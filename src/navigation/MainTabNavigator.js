@@ -35,6 +35,9 @@ const CalculatorStackWrapper = props => {
 const FollowUpStackWrapper = props => {
   return <FollowUpStack {...props} bottomTabRef={props.bottomTabRef} />;
 };
+const MeetingUpStackWrapper = props => {
+  return <MeetingStack {...props} bottomTabRef={props.bottomTabRef} />;
+};
 export default function MainTabNavigator() {
   const bottomTabRef = useRef(null);
 
@@ -119,7 +122,10 @@ export default function MainTabNavigator() {
       />
       <CurvedBottomBarExpo.Screen
         name="meeting"
-        component={MeetingStack}
+        // component={MeetingStack}
+        component={props => (
+          <MeetingUpStackWrapper {...props} bottomTabRef={bottomTabRef} />
+        )}
         options={{unmountOnBlur: true}}
         position="LEFT"
       />

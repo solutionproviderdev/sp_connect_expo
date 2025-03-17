@@ -53,6 +53,10 @@ export const meetingApi = api.injectEndpoints({
         {type: 'Meeting'},
       ],
     }),
+    getLeadById: builder.query({
+      query: leadId => `/lead/${leadId}`,
+      providesTags: (result, error, leadId) => [{ type: 'Lead', id: leadId }],
+    }),
   }),
 });
 
@@ -60,5 +64,6 @@ export const {
   useGetMeetingByIdQuery,
   useAddCommentMutation,
   useGetMeetingsQuery,
-   useUpdateProjectStatusMutation,
+  useUpdateProjectStatusMutation,
+  useGetLeadByIdQuery,
 } = meetingApi;

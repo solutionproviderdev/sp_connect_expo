@@ -10,15 +10,15 @@ import FollowUpTab from '../screens/followUp/components/top-tabs/FollowUpTab';
 import CheckInsTab from '../screens/followUp/components/top-tabs/CheckInsTab';
 
 
-
 // Define tab routes
 
 const FollowUpTopTab = ({followUp}) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
-  const {comment,salesFollowUp} =followUp
+  const {comment} =followUp
+  // console.log('-------->',followUp);
   
-  console.log('followup followup here >', followUp);
+  // console.log('followup top tab here--->', followUp);
 
   const routes = [
     { key: 'first', title: 'Comments' },
@@ -32,7 +32,7 @@ const FollowUpTopTab = ({followUp}) => {
         case 'first':
           return <CommentsTab comment={comment} />;
         case 'second':
-          return <FollowUpTab salesFollowUp={salesFollowUp} />;
+          return <FollowUpTab followUp={followUp} />;
         case 'third':
           return <CallLogsTab  />;
         case 'fourth':

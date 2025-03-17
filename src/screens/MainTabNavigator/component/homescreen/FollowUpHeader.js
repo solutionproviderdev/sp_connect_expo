@@ -14,8 +14,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {navigationRef} from '../../../../App';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useUserCredentials} from '../../../../utils/UserCredentials';
-import { useGetUserbyIDQuery } from '../../../../redux/auth/authApi';
- 
+import {useGetUserbyIDQuery} from '../../../../redux/auth/authApi';
+
 const FollowUpHeader = () => {
   const navigation = useNavigation();
   const DeviceType = getDeviceType();
@@ -60,11 +60,11 @@ const FollowUpHeader = () => {
   return (
     <View
       className={`
-    ${
-      DeviceType === 'tablet'
-        ? 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
-        : 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
-    }
+      ${
+        DeviceType === 'tablet'
+          ? 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
+          : 'flex-row items-center justify-between px-4 pt-1 bg-spBg rounded-lg'
+      }
     `}
       // source={require('../../assets/orrangeEmojie.gif')}>
     >
@@ -100,6 +100,7 @@ const FollowUpHeader = () => {
       </TouchableOpacity>
 
       {/* Dropdown Menu */}
+
       <Menu
         visible={menuVisible}
         onDismiss={closeMenu}
@@ -129,7 +130,7 @@ const FollowUpHeader = () => {
             <Icon name="account-circle-outline" size={20} color="black" />
           )}
         />
-        <Menu.Item
+        {/* <Menu.Item
           onPress={() => {
             closeMenu();
             // handleLogout();
@@ -137,7 +138,7 @@ const FollowUpHeader = () => {
           title="Logout"
           titleStyle={{color: '#000000'}}
           leadingIcon={() => <Icon name="logout" size={20} color="red" />}
-        />
+        /> */}
       </Menu>
     </View>
   );

@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FollowUpMeetingTab from '../components/addFollowUp/FollowUpMeetingTab';
 import FollowUpCall from '../components/addFollowUp/FollowUpCall';
@@ -15,7 +15,9 @@ import FollowUpCall from '../components/addFollowUp/FollowUpCall';
 const AddFollowUp = () => {
   const navigation = useNavigation();
   const [activeTab, setActiveTab] = useState('Call');
-
+  const {params} = useRoute();
+  const {leadId} = params;
+  
   return (
     <View className="flex-1 px-4 bg-spBg">
       {/* Header */}
@@ -75,11 +77,11 @@ const AddFollowUp = () => {
 
       {/* Call Section */}
       {activeTab === 'Call' ? (
-        <FollowUpCall />
+        <FollowUpCall leadId={leadId} />
       ) : (
         <FollowUpMeetingTab />
       )}
-     </View>
+    </View>
   );
 };
 

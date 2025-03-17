@@ -6,7 +6,7 @@ import { useGetUserbyIDQuery } from '../../../redux/auth/authApi';
 // import {useGetUserbyIDQuery} from '../../../redux/services/api';
 
 const MeetingCard = ({item, onpress}) => {
-  const {data: user} = useGetUserbyIDQuery(item.lead.creName);
+  const {data: user} = useGetUserbyIDQuery(item?.lead?.creName);
   // console.log('meetign card----------',item?.lead?._id);
   // console.log('visit charge-+>',item);
   return (

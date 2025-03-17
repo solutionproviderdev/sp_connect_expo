@@ -18,7 +18,7 @@ import { jwtDecode } from "jwt-decode";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Font from 'expo-font';
-import {ActivityIndicator, PaperProvider} from 'react-native-paper';
+import { ActivityIndicator, PaperProvider } from 'react-native-paper';
 
 // ✅ Create a global navigation reference
 export const navigationRef = createNavigationContainerRef();
@@ -70,11 +70,11 @@ const App = () => {
   }, []);
 
   // ✅ Logout function
-   const handleLogout = async () => {
+  const handleLogout = async () => {
     try {
       await AsyncStorage.removeItem('token');
       await AsyncStorage.removeItem('user');
-      
+
       setIsLoggedIn(false);  // Update login state
       navigationRef.reset({
         index: 0,
@@ -158,8 +158,8 @@ const App = () => {
   //font related codes
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
-   // Load fonts
-   useEffect(() => {
+  // Load fonts
+  useEffect(() => {
     async function loadFonts() {
       await Font.loadAsync({
         'RobotoCondensed-Regular': require('./assets/fonts/Roboto_Condensed/static/RobotoCondensed-Regular.ttf'),
@@ -184,6 +184,7 @@ const App = () => {
     <Provider store={store}>
       {/* <PaperProvider> */}
       <NavigationContainer ref={navigationRef}>
+
         <SafeAreaView style={{ flex: 1 }}>
           <StatusBar
             backgroundColor="rgb(4, 98, 138)"
@@ -198,6 +199,7 @@ const App = () => {
           )}
           {isLoggedIn ? <MainTabNavigator /> : <AuthStack />}
         </SafeAreaView>
+
       </NavigationContainer>
       {/* </PaperProvider> */}
     </Provider>

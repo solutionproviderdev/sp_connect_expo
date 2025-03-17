@@ -10,7 +10,7 @@ import {
   Provider,
 } from 'react-native-paper';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Pressable, Text, TouchableOpacity, View} from 'react-native';
 import {Image} from 'react-native';
 import SalesOverview from '../../MainTabNavigator/component/homescreen/today-follow-up/SalesOverview';
 import {useGetAllFollowupQuery} from '../../../redux/followUp/followUpApi';
@@ -21,6 +21,7 @@ import {useUserCredentials} from '../../../utils/UserCredentials';
 import dayjs from 'dayjs';
 import DateRangePicker from '../components/DateRangePicker';
 import FollowUpStatusMenu from '../components/FollowUpStatusMenu';
+import Ionicons2 from '@expo/vector-icons/Ionicons';
 
 const FollowUp = () => {
   const [errorModal, setErrorModal] = useState(false);
@@ -56,23 +57,27 @@ const FollowUp = () => {
       Id: userId,
       dateRange: formattedDateRange,
       status: statusFilter,
+      // Id: null,
+      // dateRange: null,
+      // status: null,
     },
     {skip: !userId},
   );
-
+// console.log('follow up data is here--->',data);
   const insets = useSafeAreaInsets();
   const togglePicker = useCallback(() => setPickerVisible(prev => !prev), []);
 
-  console.log('UserId is ->', userId);
-  console.log('Current Filter Params ->', {
-    Id: userId,
-    dateRange: formattedDateRange,
-    status: statusFilter,
-  });
-
+  // console.log('UserId is ->', userId);
+  // console.log('Current Filter Params ->', {
+  //   Id: userId,
+  //   dateRange: formattedDateRange,
+  //   status: statusFilter,
+  // });
+// console.log('checking data',data);
   return (
     <Provider>
       <SafeAreaView className="flex-1 bg-spBg px-4">
+
         {/* Header */}
         <View
           className={`${
@@ -151,17 +156,33 @@ const FollowUp = () => {
             <Text>Loading follow-ups...</Text>
           </View>
         )}
+        {error && (
+          <View className="flex-1 justify-center items-center">
+            <Pressable className='text-red-600'>Reload</Pressable>
+            <Text className='text-red-600'>Something went wrong !</Text>
+          </View>
+        )}
 
         {/* Data List */}
-        {!isLoading && !error && data?.length > 0 && (
+        {!isLoading && !error && (
           <FlatList
             data={data}
             keyExtractor={item =>
               item.id?.toString() || Math.random().toString()
             }
-            renderItem={({item}) => <FollowUpCard followUp={item} />}
+            renderItem={({item}) => <FollowUpCard followUp={item} onpress={()=>navigation.navigate('FollowUpDetails', {leadId:item?._id || null })} />}
             contentContainerStyle={{paddingBottom: insets.bottom + 100}}
-          />
+            ListEmptyComponent={() => (
+              <View className="flex-1 justify-center items-center pt-12">
+                  <Ionicons2
+                        name="telescope-outline"
+                        size={50}
+                        color="#999"
+                      />
+                <Text className="text-gray-500 mt-2">No follow-ups available</Text>
+              </View>
+            )}
+            />
         )}
 
         {/* Error Modal */}

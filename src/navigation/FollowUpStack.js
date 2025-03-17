@@ -1,60 +1,82 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
- 
 
 import FollowUp from '../screens/followUp/screens/FollowUp';
 import FollowUpDetails from '../screens/followUp/screens/FollowUpDetails';
-import { navigationRef } from '../App';
+import {navigationRef} from '../App';
 import FollowUpHeader from '../screens/MainTabNavigator/component/homescreen/FollowUpHeader';
-import { Provider } from 'react-native-paper';
+import {PaperProvider} from 'react-native-paper';
 import AddFollowUp from '../screens/followUp/screens/AddFollowUp';
+import LeadDetail from '../components/shared/LeadDetail';
 
 const Stack = createNativeStackNavigator();
 
 export default function FollowUpStack({bottomTabRef}) {
+  console.log(bottomTabRef.current);
   const navigation = useNavigation(); // ✅ Get current route
-  const allowedRoutes = ['FollowUpDetails','AddFollowUp'];
 
+  // Force check on focus as well as navigation state change
   useEffect(() => {
-    const unsubscribe = navigation.addListener('state', () => {
-      const routeName = navigationRef?.current?.getCurrentRoute()?.name; // ✅ Get Active Route
- 
-    if (allowedRoutes.includes(routeName)) {
-        bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
-        // console.log('bottom tab make false-->',bottomTabRef)
+    // Initial check function that can be reused
+    const checkRouteAndUpdateTabBar = () => {
+      const currentRoute = navigationRef?.current?.getCurrentRoute();
+      const routeName = currentRoute?.name;
+      // console.log('followup stack->', routeName);
+      
+      if (routeName === 'FollowUpDetails' || routeName === 'AddFollowUp' ) {
+        // console.log('Setting tab bar invisible');
+        bottomTabRef?.current?.setVisible(false);
       } else {
-        bottomTabRef?.current?.setVisible(true); // ❌ Hide Bottom Tab on all other screens
+        // console.log('Setting tab bar visible');
+        bottomTabRef?.current?.setVisible(true);
       }
-    });
+    };
 
-    return unsubscribe;
-  }, [navigation, allowedRoutes, bottomTabRef]);
+    // Check immediately when component mounts
+    checkRouteAndUpdateTabBar();
+    
+    // Listen for state changes
+    const unsubscribeState = navigation.addListener('state', checkRouteAndUpdateTabBar);
+    
+    // Also listen for focus events
+    const unsubscribeFocus = navigation.addListener('focus', checkRouteAndUpdateTabBar);
+
+    return () => {
+      unsubscribeState();
+      unsubscribeFocus();
+    };
+  }, [navigation, bottomTabRef]);
 
   return (
-    <Provider>
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: true,
-        contentStyle: {backgroundColor: 'rgb(255, 254, 246)'},
-        header: () => <FollowUpHeader />,
-      }} >
-      <Stack.Screen
-        name="FollowUp"
-        options={{Presentation: 'card'}}
-        component={FollowUp}
-      />
-      <Stack.Screen
+    <PaperProvider>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: true,
+          contentStyle: {backgroundColor: 'rgb(255, 254, 246)'},
+          header: () => <FollowUpHeader />,
+        }}>
+        <Stack.Screen
+          name="FollowUp"
+          options={{Presentation: 'card'}}
+          component={FollowUp}
+        />
+        {/* <Stack.Screen
         name="FollowUpDetails"
         options={{Presentation: 'card'}}
         component={FollowUpDetails}
-      />
-      <Stack.Screen
-        name="AddFollowUp"
-        options={{Presentation: 'card'}}
-        component={AddFollowUp}
-      />
-    </Stack.Navigator>
-    </Provider>
+      /> */}
+        <Stack.Screen
+          name="FollowUpDetails"
+          options={{Presentation: 'card'}}
+          component={LeadDetail}
+        />
+        <Stack.Screen
+          name="AddFollowUp"
+          options={{Presentation: 'card'}}
+          component={AddFollowUp}
+        />
+      </Stack.Navigator>
+    </PaperProvider>
   );
 }

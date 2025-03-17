@@ -6,56 +6,55 @@ import SingleMeeting from '../screens/MainTabNavigator/component/SingleMeeting';
 import SearchMeeting from '../screens/MainTabNavigator/component/SearchMeeting';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {isNavigationReady, isNavigationReadyRef, navigationRef} from '../App';
+import LeadDetail from '../components/shared/LeadDetail';
+import FollowUpHeader from '../screens/MainTabNavigator/component/homescreen/FollowUpHeader';
+import {PaperProvider} from 'react-native-paper';
 
 const Stack = createNativeStackNavigator();
-const MeetingStack = () => {
-  // const navigation = useNavigation();
+const MeetingStack = ({bottomTabRef}) => {
+  const navigation = useNavigation();
 
-  // React.useEffect(() => {
-  //   if (isNavigationReady) {
-  //     // ✅ Ensure navigation is ready before reset
-  //     navigationRef.reset({
-  //       index: 0,
-  //       routes: [{name: 'MeetingList'}],
-  //     });
-  //   }
-  // }, []);
+  const allowedRoutes = ['SingleMeeting'];
 
-  // useEffect(() => {
-  //   const unsubscribe = navigation.addListener('tabPress', e => {
-  //     const state = navigation.getState();
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('state', () => {
+      const routeName = navigationRef?.current?.getCurrentRoute()?.name; // ✅ Get Active Route
 
-  //     // ✅ Check if the 'meeting' tab is pressed
-  //     if (state.routes[state.index].name === 'meeting') {
-  //       e.preventDefault(); // Stop the default tab behavior
+      if (allowedRoutes.includes(routeName)) {
+        bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
+        // console.log('bottom tab make false-->',bottomTabRef)
+      } else {
+        bottomTabRef?.current?.setVisible(true); // ❌ Hide Bottom Tab on all other screens
+      }
+    });
 
-  //       // ✅ Reset the stack to the main Meeting screen
-  //       navigation.reset({
-  //         index: 0,
-  //         routes: [{name: 'meeting'}],
-  //       });
-  //     }
-  //   });
-
-  //   return unsubscribe; // ✅ Cleanup the listener
-  // }, [navigation]);
+    return unsubscribe;
+  }, [navigation, allowedRoutes, bottomTabRef]);
 
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}
-    initialRouteName="Meetinglist" // ✅ Always start from MeetingList
-     >
-      <Stack.Screen
-        name="Meetinglist"
-        component={MeetingList}
-        options={{title: 'Meetings'}}
-      />
-      <Stack.Screen name="SingleMeeting" component={SingleMeeting} />
-      <Stack.Screen
-        name="SearchMeeting"
-        component={SearchMeeting}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
+    <PaperProvider>
+      <Stack.Navigator
+        screenOptions={{headerShown: false}}
+        initialRouteName="Meetinglist" // ✅ Always start from MeetingList
+        screenOptions={{
+          headerShown: true,
+          contentStyle: {backgroundColor: 'rgb(255, 254, 246)'},
+          header: () => <FollowUpHeader />,
+        }}>
+        <Stack.Screen
+          name="Meetinglist"
+          component={MeetingList}
+          options={{title: 'Meetings'}}
+        />
+        {/* <Stack.Screen name="SingleMeeting" component={SingleMeeting} /> */}
+        <Stack.Screen name="SingleMeeting" component={LeadDetail} />
+        <Stack.Screen
+          name="SearchMeeting"
+          component={SearchMeeting}
+          options={{headerShown: false}}
+        />
+      </Stack.Navigator>
+    </PaperProvider>
   );
 };
 

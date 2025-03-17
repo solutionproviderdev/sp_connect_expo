@@ -208,7 +208,7 @@ const SingleMeeting = ({route}) => {
             <View className="flex-row items-start mb-2">
               <Icon name="map-marker" style={{marginTop:2}} size={16} color="#6B7280" />
               <Text className=" text-gray-700 ml-2 max-w-[180px]">
-                {division} - {district} - {area} - {address}
+                {division && division} - {district && district} - {area && area} - {address && address}
               </Text>
             </View>
 

@@ -39,11 +39,13 @@ const FollowUpDetails = () => {
   const deviceType = getDeviceType();
 
   // Calculate last comment if available
-  const lastCommentIndex = followUp?.comment ? followUp.comment.length - 1 : null;
-  const comment =
-    lastCommentIndex != null
-      ? followUp.comment[lastCommentIndex]?.comment || 'No comment yet!'
-      : 'No comment yet!';
+  // const lastCommentIndex = followUp?.comment ? followUp.comment.length - 1 : null;
+  // const comment =
+  //   lastCommentIndex != null
+  //     ? followUp.comment[lastCommentIndex]?.comment || 'No comment yet!'
+  //     : 'No comment yet!';
+
+  console.log('follouwpdetails --->',followUp);
 
   return (
     <View className="flex-1 bg-white">

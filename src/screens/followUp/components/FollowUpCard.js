@@ -26,17 +26,17 @@ const formatTime = isoString => {
   });
 };
 
-const FollowUpCard = ({followUp}) => {
+const FollowUpCard = ({followUp,onpress}) => {
   const navigation = useNavigation();
 
   const lastcomment=followUp?.comment?.length - 1;
   const comment =followUp?.comment?.[lastcomment]?.comment || 'no comment yet !';
 
- console.log('followup comment here >', followUp?.comment?.[lastcomment]?.comment);
-  
+   
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('FollowUpDetails', {followUp})}
+      onPress={onpress}
+      // onPress={() => navigation.navigate('FollowUpDetails')}
       className="p-4 mb-4 bg-spCardGray border border-dashed border-spBlue rounded-lg">
       <View className="flex-row justify-center gap-2">
         {/* Left Side Content */}

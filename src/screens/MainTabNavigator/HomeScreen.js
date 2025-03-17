@@ -155,7 +155,7 @@ const HomeScreen = () => {
         ${
           deviceType === 'tablet'
             ? 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
-            : 'flex-row items-center justify-between px-4 pt-2 bg-spBg rounded-lg'
+            : 'flex-row items-center justify-between px-4 py-1 bg-spBg rounded-lg'
         }
         `}
         // source={require('../../assets/orrangeEmojie.gif')}>
@@ -242,7 +242,7 @@ const HomeScreen = () => {
           ${
             deviceType === 'tablet'
               ? 'flex-row items-center justify-around'
-              : 'flex-row items-center justify-around py-4'
+              : 'flex-row items-center justify-around pb-4 pt-2'
           }
           `}>
           <View>

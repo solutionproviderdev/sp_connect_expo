@@ -71,7 +71,7 @@ const MeetingList = () => {
     isError,
     refetch,
   } = useGetMeetingsQuery({date: '', userId: userId}, {skip: !userId});
-
+console.log(' ----->',meetings);
   useEffect(() => {
     if (meetings) {
       applyFilters();
@@ -114,9 +114,8 @@ const MeetingList = () => {
   const renderMeetingCard = ({item}) => (
     <MeetingCard
       item={item}
-      // onpress={() => navigation.navigate('SingleMeeting', {meeting: item})}
       onpress={() =>
-        navigation.navigate('SingleMeeting', {meeting: item || {}})
+        navigation.navigate('SingleMeeting', {leadId: item.lead._id || null})
       }
     />
   );
@@ -136,75 +135,11 @@ const MeetingList = () => {
         className={`
         ${
           deviceType === 'tablet'
-            ? 'flex-1 bg-spBg px-4'
-            : 'flex-1 bg-spBg px-4'
+            ? 'flex-1 bg-spBg px-4 '
+            : 'flex-1 bg-spBg px-4 pt-2'
         }
         `}>
         {/* Header */}
-        <View
-          className={`
-          ${
-            deviceType === 'tablet'
-              ? 'flex-row items-center justify-between px-4 py-2 mt-4 bg-spBg rounded-lg'
-              : 'flex-row items-center justify-between py-2 bg-spBg rounded-lg'
-          }
-          `}>
-          <TouchableOpacity>
-            <Image
-              source={require('../../assets/sp_gear_icon.png')}
-              style={{width: 30, height: 30, borderRadius: 15}}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            className="flex-1 mx-3 flex-row items-center justify-center border border-spBlue h-10 px-4 rounded-3xl bg-spBg"
-            onPress={() => navigation.navigate('SearchMeeting', {meetings})}>
-            <Icon name="magnify" size={22} color="gray" />
-            <View className="ml-2 flex-row ">
-              <Text className="text-xl font-robotoCondensedSemiBold text-spDarkGray">
-                Find{' '}
-              </Text>
-              <Text className="text-xl text-spBlue font-robotoCondensedSemiBold">
-                Solutions
-              </Text>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity className="mr-2">
-            <Icon name="bell-badge-outline" size={25} color="rgb(4,98,138)" />
-          </TouchableOpacity>
-
-          <Menu
-            visible={profileMenuVisible}
-            onDismiss={closeProfileMenu}
-            anchor={
-              <TouchableOpacity onPress={toggleProfileMenu}>
-                <Avatar.Image
-                  size={35}
-                  source={{
-                    uri:
-                      userData?.profilePicture ||
-                      'https://via.placeholder.com/35',
-                  }}
-                />
-              </TouchableOpacity>
-            }
-            contentStyle={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: 10,
-              elevation: 5,
-            }}>
-            <Menu.Item
-              onPress={closeProfileMenu}
-              title="Profile"
-              titleStyle={{color: '#000000'}}
-              leadingIcon={() => (
-                <Icon name="account-circle-outline" size={20} color="black" />
-              )}
-            />
-    
-          </Menu>
-        </View>
 
         {/* Title */}
         <View
