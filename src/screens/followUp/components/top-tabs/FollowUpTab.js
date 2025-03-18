@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 const FollowUpTab = ({followUp}) => {
   const navigation = useNavigation();
   const {comment, salesFollowUp} = followUp;
-
+console.log('salesFollowUp->',salesFollowUp);
   // State to track which follow-up is selected (by its _id)
   const [selectedFollowUpId, setSelectedFollowUpId] = useState(null);
 
@@ -22,7 +22,7 @@ const FollowUpTab = ({followUp}) => {
     // Orange if "Pending", green if "Complete"
     const color = status === 'Pending' ? '#FFA500' : '#0CA30A';
     // Icon can be the same or different based on your design
-    return {color, iconName: 'information-circle-outline'};
+  return {color, iconName: 'information-circle'};
   };
 
   // Handler when tapping on a follow-up item
@@ -30,7 +30,6 @@ const FollowUpTab = ({followUp}) => {
     // Toggle selection: if already selected, unselect; otherwise, select it.
     setSelectedFollowUpId(prev => (prev === id ? null : id));
   };
-
   return (
     <View className="flex-1 bg-white">
       <ScrollView className="flex-1">
@@ -88,6 +87,12 @@ const FollowUpTab = ({followUp}) => {
                       {userComment}
                     </Text>
                   </View>
+                 
+                  {item.type !== 'Call' && (
+                     <Text className='font-bold bg-spGreen rounded p-1 text-white'>
+                     meeting
+                   </Text>
+                  )}
                 </View>
 
                 {/* Conditionally render the Call button if type is "Call" and this item is selected */}

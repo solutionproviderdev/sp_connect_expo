@@ -26,7 +26,6 @@ console.log('followupcall',leadId);
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const handleSubmit = async () => {
-
     
     if (!comment.trim()) {
         Alert.alert('Error', 'Please add a comment');

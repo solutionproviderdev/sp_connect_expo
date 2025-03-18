@@ -79,7 +79,7 @@ const AddFollowUp = () => {
       {activeTab === 'Call' ? (
         <FollowUpCall leadId={leadId} />
       ) : (
-        <FollowUpMeetingTab />
+        <FollowUpMeetingTab leadId={leadId} />
       )}
     </View>
   );
