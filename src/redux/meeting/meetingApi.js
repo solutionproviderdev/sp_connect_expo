@@ -57,7 +57,14 @@ export const meetingApi = api.injectEndpoints({
       query: leadId => `/lead/${leadId}`,
       providesTags: (result, error, leadId) => [{ type: 'Lead', id: leadId }],
     }),
+    getAvailableMeetingSlot: builder.query({
+      query: ({ date, salesExecutiveId }) => {
+        console.log('params from rtk---> ', date, salesExecutiveId);
+        return `/meeting/timeslots/freeSlots/${date}?salesExecutiveId=${salesExecutiveId}`;
+      },
+    }),
   }),
+  overrideExisting: true
 });
 
 export const {
@@ -66,4 +73,5 @@ export const {
   useGetMeetingsQuery,
   useUpdateProjectStatusMutation,
   useGetLeadByIdQuery,
+  useGetAvailableMeetingSlotQuery
 } = meetingApi;

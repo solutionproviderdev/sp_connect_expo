@@ -34,9 +34,9 @@ const FollowUpTopTab = ({followUp}) => {
         case 'second':
           return <FollowUpTab followUp={followUp} />;
         case 'third':
-          return <CallLogsTab  />;
+          return <CallLogsTab />;
         case 'fourth':
-          return <CheckInsTab  />;
+          return <CheckInsTab />;
         default:
           return null;
       }

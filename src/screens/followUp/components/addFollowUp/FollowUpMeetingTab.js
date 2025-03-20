@@ -5,14 +5,33 @@ import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
 import {TextInput} from 'react-native';
 
-const FollowUpMeetingTab = ({leadId}) => {
-  console.log('followup-meeting', leadId);
+import {Dropdown} from 'react-native-element-dropdown';
+import {useGetAvailableMeetingSlotQuery} from '../../../../redux/meeting/meetingApi';
+import {useUserCredentials} from '../../../../utils/UserCredentials';
 
-  const [selected, setSelected] = useState(dayjs());
+const FollowUpMeetingTab = ({leadId}) => {
+  // console.log('followup-meeting', leadId);
+
+  const [selected, setSelected] = useState(dayjs().format('YYYY-MM-DD'));
   const [selectedTime, setSelectedTime] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showFollowUpOptions, setShowFollowUpOptions] = useState(false);
   const [comment, setComment] = useState(false);
+  const {userData} = useUserCredentials();
+  // console.log('user----->',user);
+  const shouldSkip = !userData?._id || !selected; // Ensure both values exist
+
+  const {
+    data: availableSlots,
+    isError,
+    isLoading,
+  } = useGetAvailableMeetingSlotQuery(
+    {date: selected, salesExecutiveId: userData?._id},
+    {skip: shouldSkip},
+  );
+
+  // console.log('---------------->',userData?._id,selected);
+  console.log('---------------->', availableSlots);
 
   const timeSlots = [
     '10:00 AM',
@@ -24,9 +43,14 @@ const FollowUpMeetingTab = ({leadId}) => {
     '04:00 PM',
     '05:00 PM',
     '06:00 PM',
-    '07:00 PM',
   ];
-
+  const [value, setValue] = useState(null);
+  const [isFocus, setIsFocus] = useState(false);
+  const data = [
+    {label: 'Follow-Up', value: 'follow_up'},
+    {label: 'Final Measurement', value: 'final_measurement'},
+    {label: 'Handover & Review', value: 'handover_review'},
+  ];
   return (
     <View className="flex-1 bg-white relative">
       {/* Scrollable Content */}
@@ -48,15 +72,12 @@ const FollowUpMeetingTab = ({leadId}) => {
 
         {/* DateTimePicker */}
         {showDatePicker && (
-          <View className="border border-gray-300 rounded mb-4">
+          <View className="border border-gray-200 rounded mb-4">
             <DateTimePicker
               mode="single"
-              timePicker
-              use12Hours
-              date={selected.toDate()}
+              date={selected}
               onChange={({date}) => setSelected(dayjs(date))}
               selectedItemColor="rgb(4, 98, 138)"
-              todayContainerStyle={{backgroundColor: 'rgba(4, 98, 138, 0.1)'}}
             />
             <TouchableOpacity
               onPress={() => setShowDatePicker(false)}
@@ -69,53 +90,48 @@ const FollowUpMeetingTab = ({leadId}) => {
         )}
 
         {/* Horizontal Time Slot Selector */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          className="">
-          {timeSlots.map((time, index) => (
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {availableSlots?.map(item => (
             <TouchableOpacity
-              key={index}
-              onPress={() => setSelectedTime(time)}
+              key={item._id}
+              onPress={() => setSelectedTime(item.slot)}
               className={`px-4 py-2 mx-1 rounded ${
-                selectedTime === time ? 'bg-blue-600' : 'bg-gray-300'
+                selectedTime === item.slot ? 'bg-spBlue' : 'bg-spCardGray'
               }`}>
               <Text
                 className={`text-base ${
-                  selectedTime === time ? 'text-white' : 'text-gray-800'
+                  selectedTime === item.slot ? 'text-white' : 'text-gray-800'
                 }`}>
-                {time}
+                {item.slot}
               </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
 
-        {/* Follow-Up Dropdown Header */}
-        <TouchableOpacity
-          onPress={() => setShowFollowUpOptions(!showFollowUpOptions)}
-          className="w-full bg-gray-200 p-3 mt-4 rounded flex-row justify-between items-center">
-          <Text className="text-xl font-bold">Follow-Up</Text>
-          <Icon
-            name={showFollowUpOptions ? 'chevron-up' : 'chevron-down'}
-            size={24}
-            color="#000"
+        <View className="mt-4 rounded p-3 bg-spCardGray">
+          <Dropdown
+            className={`bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 ${
+              isFocus ? 'border-blue-500' : ''
+            }`}
+            placeholderStyle={{fontSize: 16, color: 'gray'}}
+            selectedTextStyle={{fontSize: 16}}
+            data={data}
+            labelField="label"
+            valueField="value"
+            placeholder={!isFocus ? 'Select an option' : '...'}
+            value={value}
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              setValue(item.value);
+              setIsFocus(false);
+            }}
           />
-        </TouchableOpacity>
-
-        {/* Follow-Up Dropdown Options */}
-        {showFollowUpOptions && (
-          <View className="bg-gray-200 p-3 mt-2 rounded">
-            <Text className="text-xl py-1">Follow-Up</Text>
-            <Text className="text-xl py-1">Final Measurement</Text>
-            <Text className="text-xl py-1">Handover & Review</Text>
-          </View>
-        )}
-
-        <View className="mt-3">
+        </View>
+        <View className="mt-3 mb-20">
           <Text className="text-lg text-spBlue px-3">Add comment here</Text>
           <TextInput
             style={{
-               
               backgroundColor: '#f2f2f2',
               borderRadius: 8,
               padding: 12,
@@ -133,8 +149,8 @@ const FollowUpMeetingTab = ({leadId}) => {
         </View>
       </ScrollView>
       {/* Fixed Button at Bottom */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white p-4">
-        <TouchableOpacity className="bg-red-800 flex-row justify-center items-center rounded py-3">
+      <View className="absolute bottom-0 left-0 right-0 bg-white p-">
+        <TouchableOpacity className="bg-spRed flex-row justify-center items-center rounded py-3">
           <Icon name="calendar-clock" size={24} color="#fff" />
           <Text className="text-white font-bold text-lg ml-2">
             Add Follow Up Meeting

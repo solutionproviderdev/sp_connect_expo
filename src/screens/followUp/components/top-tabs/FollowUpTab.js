@@ -8,7 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 const FollowUpTab = ({followUp}) => {
   const navigation = useNavigation();
   const {comment, salesFollowUp} = followUp;
-console.log('salesFollowUp->',salesFollowUp);
+  // console.log('salesFollowUp->',salesFollowUp);
   // State to track which follow-up is selected (by its _id)
   const [selectedFollowUpId, setSelectedFollowUpId] = useState(null);
 
@@ -22,7 +22,7 @@ console.log('salesFollowUp->',salesFollowUp);
     // Orange if "Pending", green if "Complete"
     const color = status === 'Pending' ? '#FFA500' : '#0CA30A';
     // Icon can be the same or different based on your design
-  return {color, iconName: 'information-circle'};
+    return {color, iconName: 'information-circle'};
   };
 
   // Handler when tapping on a follow-up item
@@ -87,11 +87,11 @@ console.log('salesFollowUp->',salesFollowUp);
                       {userComment}
                     </Text>
                   </View>
-                 
+
                   {item.type !== 'Call' && (
-                     <Text className='font-bold bg-spGreen rounded p-1 text-white'>
-                     meeting
-                   </Text>
+                    <Text className="font-bold bg-spGreen rounded p-1 text-white">
+                      meeting
+                    </Text>
                   )}
                 </View>
 

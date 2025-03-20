@@ -13,6 +13,7 @@ export const useUserCredentials = () => {
       try {
         const user = await AsyncStorage.getItem('user');
         setUserId(user);
+        console.log('user is here:',user);
       } catch (error) {
         console.error('Failed to retrieve user:', error);
       }
