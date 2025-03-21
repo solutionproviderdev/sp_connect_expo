@@ -1,81 +1,98 @@
 import React, {useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from 'react-native-ui-datepicker';
 import dayjs from 'dayjs';
-import {TextInput} from 'react-native';
-
 import {Dropdown} from 'react-native-element-dropdown';
 import {useGetAvailableMeetingSlotQuery} from '../../../../redux/meeting/meetingApi';
 import {useUserCredentials} from '../../../../utils/UserCredentials';
+import {useAddFollowUpMeetingMutation} from '../../../../redux/followUp/followUpApi';
 
 const FollowUpMeetingTab = ({leadId}) => {
-  // console.log('followup-meeting', leadId);
-
-  const [selected, setSelected] = useState(dayjs().format('YYYY-MM-DD'));
+  // Hooks & State
+  const {userData} = useUserCredentials();
+  const [selected, setSelected] = useState(dayjs());
   const [selectedTime, setSelectedTime] = useState(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showFollowUpOptions, setShowFollowUpOptions] = useState(false);
-  const [comment, setComment] = useState(false);
-  const {userData} = useUserCredentials();
-  // console.log('user----->',user);
-  const shouldSkip = !userData?._id || !selected; // Ensure both values exist
-
-  const {
-    data: availableSlots,
-    isError,
-    isLoading,
-  } = useGetAvailableMeetingSlotQuery(
-    {date: selected, salesExecutiveId: userData?._id},
-    {skip: shouldSkip},
-  );
-
-  // console.log('---------------->',userData?._id,selected);
-  console.log('---------------->', availableSlots);
-
-  const timeSlots = [
-    '10:00 AM',
-    '11:00 AM',
-    '12:00 PM',
-    '01:00 PM',
-    '02:00 PM',
-    '03:00 PM',
-    '04:00 PM',
-    '05:00 PM',
-    '06:00 PM',
-  ];
+  const [comment, setComment] = useState('');
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
+  // const selectedSlot=selected?.toISOString().format('D-MMM dddd')
+  // console.log('-------||--------',selected);
+  // RTK Queries
+  const shouldSkip = !userData?._id || !selected;
+  const {data: availableSlots, isLoading: isLoadingSlots} =
+    useGetAvailableMeetingSlotQuery(
+      {date: selected.toISOString(), salesExecutiveId: userData?._id},
+      {skip: shouldSkip},
+    );
+
+  const [addFollowUpMeeting, {isLoading}] = useAddFollowUpMeetingMutation();
+
+  // Follow-Up Types
   const data = [
     {label: 'Follow-Up', value: 'follow_up'},
     {label: 'Final Measurement', value: 'final_measurement'},
     {label: 'Handover & Review', value: 'handover_review'},
   ];
+
+  // console.log('outhside.', selected);
+  // Meeting Handler Function
+  const MeetingHandler = async () => {
+    if (!selected || !selectedTime || !value || !comment) {
+      console.log('Please select a date, time, and follow-up type.',selected,selectedTime,value);
+      return;
+    }
+
+    const meetingData = {
+      time: selected,
+      status: 'Missed', // Can be dynamic
+      type: 'Call', // Can be dynamic
+      meetingDetails: {
+        date:selected,
+        slot: selectedTime,
+        salesExecutive: leadId,
+        meetingStatus: 'Postponed', // Can be dynamic
+      },
+      comment: comment,
+    };
+
+    try {
+      const response = await addFollowUpMeeting({
+        id: leadId,
+        body: meetingData,
+      }).unwrap();
+      console.log('Sending Meeting Data:', response);
+    } catch (error) {
+      console.error('Error adding meeting:', error);
+    }
+  };
+
   return (
     <View className="flex-1 bg-white relative">
       {/* Scrollable Content */}
-      <ScrollView
-        contentContainerStyle={{}}
-        showsVerticalScrollIndicator={false}>
-        {/* Date/Time Display */}
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Date Picker */}
         <TouchableOpacity
           onPress={() => setShowDatePicker(!showDatePicker)}
           className="flex-row items-center justify-between bg-gray-200 p-3 rounded mb-4">
           <Text className="text-base text-blue-900">
-            {dayjs(selected)
-              .format('D-MMM dddd hh:mm A')
-              .replace('AM', 'Am')
-              .replace('PM', 'Pm')}
+            {dayjs(selected.toISOString()).format('D-MMM dddd')}{' '}{selectedTime}
           </Text>
           <Icon name="clock" size={22} color="rgb(4, 98, 138)" />
         </TouchableOpacity>
 
-        {/* DateTimePicker */}
         {showDatePicker && (
           <View className="border border-gray-200 rounded mb-4">
             <DateTimePicker
               mode="single"
-              date={selected}
+              date={selected.toDate().toISOString()}
               onChange={({date}) => setSelected(dayjs(date))}
               selectedItemColor="rgb(4, 98, 138)"
             />
@@ -89,25 +106,30 @@ const FollowUpMeetingTab = ({leadId}) => {
           </View>
         )}
 
-        {/* Horizontal Time Slot Selector */}
+        {/* Available Time Slots */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {availableSlots?.map(item => (
-            <TouchableOpacity
-              key={item._id}
-              onPress={() => setSelectedTime(item.slot)}
-              className={`px-4 py-2 mx-1 rounded ${
-                selectedTime === item.slot ? 'bg-spBlue' : 'bg-spCardGray'
-              }`}>
-              <Text
-                className={`text-base ${
-                  selectedTime === item.slot ? 'text-white' : 'text-gray-800'
+          {isLoadingSlots ? (
+            <Text className="text-gray-500">Loading slots...</Text>
+          ) : (
+            availableSlots?.map(item => (
+              <TouchableOpacity
+                key={item._id}
+                onPress={() => setSelectedTime(item.slot)}
+                className={`px-4 py-2 mx-1 rounded ${
+                  selectedTime === item.slot ? 'bg-spBlue' : 'bg-spCardGray'
                 }`}>
-                {item.slot}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text
+                  className={`text-base ${
+                    selectedTime === item.slot ? 'text-white' : 'text-gray-800'
+                  }`}>
+                  {item.slot}
+                </Text>
+              </TouchableOpacity>
+            ))
+          )}
         </ScrollView>
 
+        {/* Follow-Up Type Dropdown */}
         <View className="mt-4 rounded p-3 bg-spCardGray">
           <Dropdown
             className={`bg-gray-100 border border-gray-300 rounded-lg py-2 px-3 ${
@@ -128,6 +150,8 @@ const FollowUpMeetingTab = ({leadId}) => {
             }}
           />
         </View>
+
+        {/* Comment Input */}
         <View className="mt-3 mb-20">
           <Text className="text-lg text-spBlue px-3">Add comment here</Text>
           <TextInput
@@ -148,12 +172,18 @@ const FollowUpMeetingTab = ({leadId}) => {
           />
         </View>
       </ScrollView>
-      {/* Fixed Button at Bottom */}
-      <View className="absolute bottom-0 left-0 right-0 bg-white p-">
-        <TouchableOpacity className="bg-spRed flex-row justify-center items-center rounded py-3">
+
+      {/* Fixed Submit Button */}
+      <View className="absolute bottom-0 left-0 right-0 bg-white">
+        <TouchableOpacity
+          onPress={MeetingHandler}
+          disabled={isLoading}
+          className={`flex-row justify-center items-center rounded py-3 ${
+            isLoading ? 'bg-gray-400' : 'bg-spRed'
+          }`}>
           <Icon name="calendar-clock" size={24} color="#fff" />
           <Text className="text-white font-bold text-lg ml-2">
-            Add Follow Up Meeting
+            {isLoading ? 'Saving...' : 'Add Follow Up Meeting'}
           </Text>
         </TouchableOpacity>
       </View>

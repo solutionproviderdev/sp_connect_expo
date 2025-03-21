@@ -1,29 +1,38 @@
- import {api} from '../services/api';
+import {api} from '../services/api';
 
 export const followUpApi = api.injectEndpoints({
   endpoints: builder => ({
     GetAllFollowup: builder.query({
-      query: ({ Id, dateRange, status }) => { 
+      query: ({Id, dateRange, status}) => {
         // console.log('from rtk ok ->',Id,dateRange,status)
-        return(
+        return (
           // `/lead/sales/follow-up?dateRange=${dateRange}&status=${status}&salesExecutiveId=${Id}`
           `/lead/sales/follow-up`
-        )
+        );
       },
-       providesTags: ['followUp'],
+      providesTags: ['followUp'],
     }),
     AddFollowUpCall: builder.mutation({
-      query: ({ id, body }) => {
-        console.log('add folloup api id-body--->',id,body);
-        return{
+      query: ({id, body}) => ({
         url: `/lead/sales/follow-up/${id}`,
         method: 'POST', // Use PUT if that's what your API expects
         body,
-      }},
+      }),
       // Invalidate followUp tag so that any queries re-fetch updated data.
-      invalidatesTags: (result, error, { id }) => [{ type: 'Lead', id }],
+      invalidatesTags: (result, error, {id}) => [{type: 'Lead', id}],
+    }),
+    AddFollowUpMeeting: builder.mutation({
+      query: ({id, body}) => {
+        console.log('rtk id body for follow meeitn',id,body);
+        return {url: `/lead/sales/follow-up/${id}`, method: 'POST', body};
+      },
+      invalidatesTags: (result, error, {id}) => [{type: 'Lead', id}],
     }),
   }),
 });
 
-export const {useGetAllFollowupQuery,useAddFollowUpCallMutation} = followUpApi;
+export const {
+  useGetAllFollowupQuery,
+  useAddFollowUpCallMutation,
+  useAddFollowUpMeetingMutation,
+} = followUpApi;
