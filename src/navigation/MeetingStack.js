@@ -14,7 +14,6 @@ const Stack = createNativeStackNavigator();
 const MeetingStack = ({bottomTabRef}) => {
   const navigation = useNavigation();
 
-  
   const allowedRoutes = ['SingleMeeting'];
   useEffect(() => {
     const unsubscribe = navigation.addListener('state', () => {

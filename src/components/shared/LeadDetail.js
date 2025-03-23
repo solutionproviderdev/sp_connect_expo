@@ -40,7 +40,9 @@ const LeadDetail = () => {
   // Fetch lead data using the ID from params or use a default ID
   const {data: lead, isLoading} = useGetLeadByIdQuery(leadId || null);
   // console.log(' from leaddetail', lead);
-
+  const number = lead?.phone[0];
+  console.log('number', number);
+  const address = lead?.address;
   const deviceType = getDeviceType();
 
   // console.log(lead?._id);
@@ -65,6 +67,8 @@ const LeadDetail = () => {
       </View>
     );
   }
+
+  console.log('lead', lead);
 
   return (
     <View className="flex-1 bg-white">
@@ -112,7 +116,8 @@ const LeadDetail = () => {
             <View className="flex-row items-center mb-1">
               <Ionicons name="location-outline" size={18} color="#666" />
               <Text className="ml-1 font-robotoCondensed text-base">
-                {lead?.Location || 'Unknown Source'}
+                {`${address.area}, ${address.district}, ${address.division}, Bangladesh` ||
+                  'Unknown Source'}
               </Text>
             </View>
             {/* Requirements */}
@@ -134,12 +139,22 @@ const LeadDetail = () => {
                 </Text>
               )}
             </View>
-                <Text className=" font-robotoCondensed p-1">
-                  Budget:N/A
-                </Text>
-                <Text className=" font-robotoCondensed p-1">
-                  Value:N/A
-                </Text>
+            {/* const projectValue = leadData.finance.projectValue;
+const clientsBudget = leadData.finance.clientsBudget; */}
+            {lead?.finance?.projectValue ? (
+              <Text className=" font-robotoCondensed p-1">
+                Budget: {`${lead?.finance?.clientsBudget}`}
+              </Text>
+            ) : (
+              'N/A'
+            )}
+            {lead?.finance?.projectValue ? (
+              <Text className=" font-robotoCondensed p-1">
+                Value: {`${lead?.finance?.projectValue}`}
+              </Text>
+            ) : (
+              'N/A'
+            )}
 
             {/* Messages */}
           </View>
@@ -149,7 +164,6 @@ const LeadDetail = () => {
             <View className="bg-spRed p-1">
               <Text className="text-white font-robotoCondensed text-sm">
                 {lead?.status || 'No Status'}{' '}
-                 
               </Text>
             </View>
             {/* Meeting Time & Date */}
@@ -170,7 +184,7 @@ const LeadDetail = () => {
             {/* Source Badge */}
             <View className="bg-spBlue">
               <Text className="text-white p-1 font-robotoCondensed text-sm">
-                {lead?.salesFollowUp?.status || 'Unknown'}
+                {lead?.salesFollowUp?.status || 'free'}
               </Text>
             </View>
           </View>
@@ -193,7 +207,7 @@ const LeadDetail = () => {
       </View>
 
       {/* Action Buttons */}
-      <ActionButtons sourceType={sourceType} />
+      <ActionButtons address={address} number={number} />
 
       {/* Follow Up Top Tabs */}
       <View className="flex-1 px-3">

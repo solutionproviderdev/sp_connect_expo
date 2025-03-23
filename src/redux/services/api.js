@@ -7,8 +7,8 @@ import { checkTokenAndLogout } from '../utils/checkTokenAndLogout';
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://192.168.68.126:5000',
-    // baseUrl: 'https://crm.solutionprovider.com.bd/api',
+    // baseUrl: 'http://192.168.68.126:5000',
+    baseUrl: 'https://crm.solutionprovider.com.bd/api',
     prepareHeaders: async (headers, {getState}) => {
       let token = getState().auth.token;
       // console.log("token from redux api",token);

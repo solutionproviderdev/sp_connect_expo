@@ -17,7 +17,7 @@ const AddFollowUp = () => {
   const [activeTab, setActiveTab] = useState('Call');
   const {params} = useRoute();
   const {leadId} = params;
-  
+
   return (
     <View className="flex-1 px-4 bg-spBg">
       {/* Header */}
