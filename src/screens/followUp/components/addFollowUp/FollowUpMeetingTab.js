@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   TextInput,
+  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DateTimePicker from 'react-native-ui-datepicker';
@@ -13,8 +14,10 @@ import {Dropdown} from 'react-native-element-dropdown';
 import {useGetAvailableMeetingSlotQuery} from '../../../../redux/meeting/meetingApi';
 import {useUserCredentials} from '../../../../utils/UserCredentials';
 import {useAddFollowUpMeetingMutation} from '../../../../redux/followUp/followUpApi';
+import Toast from 'react-native-toast-message';
 
 const FollowUpMeetingTab = ({leadId}) => {
+  //  console.log('Toast',Toast);
   // Hooks & State
   const {userData} = useUserCredentials();
   const [selected, setSelected] = useState(dayjs());
@@ -45,20 +48,50 @@ const FollowUpMeetingTab = ({leadId}) => {
   // console.log('outhside.', selected);
   // Meeting Handler Function
   const MeetingHandler = async () => {
+  
+
     if (!selected || !selectedTime || !value || !comment) {
-      console.log('Please select a date, time, and follow-up type.',selected,selectedTime,value);
+      // console.log('Please select a date, time, and follow-up type.',selected,selectedTime,value);
+      Toast.show({
+        type: 'info', // 
+        text1: 'fill has empty !',  
+        text2: 'Please make sure to fill all filled!',  
+        position: 'top',  
+        visibilityTime: 3000,  
+        autoHide: true,  
+        topOffset: 50,  
+        bottomOffset: 50,  
+        onHide: () => console.log('Toast has been hidden'),  
+         
+        style: {
+          backgroundColor: 'yellow',  
+          borderRadius: 20,  
+          paddingHorizontal: 20,  
+          paddingVertical: 15,  
+        },
+        text1Style: {
+          fontSize: 18,  
+          fontWeight: 'bold',  
+          color: 'black',  
+        },
+        text2Style: {
+          fontSize: 16,  
+          color: 'black',  
+        },
+      });
+      
       return;
     }
 
     const meetingData = {
       time: selected,
-      status: 'Missed', // Can be dynamic
-      type: 'Call', // Can be dynamic
+      status: 'Missed',  
+      type: 'Call', 
       meetingDetails: {
         date:selected,
         slot: selectedTime,
         salesExecutive: leadId,
-        meetingStatus: 'Postponed', // Can be dynamic
+        meetingStatus: 'Postponed',
       },
       comment: comment,
     };
@@ -68,6 +101,30 @@ const FollowUpMeetingTab = ({leadId}) => {
         id: leadId,
         body: meetingData,
       }).unwrap();
+      if(response.message === 'Follow-up added successfully'){
+        Toast.show({
+          type: 'success', // 
+          text1: 'data saved successfully !',  
+           position: 'top',  
+          visibilityTime: 3000,  
+          autoHide: true,  
+          topOffset: 50,  
+          bottomOffset: 50,  
+          onHide: () => console.log('Toast has been hidden'),  
+           
+          style: {
+            backgroundColor: 'yellow',  
+            borderRadius: 20,  
+            paddingHorizontal: 20,  
+            paddingVertical: 15,  
+          },
+          text1Style: {
+            fontSize: 18,  
+            fontWeight: 'bold',  
+            color: 'black',  
+          },
+        });
+      }
       console.log('Sending Meeting Data:', response);
     } catch (error) {
       console.error('Error adding meeting:', error);
@@ -83,7 +140,7 @@ const FollowUpMeetingTab = ({leadId}) => {
           onPress={() => setShowDatePicker(!showDatePicker)}
           className="flex-row items-center justify-between bg-gray-200 p-3 rounded mb-4">
           <Text className="text-base text-blue-900">
-            {dayjs(selected.toISOString()).format('D-MMM dddd')}{' '}{selectedTime}
+            {dayjs(selected.toISOString()).format('D-MMM dddd')} {selectedTime}
           </Text>
           <Icon name="clock" size={22} color="rgb(4, 98, 138)" />
         </TouchableOpacity>

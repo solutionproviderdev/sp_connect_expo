@@ -19,6 +19,7 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Font from 'expo-font';
 import { ActivityIndicator, PaperProvider } from 'react-native-paper';
+import Toast from "react-native-toast-message";
 
 // ✅ Create a global navigation reference
 export const navigationRef = createNavigationContainerRef();
@@ -181,6 +182,7 @@ const App = () => {
   }
 
   return (
+    <>
     <Provider store={store}>
       {/* <PaperProvider> */}
       <NavigationContainer ref={navigationRef}>
@@ -203,6 +205,8 @@ const App = () => {
       </NavigationContainer>
       {/* </PaperProvider> */}
     </Provider>
+    <Toast />
+    </>
   );
 };
 

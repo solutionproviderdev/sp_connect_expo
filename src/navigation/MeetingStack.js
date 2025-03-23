@@ -14,16 +14,20 @@ const Stack = createNativeStackNavigator();
 const MeetingStack = ({bottomTabRef}) => {
   const navigation = useNavigation();
 
+  
   const allowedRoutes = ['SingleMeeting'];
-
   useEffect(() => {
     const unsubscribe = navigation.addListener('state', () => {
       const routeName = navigationRef?.current?.getCurrentRoute()?.name; // ✅ Get Active Route
 
       if (allowedRoutes.includes(routeName)) {
-        bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
-        // console.log('bottom tab make false-->',bottomTabRef)
-      } else {
+        if (bottomTabRef?.current) {
+          setTimeout(() => {
+            console.log('Hiding Tab Bar with Delay');
+            bottomTabRef?.current?.setVisible(false);
+          }, 100); // 100 milliseconds delay
+        // bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
+       }} else {
         bottomTabRef?.current?.setVisible(true); // ❌ Hide Bottom Tab on all other screens
       }
     });
