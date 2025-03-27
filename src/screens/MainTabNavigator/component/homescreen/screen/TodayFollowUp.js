@@ -33,7 +33,7 @@ const TodayFollowUp = () => {
     },
     {skip: !userId},
   );
-  console.log('haha data followu', data);
+  // console.log('haha data followu', data);
   return (
     <Provider>
       <FollowUpHeader />

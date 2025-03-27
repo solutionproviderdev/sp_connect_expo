@@ -6,7 +6,8 @@ import {useNavigation} from '@react-navigation/native';
 import {getDeviceType} from '../../HomeScreen';
 
 const HomeMeetingCard = ({item}) => {
-  // console.log('HomeMeetingCard item--<><>', item);
+  const leadId=item?.lead?._id
+  console.log('HomeMeetingCard item--<><>', item?.lead?._id);
   const navigation = useNavigation();
 
   const deviceType = getDeviceType();
@@ -36,18 +37,18 @@ const HomeMeetingCard = ({item}) => {
       // onPress={() =>
       //   navigation.navigate('meeting', {
       //     screen: 'SingleMeeting',
-      //     params: {meeting: item},
+      //     params: {leadId: leadId},
       //   })
       // }
 
       onPress={() => {
         console.log(item?.lead?._id);
-        Alert.alert('work in progress !')
-        // if (item && item.lead) {
-        //   navigation.navigate('LeadDetails', {leadId:item._id});
-        // } else {
-        //   console.warn('Invalid meeting data');
-        // }
+        // Alert.alert('work in progress !')
+        if (item && item?.lead) {
+          navigation.navigate('LeadDetails', {leadId: leadId});
+        } else {
+          console.warn('Invalid meeting data');
+        }
       }}>
       {/* Left Section */}
       <View className="flex-1 pr-3">

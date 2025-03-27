@@ -39,8 +39,11 @@ const LeadDetail = () => {
   const route = useRoute();
   const {leadId} = route.params || {};
   // Fetch lead data using the ID from params or use a default ID
-  const {data: lead, isLoading} = useGetLeadByIdQuery(leadId || null);
-  console.log('--------------leadId--------->', lead);
+  console.log('--------------leadId--------->', leadId);
+  const {data: lead, isLoading} = useGetLeadByIdQuery(leadId || null, {
+    skip: !leadId
+  });
+  console.log('--------------lead--------->', lead);
 
   // console.log(' from leaddetail', lead);
   const number = lead?.phone[0];
@@ -78,16 +81,7 @@ const LeadDetail = () => {
       </View>
     );
   }
-  // if (lead === undefined) {
-  //   return (
-  //     <View className="flex-1 bg-spBg items-center justify-center">
-  //       <Text>...</Text>
-  //     </View>
-  //   );
-  // }
-
-  // console.log('lead', lead);
-
+ 
   return (
     <View className="flex-1 bg-spBg">
       {/* Header */}
@@ -114,23 +108,21 @@ const LeadDetail = () => {
       {/* Main Details */}
       <View className="px-3 pb-1 px-4">
         <View className="flex-row justify-center gap-2">
-          {/* Left Side: Customer & Product Details */}
           <View className="w-2/3">
-            {/* Customer Name */}
             <View className="flex-row items-center mb-1">
               <Ionicons name="person-outline" size={18} color="#666" />
               <Text className="ml-1 text-lg font-robotoCondensed">
                 {lead?.name || 'Unknown'}
               </Text>
             </View>
-            {/* Phone */}
+
             <View className="flex-row items-center mb-1">
               <Ionicons name="call-outline" size={18} color="#666" />
               <Text className="ml-1 text-base font-robotoCondensed">
                 {lead?.phone?.length > 0 ? lead.phone[0] : 'No Phone'}
               </Text>
             </View>
-            {/* Source */}
+
             <View className="flex-row items-center mb-1">
               <Ionicons name="location-outline" size={18} color="#666" />
               {address && (
@@ -158,34 +150,31 @@ const LeadDetail = () => {
               </View>
             </View>
 
-            {/* const projectValue = leadData.finance.projectValue;
-const clientsBudget = leadData.finance.clientsBudget; */}
-            {lead?.finance?.projectValue ? (
+            {lead?.finance?.clientsBudget ? (
               <Text className=" font-robotoCondensed p-1">
                 Budget: {`${lead?.finance?.clientsBudget}`}
               </Text>
             ) : (
-              'N/A'
+              <Text className="font-robotoCondensed p-1">Budget:N/A</Text>
             )}
             {lead?.finance?.projectValue ? (
               <Text className=" font-robotoCondensed p-1">
                 Value: {`${lead?.finance?.projectValue}`}
               </Text>
             ) : (
-              'N/A'
+              <Text className="text-white p-1 font-robotoCondensedExtraBold text-sm text-center">
+                Value:'N/A'
+              </Text>
             )}
-
-            {/* Messages */}
           </View>
-          {/* Right Side: Meeting, Status, and Badges */}
+
           <View className="w-1/3 gap-1">
-            {/* Status Badge */}
             <View className="bg-spRed p-1">
               <Text className="text-white p-1 font-robotoCondensedExtraBold text-sm text-center">
                 {lead?.status || 'No Status'}{' '}
               </Text>
             </View>
-            {/* Meeting Time & Date */}
+
             {lead?.salesFollowUp && lead.salesFollowUp.length > 0 && (
               <View className="gap-0.5">
                 <View className="bg-gray-800 px-2 py-1 rounded-t-md">
@@ -200,26 +189,26 @@ const clientsBudget = leadData.finance.clientsBudget; */}
                 </View>
               </View>
             )}
-            {/* Source Badge */}
+
             <View className="bg-spBlue ">
               {visitCharge ? (
                 <Text className="text-white p-1 font-robotoCondensedExtraBold text-sm text-center">
                   {visitCharge || 'Free'}
                 </Text>
               ) : (
-                'Free'
+                <Text className="text-white p-1 font-robotoCondensedExtraBold text-sm text-center">
+                  Free
+                </Text>
               )}
             </View>
           </View>
         </View>
       </View>
 
-      {/* Staff Section */}
       <Text className="text-right text-lg px-4 py-1 font-robotoCondensed">
         {lead?.creName?.nameAsPerNID || 'N/A'}
       </Text>
 
-      {/* Project Status Tracking */}
       <View className="flex-row items-center justify-center pt-1 px-2">
         {lead?._id && (
           <ProjectStatus
@@ -229,10 +218,8 @@ const clientsBudget = leadData.finance.clientsBudget; */}
         )}
       </View>
 
-      {/* Action Buttons */}
       <ActionButtons address={address} number={number} />
 
-      {/* Follow Up Top Tabs */}
       <View className="flex-1 px-3">
         <FollowUpTopTab followUp={lead} />
       </View>

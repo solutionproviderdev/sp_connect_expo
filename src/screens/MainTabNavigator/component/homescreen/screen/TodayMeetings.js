@@ -17,7 +17,7 @@ import {navigationRef} from '../../../../../App';
 import SkeletonLoading from 'expo-skeleton-loading';
 import MeetingCardSkeleton from '../MeetingCardSkeleton';
 import {getDeviceType} from '../../../HomeScreen';
-import { useGetMeetingsQuery } from '../../../../../redux/meeting/meetingApi';
+import {useGetMeetingsQuery} from '../../../../../redux/meeting/meetingApi';
 
 // const TodayMeetings = ({route}) => {
 const TodayMeetings = ({route = {}}) => {
@@ -38,15 +38,21 @@ const TodayMeetings = ({route = {}}) => {
     isLoading,
     isError,
     refetch,
-  } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
-// console.log('meetings---<>',meetings);
+  } = useGetMeetingsQuery(
+    {date: dateRange, salesExecutiveId: userId},
+    {skip: !userId},
+  );
+  // console.log('meetings---<>',meetings);
   // const sortedMeetings = meetings?.slice().sort(
   //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt), // Newest first
   // );
   const sortedMeetings = meetings
-  ?.filter(meeting => meeting.status !== 'Postponed' && meeting.status !== 'Canceled') // ✅ Exclude unwanted statuses
-  .slice()
-  .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // ✅ Sort newest first
+    ?.filter(
+      meeting =>
+        meeting.status !== 'Postponed' && meeting.status !== 'Canceled',
+    ) // ✅ Exclude unwanted statuses
+    .slice()
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // ✅ Sort newest first
   // console.log('todaymeeting sortedMeetings----->', sortedMeetings);
 
   // console.log('meeting, isLoading----->', meetings, isLoading);
@@ -83,41 +89,6 @@ const TodayMeetings = ({route = {}}) => {
           onPress={() => navigation.goBack()}
           className="bg-red-500 p-3 rounded mt-4">
           <Text className="text-white">Go Back</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  if (isError) {
-    return (
-      <View className="flex-1 items-center justify-center bg-spBg">
-        <Text className="text-red-500 text-xl">Failed to load meetings.</Text>
-        <TouchableOpacity
-          onPress={refetch}
-          className="bg-blue-500 p-3 rounded mt-4">
-          <Text className="text-white">Retry</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  if (!meetings || meetings.length === 0) {
-    return (
-      <View className="flex-1 items-center justify-center bg-spBg">
-        <View>
-          {isLoading ? (
-            <ActivityIndicator size="large" color="rgb(4, 98, 138)" />
-          ) : (
-            <Text className="text-gray-500 text-xl">
-              No meetings scheduled today.
-            </Text>
-          )}
-        </View>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          className="flex-row text-xl bg-red-500 rounded-md">
-          {/* <Text className="px-4 py-3 text-white">{isloading }</Text> */}
-          <Text className="px-4 py-3 text-white">Go Back !</Text>
         </TouchableOpacity>
       </View>
     );
@@ -200,15 +171,6 @@ const TodayMeetings = ({route = {}}) => {
                 <Icon name="account-circle-outline" size={20} color="black" />
               )}
             />
-            {/* <Menu.Item
-              onPress={() => {
-                closeMenu();
-                handleLogout();
-              }}
-              title="Logout"
-              titleStyle={{color: '#000000'}}
-              leadingIcon={() => <Icon name="logout" size={20} color="red" />}
-            /> */}
           </Menu>
         </View>
         {/*  back button  */}
@@ -268,13 +230,12 @@ const TodayMeetings = ({route = {}}) => {
             <Text className="text-gray-500 text-xl mb-4">
               No meetings scheduled today.
             </Text>
-            <TouchableOpacity
-              onPress={() => navigation.goBack()}
-              className="bg-gray-300 p-3 rounded">
-              <Text className="text-black">Go Back</Text>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Text className="text-gray-100 bg-red-500 p-3 rounded">Go Back</Text>
             </TouchableOpacity>
           </View>
-        )}
+        )
+        }
       </View>
     </Provider>
   );

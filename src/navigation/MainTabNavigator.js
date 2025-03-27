@@ -38,6 +38,9 @@ const FollowUpStackWrapper = props => {
 const MeetingUpStackWrapper = props => {
   return <MeetingStack {...props} bottomTabRef={props.bottomTabRef} />;
 };
+const HomeStackStackWrapper = props => {
+  return <HomeStack {...props} bottomTabRef={props.bottomTabRef} />;
+};
 export default function MainTabNavigator() {
   const bottomTabRef = useRef(null);
 
@@ -116,7 +119,11 @@ export default function MainTabNavigator() {
       tabBar={renderTabBar}>
       <CurvedBottomBarExpo.Screen
         name="home"
-        component={HomeStack}
+        // component={HomeStack}
+        component={props => (
+          <HomeStackStackWrapper {...props} bottomTabRef={bottomTabRef} />
+        )}
+        
         options={{unmountOnBlur: true}}
         position="LEFT"
       />

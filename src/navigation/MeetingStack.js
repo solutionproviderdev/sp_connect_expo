@@ -9,12 +9,13 @@ import {isNavigationReady, isNavigationReadyRef, navigationRef} from '../App';
 import LeadDetail from '../components/shared/LeadDetail';
 import FollowUpHeader from '../screens/MainTabNavigator/component/homescreen/FollowUpHeader';
 import {PaperProvider} from 'react-native-paper';
+import AddFollowUp from '../screens/followUp/screens/AddFollowUp';
 
 const Stack = createNativeStackNavigator();
 const MeetingStack = ({bottomTabRef}) => {
   const navigation = useNavigation();
 
-  const allowedRoutes = ['SingleMeeting'];
+  const allowedRoutes = ['SingleMeeting','AddFollowUp'];
   useEffect(() => {
     const unsubscribe = navigation.addListener('state', () => {
       const routeName = navigationRef?.current?.getCurrentRoute()?.name; // ✅ Get Active Route
@@ -25,8 +26,9 @@ const MeetingStack = ({bottomTabRef}) => {
             console.log('Hiding Tab Bar with Delay');
             bottomTabRef?.current?.setVisible(false);
           }, 100); // 100 milliseconds delay
-        // bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
-       }} else {
+          // bottomTabRef?.current?.setVisible(false); // ✅ Show Bottom Tab on client-info
+        }
+      } else {
         bottomTabRef?.current?.setVisible(true); // ❌ Hide Bottom Tab on all other screens
       }
     });
@@ -56,6 +58,7 @@ const MeetingStack = ({bottomTabRef}) => {
           component={SearchMeeting}
           options={{headerShown: false}}
         />
+        <Stack.Screen name="AddFollowUp" component={AddFollowUp} />
       </Stack.Navigator>
     </PaperProvider>
   );

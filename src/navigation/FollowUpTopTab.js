@@ -23,7 +23,7 @@ const FollowUpTopTab = ({followUp}) => {
     { key: 'third', title: 'Call Logs' },
     { key: 'fourth', title: 'Check-ins' },
   ];
-   
+
   const renderScene = ({ route }) => {
       switch (route.key) {
         case 'first':

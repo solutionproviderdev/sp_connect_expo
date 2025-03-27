@@ -2,26 +2,53 @@ import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useGetMeetingsQuery} from '../../../../redux/meeting/meetingApi';
+import {useGetAllFollowupQuery} from '../../../../redux/followUp/followUpApi';
 
 const Tasks = ({meeting, user, deviceType}) => {
   const navigation = useNavigation();
-  const todayDate = new Date().toISOString().split('T')[0];
-  // const todayMeetings = meeting?.filter(m => m.date.startsWith(todayDate));
-  const todayMeetings = meeting?.filter(m => m.date.startsWith(todayDate) && m.status !== 'Postponed' && m.status !== 'Canceled' );
+  const userId = user?._id;
+
+  const today = new Date();
+  const todayDate = today.toISOString().split('T')[0]; // Extract YYYY-MM-DD part
+  const dateRange = `${todayDate}_${todayDate}`;
+  console.log('dateRange', dateRange);
+  const {
+    data: meetings = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
+
+  // --------------------------------
+
+  const {
+    data,
+    error,
+    isLoading: followupLoading,
+  } = useGetAllFollowupQuery(
+    {
+      Id: userId,
+      dateRange: dateRange,
+    },
+    {skip: !userId},
+  );
+
+  console.log('followup.length', data?.length);
 
   const taskItems = [
     {
       icon: 'account-group-outline',
       title: 'Today Meetings',
       // count: todayMeetings?.length,
-      count: '',
+      count: meetings?.length,
       route: 'todayMeetings',
       params: {user}, // Send specific data
     },
     {
       icon: 'telescope',
       title: 'Today Follow-up',
-      count: '',
+      count: data?.length,
       route: 'TodayFollowUp',
       params: {user, followUps: meeting?.filter(m => m.followUp)}, // Example data
     },
@@ -41,7 +68,6 @@ const Tasks = ({meeting, user, deviceType}) => {
     },
   ];
 
-
   const handleNavigation = (route, params) => {
     if (!params?.user) {
       console.warn('User data is missing. Navigation stopped.');
@@ -49,13 +75,12 @@ const Tasks = ({meeting, user, deviceType}) => {
       Alert.alert(
         'Navigation Error',
         'User data is missing. Please try again later.',
-        [{ text: 'OK' }]
+        [{text: 'OK'}],
       );
       return;
     }
     navigation.navigate(route, params);
   };
-
 
   const TaskItem = ({icon, title, count, route, params}) => (
     <View
@@ -92,7 +117,6 @@ const Tasks = ({meeting, user, deviceType}) => {
           <Text className="text-white font-bold">{count}</Text>
         </View>
         <TouchableOpacity onPress={() => handleNavigation(route, params)}>
-          
           <Text
             className={`text-spDarkGray ${
               deviceType === 'tablet'
@@ -121,4 +145,3 @@ const Tasks = ({meeting, user, deviceType}) => {
 };
 
 export default Tasks;
- 
