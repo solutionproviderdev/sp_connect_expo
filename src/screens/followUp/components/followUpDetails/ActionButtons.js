@@ -5,11 +5,14 @@ import IconE from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {Linking} from 'react-native';
 import Toast from 'react-native-toast-message';
+import {Clipboard} from 'react-native';
 
-const ActionButtons = ({address,number}) => {
+const ActionButtons = ({address, number}) => {
+  const phoneNumber = number.substring(1);
+  console.log('numberf');
+
   const fullAddress = `${address.area}, ${address.district}, ${address.division}, Bangladesh`;
   console.log(fullAddress);
-  let phoneNumber = '01799719112';
 
   const handleCall = () => {
     const url = `tel:${phoneNumber}`;
@@ -68,20 +71,23 @@ const ActionButtons = ({address,number}) => {
       });
   };
 
-  const openWhatsApp = () => {
-    const url = `whatsapp://send?phone=8801799719112`;
-    Linking.canOpenURL(url)
-      .then(supported => {
-        if (supported) {
-          Linking.openURL(url);
-        } else {
-          Alert.alert(
-            'WhatsApp not installed',
-            'Please install WhatsApp to continue.',
-          );
-        }
-      })
-      .catch(err => console.error('An error occurred', err));
+  const openWhatsApp = async () => {
+    try {
+      await Linking.openURL(`whatsapp://send?phone=${phoneNumber}`);
+    } catch (e) {
+      // If it fails, show manual instructions
+      Alert.alert(
+        'Manual WhatsApp Instructions',
+        `Please manually open WhatsApp and add this number: ${phoneNumber}`,
+        [
+          {
+            text: 'Copy Number',
+            onPress: () => Clipboard.setString(phoneNumber),
+          },
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+      );
+    }
   };
 
   const navigateToAddress = () => {

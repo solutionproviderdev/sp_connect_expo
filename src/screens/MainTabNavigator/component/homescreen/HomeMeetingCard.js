@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import IconE from 'react-native-vector-icons/Entypo';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -41,16 +41,14 @@ const HomeMeetingCard = ({item}) => {
       // }
 
       onPress={() => {
-        if (item && item.lead) {
-          navigation.navigate('meeting', {
-            screen: 'SingleMeeting',
-            params: { meeting: item },
-          });
-        } else {
-          console.warn('Invalid meeting data');
-        }
-      }}
-     >
+        console.log(item?.lead?._id);
+        Alert.alert('work in progress !')
+        // if (item && item.lead) {
+        //   navigation.navigate('LeadDetails', {leadId:item._id});
+        // } else {
+        //   console.warn('Invalid meeting data');
+        // }
+      }}>
       {/* Left Section */}
       <View className="flex-1 pr-3">
         {/* Name */}

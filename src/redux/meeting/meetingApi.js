@@ -4,7 +4,8 @@ export const meetingApi = api.injectEndpoints({
   endpoints: builder => ({
     getMeetings: builder.query({
       query: ({date, userId}) =>
-        `/meeting?dateRange=${date}&salesExecutiveId=${userId}`,
+        // `/meeting?dateRange=${date}&salesExecutiveId=${userId}`,
+        `/meeting?salesExecutiveId=${userId}`,
       providesTags: (result = []) => [
         'Meeting',
         ...result.map(({lead}) => ({type: 'Lead', id: lead._id})),

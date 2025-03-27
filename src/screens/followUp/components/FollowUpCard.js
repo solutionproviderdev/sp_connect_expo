@@ -3,6 +3,7 @@ import React from 'react';
 import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconE from 'react-native-vector-icons/Entypo';
+import {useGetMeetingByIdQuery} from '../../../redux/meeting/meetingApi';
 
 // Function to format date properly
 const formatDate = isoString => {
@@ -24,15 +25,25 @@ const formatTime = isoString => {
     minute: '2-digit',
     hour12: true,
   });
+  
 };
-
-const FollowUpCard = ({followUp,onpress}) => {
+const FollowUpCard = ({followUp, onpress}) => {
   const navigation = useNavigation();
+  const meetingId = followUp.meetings[0];
+  const lastcomment = followUp?.comment?.length - 1;
+  const comment =
+    followUp?.comment?.[lastcomment]?.comment || 'no comment yet !';
 
-  const lastcomment=followUp?.comment?.length - 1;
-  const comment =followUp?.comment?.[lastcomment]?.comment || 'no comment yet !';
+  const {
+    data: meeting,
+    isLoading: loading,
+    isError,
+    error,
+  } = useGetMeetingByIdQuery(meetingId);
+  // const visitCharge = meeting?.visitCharge;
+  const visitCharge = meeting?.visitCharge;
+  // console.log('mathar fot', visitCharge);
 
-   
   return (
     <TouchableOpacity
       onPress={onpress}
@@ -58,27 +69,27 @@ const FollowUpCard = ({followUp,onpress}) => {
 
           <View className="flex-row items-center mb-1">
             <Ionicons name="location-outline" size={20} color="#666" />
-            <Text className="ml-2 font-robotoCondensedSemiBold text-md w-40">
-              {followUp?.address?.area || 'Unknown Area'},{' '}
-              {followUp?.address?.district || ''}
+            <Text className="ml-2 font-robotoCondensedSemiBold w-52">
+              {`${followUp?.address.area}, ${followUp?.address.district}, ${followUp?.address.division}, Bangladesh` ||
+                'Unknown Source'}
             </Text>
           </View>
 
-          {/* Product Requirements */}
-          {followUp?.requirements?.length > 0 && (
-            <View className="flex-row items-center mt-1">
-              <IconE name="info-with-circle" size={20} color="#666" />
-              <View className="flex-row ml-2 gap-2">
+          <View className="flex-row items-start justify-center items-center">
+            <IconE name="info-with-circle" size={18} color="#666" />
+            <View className="flex-1 ml-2 ">
+              <View className="flex-row flex-wrap ">
                 {followUp.requirements.map((req, index) => (
                   <Text
                     key={index}
-                    className="bg-gray-800 text-gray-100 font-robotoCondensedSemiBold p-1">
+                    className="text-black  font-robotoCondensedSemiBold mr-1">
                     {req}
+                    {index < followUp.requirements.length - 1 ? ',' : ''}
                   </Text>
                 ))}
               </View>
             </View>
-          )}
+          </View>
 
           {/* Budget & Value */}
           <View className="mt-2">
@@ -118,9 +129,15 @@ const FollowUpCard = ({followUp,onpress}) => {
 
           {/* Handed Over Status */}
           <View className="bg-spBlue">
-            <Text className="text-white p-2 font-robotoCondensedSemiBold">
-              {followUp?.status || 'Unknown Status'}
-            </Text>
+            {visitCharge ? (
+              <Text className="text-white p-2 font-robotoCondensedSemiBold">
+                {visitCharge}
+              </Text>
+            ) : (
+              <Text className="text-white p-2 font-robotoCondensedSemiBold">
+                Free
+              </Text>
+            )}
           </View>
         </View>
       </View>
@@ -132,12 +149,11 @@ const FollowUpCard = ({followUp,onpress}) => {
 
       {followUp?.comment?.length > 0 && (
         <View className="flex-row mt-1 items-center">
-            {/* followUp?.comment[lastcomment] */}
+          {/* followUp?.comment[lastcomment] */}
           <Image
             source={{
               uri:
-              followUp?.comment?.images ||
-                'https://via.placeholder.com/40',
+                followUp?.comment?.images || 'https://via.placeholder.com/40',
             }}
             className="w-14 h-14 rounded-full border-2 border-yellow-500"
           />
@@ -150,9 +166,7 @@ const FollowUpCard = ({followUp,onpress}) => {
                 {formatDate(followUp?.updatedAt)}
               </Text>
             </View>
-            <Text className="font-robotoCondensedSemiBold">
-              {comment}
-            </Text>
+            <Text className="font-robotoCondensedSemiBold">{comment}</Text>
           </View>
         </View>
       )}

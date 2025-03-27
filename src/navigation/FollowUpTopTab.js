@@ -16,9 +16,6 @@ const FollowUpTopTab = ({followUp}) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = React.useState(0);
   const {comment} =followUp
-  // console.log('-------->',followUp);
-  
-  // console.log('followup top tab here--->', followUp);
 
   const routes = [
     { key: 'first', title: 'Comments' },
@@ -34,7 +31,7 @@ const FollowUpTopTab = ({followUp}) => {
         case 'second':
           return <FollowUpTab followUp={followUp} />;
         case 'third':
-          return <CallLogsTab />;
+          return <CallLogsTab followUp={followUp} />;
         case 'fourth':
           return <CheckInsTab />;
         default:

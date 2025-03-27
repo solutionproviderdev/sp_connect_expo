@@ -26,19 +26,19 @@
       "favicon": "./src/assets/sp_gear_icon.png",
       "bundler": "metro"
     },
-    "extra": {
-      "eas": {
-        "projectId": "7dbfefca-2030-417a-8fea-fef2c8d54c26"
-      }
-    },
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "updates": {
-      "url": "https://u.expo.dev/7dbfefca-2030-417a-8fea-fef2c8d54c26"
-    },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "4802fe85-94dd-4b3a-9607-d8b3e7e4aeee"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/4802fe85-94dd-4b3a-9607-d8b3e7e4aeee"
+    }
   }
 }

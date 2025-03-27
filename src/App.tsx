@@ -88,41 +88,6 @@ const App = () => {
     }
   };
 
-  //--------------------------------------------------------------------
-  //logout when jwt token expires 
-  // useEffect(() => {
-  //   const checkTokenExpiration = async () => {
-  //     try {
-  //       const token = await AsyncStorage.getItem('token');
-  //       console.log('Token:', token);
-  //       setIsLoggedIn(!!token);
-
-  //       if (token) {
-  //         const decodedToken = jwtDecode(token);
-  //         const currentTime = Date.now() / 1000; // Current time in seconds
-
-  //         console.log('Decoded Token:', decodedToken);
-  //         console.log('Current Time:', currentTime);
-  //         console.log('Token Expiry Time:', decodedToken.exp);
-
-  //         // ✅ Check if the token is expired
-  //         if (decodedToken.exp && decodedToken.exp < currentTime) {
-  //           console.log('⛔ Token has expired!');
-  //           await handleLogout();
-  //         } else {
-  //           console.log('✅ Token is still valid.');
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error('Error checking token expiration:', error);
-  //     }
-  //   };
-
-  //   checkTokenExpiration();
-  // }, []);
-
-
-  //--------------------------------------------------------------------
 
   // ✅ Handle app state changes (active, background, inactive)
   useEffect(() => {

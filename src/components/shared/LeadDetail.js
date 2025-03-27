@@ -3,9 +3,11 @@ import {View, Text, TouchableOpacity, Image} from 'react-native';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconE from 'react-native-vector-icons/Entypo';
-
 // import dayjs from 'dayjs';
-import {useGetLeadByIdQuery} from '../../redux/meeting/meetingApi';
+import {
+  useGetLeadByIdQuery,
+  useGetMeetingByIdQuery,
+} from '../../redux/meeting/meetingApi';
 import {getDeviceType} from '../../screens/MainTabNavigator/HomeScreen';
 import ProjectStatus from '../../screens/MainTabNavigator/component/projectStatusTrack/ProjecStatus';
 import ActionButtons from '../../screens/followUp/components/followUpDetails/ActionButtons';
@@ -36,15 +38,24 @@ const LeadDetail = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const {leadId} = route.params || {};
-
   // Fetch lead data using the ID from params or use a default ID
   const {data: lead, isLoading} = useGetLeadByIdQuery(leadId || null);
+  console.log('--------------leadId--------->', lead);
+
   // console.log(' from leaddetail', lead);
   const number = lead?.phone[0];
-  console.log('number', number);
+  const meetingId = lead?.meetings;
   const address = lead?.address;
   const deviceType = getDeviceType();
 
+  const {
+    data: meeting,
+    isLoading: loading,
+    isError,
+    error,
+  } = useGetMeetingByIdQuery(meetingId);
+  const visitCharge = meeting?.visitCharge;
+  // console.log('meeting------------>', visitCharge);
   // console.log(lead?._id);
 
   // Get the last comment if available
@@ -62,16 +73,23 @@ const LeadDetail = () => {
   // Handle loading state
   if (isLoading) {
     return (
-      <View className="flex-1 items-center justify-center">
+      <View className="flex-1 bg-spBg items-center justify-center">
         <Text>Loading...</Text>
       </View>
     );
   }
+  // if (lead === undefined) {
+  //   return (
+  //     <View className="flex-1 bg-spBg items-center justify-center">
+  //       <Text>...</Text>
+  //     </View>
+  //   );
+  // }
 
-  console.log('lead', lead);
+  // console.log('lead', lead);
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-spBg">
       {/* Header */}
       <View className="flex-row items-center justify-between py-1 px-3">
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -115,30 +133,31 @@ const LeadDetail = () => {
             {/* Source */}
             <View className="flex-row items-center mb-1">
               <Ionicons name="location-outline" size={18} color="#666" />
-              <Text className="ml-1 font-robotoCondensed text-base">
-                {`${address.area}, ${address.district}, ${address.division}, Bangladesh` ||
-                  'Unknown Source'}
-              </Text>
-            </View>
-            {/* Requirements */}
-            <View className="flex-row items-center mt-1">
-              <IconE name="info-with-circle" size={18} color="#666" />
-              {lead?.requirements?.length > 0 ? (
-                <View className="flex-row ml-1 gap-1">
-                  {lead.requirements.map((req, index) => (
-                    <Text
-                      key={index}
-                      className="bg-gray-800 text-gray-100 font-robotoCondensed p-1">
-                      {req}
-                    </Text>
-                  ))}
-                </View>
-              ) : (
-                <Text className="bg-gray-800 text-gray-100 font-robotoCondensed p-1">
-                  No requirement
+              {address && (
+                <Text className="ml-1 font-robotoCondensed text-base">
+                  {`${address?.area}, ${address?.district}, ${address?.division}, Bangladesh` ||
+                    'Unknown Source'}
                 </Text>
               )}
             </View>
+
+            <View className="flex-row items-center mb-1 ">
+              <Ionicons name="location-outline" size={18} color="#666" />
+              <View className="ml-1 font-robotoCondensed text-base ">
+                {lead?.requirements && (
+                  <View className="flex-row flex-wrap ml-1 gap-1 ">
+                    {lead?.requirements.map((req, index) => (
+                      <Text
+                        key={index}
+                        className=" bg-gray-800 text-gray-100 font-robotoCondensed p-1">
+                        {req}
+                      </Text>
+                    ))}
+                  </View>
+                )}
+              </View>
+            </View>
+
             {/* const projectValue = leadData.finance.projectValue;
 const clientsBudget = leadData.finance.clientsBudget; */}
             {lead?.finance?.projectValue ? (
@@ -162,7 +181,7 @@ const clientsBudget = leadData.finance.clientsBudget; */}
           <View className="w-1/3 gap-1">
             {/* Status Badge */}
             <View className="bg-spRed p-1">
-              <Text className="text-white font-robotoCondensed text-sm">
+              <Text className="text-white p-1 font-robotoCondensedExtraBold text-sm text-center">
                 {lead?.status || 'No Status'}{' '}
               </Text>
             </View>
@@ -170,22 +189,26 @@ const clientsBudget = leadData.finance.clientsBudget; */}
             {lead?.salesFollowUp && lead.salesFollowUp.length > 0 && (
               <View className="gap-0.5">
                 <View className="bg-gray-800 px-2 py-1 rounded-t-md">
-                  <Text className="text-white font-robotoCondensed text-sm">
+                  <Text className="text-white p-1 font-robotoCondensedExtraBold text-sm text-center">
                     {formatTime(lead.salesFollowUp[0]?.time)}
                   </Text>
                 </View>
                 <View className="bg-spRed px-2 py-1 rounded-b-md">
-                  <Text className="text-white font-robotoCondensed text-sm">
+                  <Text className="text-white p-1 font-robotoCondensedExtraBold text-sm text-center">
                     {formatDate(lead.salesFollowUp[0]?.time)}
                   </Text>
                 </View>
               </View>
             )}
             {/* Source Badge */}
-            <View className="bg-spBlue">
-              <Text className="text-white p-1 font-robotoCondensed text-sm">
-                {lead?.salesFollowUp?.status || 'free'}
-              </Text>
+            <View className="bg-spBlue ">
+              {visitCharge ? (
+                <Text className="text-white p-1 font-robotoCondensedExtraBold text-sm text-center">
+                  {visitCharge || 'Free'}
+                </Text>
+              ) : (
+                'Free'
+              )}
             </View>
           </View>
         </View>

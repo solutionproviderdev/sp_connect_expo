@@ -8,6 +8,7 @@ import {StatusBar} from 'expo-status-bar';
 import {SafeAreaView} from 'react-native';
 import TodayFollowUp from '../screens/MainTabNavigator/component/homescreen/screen/TodayFollowUp';
 import CalculatorHeader from '../screens/calculator/components/shared/CalculatorHeader';
+ import LeadDetail from '../components/shared/LeadDetail';
 import FollowUpHeader from '../screens/MainTabNavigator/component/homescreen/FollowUpHeader';
 
 const Stack = createNativeStackNavigator();
@@ -20,7 +21,13 @@ export default function HomeStack() {
       <Stack.Screen name="homes" component={HomeScreen} />
       <Stack.Screen name="todayMeetings" component={TodayMeetings} />
       <Stack.Screen name="TodayFollowUp" component={TodayFollowUp} />
+      <Stack.Screen
+      name="LeadDetails"
+        component={LeadDetail}
+        options={{tabBarStyle: {display: 'none'},headerShown:true,header: () => <FollowUpHeader />,}}
 
+      />
+ 
       {/* <Stack.Screen name="ForgotPasswordStack" component={ForgotPasswordStack} /> */}
     </Stack.Navigator>
   );

@@ -1,9 +1,10 @@
+
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 
 const SalesOverview = () => {
   return (
-    <View className="flex-row gap-4 items justify-around drop-shadow-md">
+    <View className="flex-row gap-4 px-4 items justify-around drop-shadow-md">
       <View className="border border-spBlue rounded-xl">
         <Text className="text-2xl font-robotoCondensedExtraBold text-spBlue border-b border-spBlue text-center">
           SOLD
@@ -35,5 +36,3 @@ const SalesOverview = () => {
 export default SalesOverview;
 
 const styles = StyleSheet.create({});
-
-

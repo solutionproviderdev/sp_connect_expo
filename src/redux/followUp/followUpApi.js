@@ -6,8 +6,8 @@ export const followUpApi = api.injectEndpoints({
       query: ({Id, dateRange, status}) => {
         // console.log('from rtk ok ->',Id,dateRange,status)
         return (
-          // `/lead/sales/follow-up?dateRange=${dateRange}&status=${status}&salesExecutiveId=${Id}`
-          `/lead/sales/follow-up`
+          `/lead/sales/follow-up?dateRange=${dateRange}&status=${status}&salesExecutiveId=${Id}`
+          // `/lead/sales/follow-up`
         );
       },
       providesTags: ['followUp'],

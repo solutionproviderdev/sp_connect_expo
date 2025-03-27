@@ -57,23 +57,13 @@ const FollowUp = () => {
       Id: userId,
       dateRange: formattedDateRange,
       status: statusFilter,
-      // Id: null,
-      // dateRange: null,
-      // status: null,
     },
     {skip: !userId},
   );
-// console.log('follow up data is here--->',data);
+console.log('follow up data is loading or not --->',isLoading);
   const insets = useSafeAreaInsets();
   const togglePicker = useCallback(() => setPickerVisible(prev => !prev), []);
 
-  // console.log('UserId is ->', userId);
-  // console.log('Current Filter Params ->', {
-  //   Id: userId,
-  //   dateRange: formattedDateRange,
-  //   status: statusFilter,
-  // });
-// console.log('checking data',data);
   return (
     <Provider>
       <SafeAreaView className="flex-1 bg-spBg px-4">

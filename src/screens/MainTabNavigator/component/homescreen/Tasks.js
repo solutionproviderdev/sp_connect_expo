@@ -13,28 +13,29 @@ const Tasks = ({meeting, user, deviceType}) => {
     {
       icon: 'account-group-outline',
       title: 'Today Meetings',
-      count: todayMeetings?.length,
+      // count: todayMeetings?.length,
+      count: '',
       route: 'todayMeetings',
       params: {user}, // Send specific data
     },
     {
       icon: 'telescope',
       title: 'Today Follow-up',
-      count: 10,
+      count: '',
       route: 'TodayFollowUp',
       params: {user, followUps: meeting?.filter(m => m.followUp)}, // Example data
     },
     {
       icon: 'file-document-outline',
       title: 'Quotations',
-      count: 8,
+      count: '',
       route: 'quotations',
       params: {user, quotations: meeting?.filter(m => m.quotation)}, // Example data
     },
     {
       icon: 'credit-card-check-outline',
       title: 'Payments',
-      count: 6,
+      count: '',
       route: 'payments',
       params: {user, payments: meeting?.filter(m => m.payment)}, // Example data
     },

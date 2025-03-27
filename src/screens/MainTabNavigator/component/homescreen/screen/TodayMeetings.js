@@ -39,7 +39,7 @@ const TodayMeetings = ({route = {}}) => {
     isError,
     refetch,
   } = useGetMeetingsQuery({date: dateRange, userId}, {skip: !userId});
-console.log('meetings---<>',meetings);
+// console.log('meetings---<>',meetings);
   // const sortedMeetings = meetings?.slice().sort(
   //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt), // Newest first
   // );
@@ -62,6 +62,7 @@ console.log('meetings---<>',meetings);
   // const renderMeetingCard = ({item}) => <HomeMeetingCard item={item} />;
 
   const renderMeetingCard = ({item}) => {
+    // console.log('for today meetin id----->',item._id);
     try {
       return <HomeMeetingCard item={item} />;
     } catch (error) {
