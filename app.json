@@ -30,7 +30,15 @@
       "policy": "appVersion"
     },
     "plugins": [
-      "expo-font"
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/icons/spSalesIcon.png",
+          "color": "#ffffff",
+          "sounds": ["./src/assets/sounds/notification_sound.wav"]
+        }
+      ]
     ],
     "extra": {
       "eas": {

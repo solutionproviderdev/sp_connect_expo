@@ -15,7 +15,6 @@ const formatDate = isoString => {
     year: 'numeric',
   });
 };
-
 // Function to format time properly
 const formatTime = isoString => {
   if (!isoString) return 'N/A';
@@ -25,9 +24,18 @@ const formatTime = isoString => {
     minute: '2-digit',
     hour12: true,
   });
-  
 };
+
 const FollowUpCard = ({followUp, onpress}) => {
+  // console.log('dummy followUp---->', followUp);
+
+  // const salesFollowUpTime = followUp.salesFollowUp[0].time;
+  // const formattedDate = formatDate(salesFollowUpTime);
+  // const formattedTime = formatTime(salesFollowUpTime);
+
+  // console.log("Formatted Date:--------------->", formattedDate); // Output: Formatted Date: 25 Feb 2025
+  // console.log("Formatted Time:--------------->", formattedTime); // Output: Formatted Time: 01:42 PM
+
   const navigation = useNavigation();
   const meetingId = followUp.meetings[0];
   const lastcomment = followUp?.comment?.length - 1;

@@ -112,7 +112,7 @@ const Tasks = ({meeting, user, deviceType}) => {
           deviceType === 'tablet' ? 'gap-4' : 'gap-2'
         }`}>
         <View
-          className={`bg-spRed rounded flex items-center justify-center ${
+         className={`bg-spRed rounded flex items-center justify-center ${
             deviceType === 'tablet' ? 'w-12 h-12' : 'w-6 h-6'
           }`}>
           <Text className="text-white font-bold">{count}</Text>
