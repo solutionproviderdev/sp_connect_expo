@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconE from 'react-native-vector-icons/Entypo';
 import {useGetMeetingByIdQuery} from '../../../redux/meeting/meetingApi';
+import {useGetUserbyIDQuery} from '../../../redux/auth/authApi';
 
 // Function to format date properly
 const formatDate = isoString => {
@@ -25,7 +26,6 @@ const formatTime = isoString => {
     minute: '2-digit',
     hour12: true,
   });
-  
 };
 const FollowUpCard = ({followUp, onpress}) => {
   const navigation = useNavigation();
@@ -33,6 +33,15 @@ const FollowUpCard = ({followUp, onpress}) => {
   const lastcomment = followUp?.comment?.length - 1;
   const comment =
     followUp?.comment?.[lastcomment]?.comment || 'no comment yet !';
+  const commentByID = followUp?.comment?.[lastcomment] || 'no comment yet !';
+  let commentUser = commentByID?.commentBy;
+
+  const {
+    data: commentor,
+    isLoading,
+    isError: commentError,
+  } = useGetUserbyIDQuery(commentUser, {skip: !commentUser});
+  console.log('followUp----------->', followUp.projectStatus);
 
   const {
     data: meeting,
@@ -106,10 +115,18 @@ const FollowUpCard = ({followUp, onpress}) => {
         <View className="w-1/3 gap-2">
           {/* Project Status */}
           <View className="bg-spRed p-2">
-            <Text className="text-white font-robotoCondensedSemiBold">
-              {followUp?.projectStatus?.subStatus || 'No Status'}{' '}
-              <Text className="text-xs">(Ongoing)</Text>
-            </Text>
+            {followUp?.projectStatus?.status && followUp?.projectStatus?.subStatus ? (
+              <Text className="text-white font-robotoCondensedSemiBold">
+                {followUp?.projectStatus?.subStatus || 'No Status'}{' '}
+                <Text className="text-xs">
+                  ({followUp?.projectStatus?.status})
+                </Text>
+              </Text>
+            ) : (
+              <Text className="text-white font-robotoCondensedSemiBold">
+                N/A
+              </Text>
+            )}
           </View>
 
           {/* Meeting Time & Date */}
@@ -150,18 +167,27 @@ const FollowUpCard = ({followUp, onpress}) => {
       {followUp?.comment?.length > 0 && (
         <View className="flex-row mt-1 items-center">
           {/* followUp?.comment[lastcomment] */}
-          <Image
-            source={{
-              uri:
-                followUp?.comment?.images || 'https://via.placeholder.com/40',
-            }}
-            className="w-14 h-14 rounded-full border-2 border-yellow-500"
-          />
+          {commentor?.profilePicture && (
+            <Image
+              // source={{
+              //   uri:
+              //     followUp?.comment?.images || 'https://via.placeholder.com/40',
+              // }}
+              source={{
+                uri:
+                  commentor?.profilePicture || 'https://via.placeholder.com/40',
+              }}
+              className="w-14 h-14 rounded-full border-2 border-blue-400"
+            />
+          )}
           <View className="ml-3 flex-1">
             <View className="flex-row justify-between items-center">
-              <Text className="font-robotoCondensedSemiBold font-semibold text-xl">
-                {followUp?.comment?._id || 'Name attach later'}
-              </Text>
+              {commentor?.nameAsPerNID && (
+                <Text className="font-robotoCondensedSemiBold font-semibold text-xl">
+                  {/* {followUp?.comment?._id || 'Name attach later'} */}
+                  {commentor?.nameAsPerNID || 'Name nto found !'}
+                </Text>
+              )}
               <Text className="text-gray-700 font-robotoCondensed">
                 {formatDate(followUp?.updatedAt)}
               </Text>
