@@ -148,35 +148,34 @@ const App = () => {
 
   return (
     <>
-    <Provider store={store}>
-      {/* <PaperProvider> */}
-      <NavigationContainer ref={navigationRef}>
+      <Provider store={store}>
+        {/* <PaperProvider> */}
+        <NavigationContainer ref={navigationRef}>
 
-        <SafeAreaView style={{ flex: 1 }}>
-          <StatusBar
-            backgroundColor="rgb(4, 98, 138)"
-            style="light" // or "dark" if you use a custom red color (not recommended)
-          />
-          {isOffline && (
-            <View className="bg-yellow-300 py-2 rounded-md">
-              <Text className="text-yellow-800 text-xl font bold text-center">
-                ⚠️ You are offline.
-              </Text>
-            </View>
-          )}
-          {isLoggedIn ? <MainTabNavigator /> : <AuthStack />}
-        </SafeAreaView>
+          <SafeAreaView style={{ flex: 1 }}>
+            <StatusBar
+              backgroundColor="rgb(4, 98, 138)"
+              style="light" // or "dark" if you use a custom red color (not recommended)
+            />
+            {isOffline && (
+              <View className="bg-yellow-300 py-2 rounded-md">
+                <Text className="text-yellow-800 text-xl font bold text-center">
+                  ⚠️ You are offline.
+                </Text>
+              </View>
+            )}
+            {isLoggedIn ? <MainTabNavigator /> : <AuthStack />}
+          </SafeAreaView>
 
-      </NavigationContainer>
-      {/* </PaperProvider> */}
-    </Provider>
-    <Toast />
+        </NavigationContainer>
+        {/* </PaperProvider> */}
+      </Provider>
+      <Toast />
     </>
   );
 };
 
 export default App;
-
 
 
 

@@ -60,7 +60,7 @@ const FollowUp = () => {
     },
     {skip: !userId},
   );
-console.log('follow up data is loading or not --->',isLoading);
+console.log('follow up data is here --->',data);
   const insets = useSafeAreaInsets();
   const togglePicker = useCallback(() => setPickerVisible(prev => !prev), []);
 

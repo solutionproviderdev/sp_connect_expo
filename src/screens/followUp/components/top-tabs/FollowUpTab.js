@@ -10,7 +10,6 @@ const FollowUpTab = ({followUp}) => {
   const navigation = useNavigation();
   const {comment = [], salesFollowUp = []} = followUp;
   const [selectedFollowUpId, setSelectedFollowUpId] = useState(null);
-
   // Helper to format the time from item.time
   const formatTime = isoString => {
     return dayjs(isoString).format('DD MMM, YYYY hh:mm A');

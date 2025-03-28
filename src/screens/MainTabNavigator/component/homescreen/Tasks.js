@@ -40,7 +40,6 @@ const Tasks = ({meeting, user, deviceType}) => {
     {
       icon: 'account-group-outline',
       title: 'Today Meetings',
-      // count: todayMeetings?.length,
       count: meetings?.length,
       route: 'todayMeetings',
       params: {user}, // Send specific data
@@ -50,7 +49,8 @@ const Tasks = ({meeting, user, deviceType}) => {
       title: 'Today Follow-up',
       count: data?.length,
       route: 'TodayFollowUp',
-      params: {user, followUps: meeting?.filter(m => m.followUp)}, // Example data
+      // params: {user, followUps: meeting?.filter(m => m.followUp)}, // Example data
+      params: {user}, // Example data
     },
     {
       icon: 'file-document-outline',
@@ -69,17 +69,18 @@ const Tasks = ({meeting, user, deviceType}) => {
   ];
 
   const handleNavigation = (route, params) => {
-    if (!params?.user) {
-      console.warn('User data is missing. Navigation stopped.');
-      // ✅ Show an alert for production
-      Alert.alert(
-        'Navigation Error',
-        'User data is missing. Please try again later.',
-        [{text: 'OK'}],
-      );
-      return;
-    }
-    navigation.navigate(route, params);
+    console.log('route, params',route);
+    // if (!params?.user) {
+    //   console.warn('User data is missing. Navigation stopped.');
+    //   // ✅ Show an alert for production
+    //   Alert.alert(
+    //     'Navigation Error',
+    //     'User data is missing. Please try again later.',
+    //     [{text: 'OK'}],
+    //   );
+    //   return;
+    // }
+    navigation.navigate(route);
   };
 
   const TaskItem = ({icon, title, count, route, params}) => (

@@ -18,20 +18,24 @@ import SkeletonLoading from 'expo-skeleton-loading';
 import MeetingCardSkeleton from '../MeetingCardSkeleton';
 import {getDeviceType} from '../../../HomeScreen';
 import {useGetMeetingsQuery} from '../../../../../redux/meeting/meetingApi';
+import { useUserCredentials } from '../../../../../utils/UserCredentials';
 
 // const TodayMeetings = ({route}) => {
 const TodayMeetings = ({route = {}}) => {
   // need to validate the route
-  const {user} = route?.params || {}; // Extract passed data
+  // const {user} = route?.params || {}; // Extract passed data
   // console.log('todaymeeting route user- is here----->', user);
 
-  // console.log('todaymeeting user----->', user);
-  const userId = user?._id || '';
-  // console.log('todaymeeting userId----->', userId);
+  // // console.log('todaymeeting user----->', user);
+  // const userId = user?._id || '';
+  const {userData,userId}=useUserCredentials()
+  console.log('todaymeeting userId----->', userData,userId);
   const today = new Date();
   const todayDate = today.toISOString().split('T')[0]; // Extract YYYY-MM-DD part
   const dateRange = `${todayDate}_${todayDate}`;
   const deviceType = getDeviceType();
+
+
 
   const {
     data: meetings = [],
@@ -44,8 +48,8 @@ const TodayMeetings = ({route = {}}) => {
   );
   // console.log('meetings---<>',meetings);
   // const sortedMeetings = meetings?.slice().sort(
-  //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt), // Newest first
-  // );
+    //   (a, b) => new Date(b.createdAt) - new Date(a.createdAt), // Newest first
+    // );
   const sortedMeetings = meetings
     ?.filter(
       meeting =>
@@ -65,6 +69,31 @@ const TodayMeetings = ({route = {}}) => {
   const openMenu = () => setMenuVisible(true);
   const closeMenu = () => setMenuVisible(false);
 
+    if (meetings?.length === 0) {
+    return (
+      <View className="flex-1 items-center justify-center bg-spBg">
+        <Text className="text-red-500 text-xl">There is no meeting today!.</Text>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          className="bg-red-500 p-3 rounded mt-4">
+          <Text className="text-white">Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+    if (!userData,!userId) {
+    return (
+      <View className="flex-1 items-center justify-center bg-spBg">
+        <Text className="text-red-500 text-xl">There is no data available !.</Text>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          className="bg-red-500 p-3 rounded mt-4">
+          <Text className="text-white">Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   // const renderMeetingCard = ({item}) => <HomeMeetingCard item={item} />;
 
   const renderMeetingCard = ({item}) => {
@@ -81,18 +110,6 @@ const TodayMeetings = ({route = {}}) => {
     }
   };
 
-  if (!user) {
-    return (
-      <View className="flex-1 items-center justify-center bg-spBg">
-        <Text className="text-red-500 text-xl">User data is missing.</Text>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          className="bg-red-500 p-3 rounded mt-4">
-          <Text className="text-white">Go Back</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
 
   if (!Array.isArray(meetings)) {
     return (
@@ -151,8 +168,8 @@ const TodayMeetings = ({route = {}}) => {
                 <Avatar.Image
                   size={35}
                   source={{
-                    uri: user?.profilePicture
-                      ? user.profilePicture
+                    uri: userData?.profilePicture
+                      ? userData.profilePicture
                       : 'https://via.placeholder.com/35',
                   }}
                 />
@@ -207,16 +224,10 @@ const TodayMeetings = ({route = {}}) => {
 
         {/* Meetings Section */}
 
-        {isLoading || !meetings ? (
+        {isLoading  ? (
           <MeetingCardSkeleton />
-        ) : //  <FlatList
-        //   data={sortedMeetings}
-        //   renderItem={renderMeetingCard}
-        //   keyExtractor={item => item?._id.toString()}
-        //   contentContainerStyle={{paddingBottom: 60}}
-        // />
-
-        meetings?.length > 0 ? (
+        ) : 
+        meetings?.length !== 0 ? (
           <FlatList
             data={sortedMeetings}
             renderItem={renderMeetingCard}
@@ -242,20 +253,4 @@ const TodayMeetings = ({route = {}}) => {
 };
 
 export default TodayMeetings;
-
-// import {StyleSheet, Text, View} from 'react-native';
-// import React from 'react';
-
-// const TodayMeetings = () => {
-//   return (
-//     <View className="flex-1 items-center justify-center  ">
-//       <Text className="text-black text-4xl p-8 border rounded-md bg-gradient-to-r bg-yellow-500">
-//         TodayMeetings
-//       </Text>
-//     </View>
-//   );
-// };
-
-// export default TodayMeetings;
-
-// const styles = StyleSheet.create({});
+ 
