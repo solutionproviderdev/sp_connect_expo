@@ -1,5 +1,4 @@
  
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import { checkTokenAndLogout } from '../utils/checkTokenAndLogout';

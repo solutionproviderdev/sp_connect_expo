@@ -12,10 +12,17 @@ import {useUserCredentials} from '../../../../../utils/UserCredentials';
 import {FlatList} from 'react-native';
 import FollowUpCard from '../../../../followUp/components/FollowUpCard';
 import Ionicons2 from '@expo/vector-icons/Ionicons';
-import {
-  processFollowUpNotifications,
-  setupNotificationListeners,
-} from '../../../../../utils/notifications';
+import * as Notifications from 'expo-notifications';
+import {Platform} from 'react-native';
+
+// Configure notification handler
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 const TodayFollowUp = () => {
   const navigation = useNavigation();
@@ -92,33 +99,142 @@ const TodayFollowUp = () => {
       },
       salesFollowUp: [
         {
-          time: '2025-02-25T09:59:00.000Z',
+          // time: '2025-02-25T11:14:00.000Z',
+          time: new Date(Date.now() + 60000).toISOString(),
           status: 'Pending',
           type: 'Call',
           _id: '67bdc8ce06b2b70bdee220ea',
-        }
+        },
       ],
       source: 'Phone',
       status: 'Sold',
       updatedAt: '2025-03-08T19:45:20.488Z',
     },
   ];
- 
-  data.map(item=> console.log('item.salesFollowUp----->',item?.salesFollowUp[0].time))
 
+  const utcTime = '2025-02-25T11:14:00.000Z';
+  const banglaTime = new Date(utcTime).toLocaleString('bn-BD', {
+    timeZone: 'Asia/Dhaka',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  });
 
+  console.log(`বাংলাদেশ সময়: ${banglaTime}`);
+  // উদাহরণ: "২৫ ফেব্রুয়ারি, ২০২৫ ৫:১৪ PM
+
+  //  Notifications code here
+  // Notification setup
   useEffect(() => {
-    // Process and schedule notifications when data changes
-    if (data && data.length > 0) {
-      processFollowUpNotifications(data);
-    }
+    const setupNotifications = async () => {
+      await requestNotificationPermission();
+      await scheduleAllNotifications();
+      setupNotificationListeners();
+    };
 
-    const cleanup = setupNotificationListeners();
+    setupNotifications();
 
     return () => {
-      cleanup();
+      Notifications.removeAllNotificationListeners();
     };
-  }, [data]);
+  }, []);
+
+  const requestNotificationPermission = async () => {
+    if (Platform.OS === 'android') {
+      await Notifications.setNotificationChannelAsync('default', {
+        name: 'default',
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: '#FF231F7C',
+      });
+    }
+
+    const {status} = await Notifications.requestPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Failed to get notification permissions');
+      return false;
+    }
+    return true;
+  };
+
+  // const scheduleAllNotifications = async () => {
+  //   await Notifications.cancelAllScheduledNotificationsAsync();
+
+  //   data.forEach(item => {
+  //     const followUp = item.salesFollowUp[0];
+  //     if (!followUp.time) return;
+
+  //     const triggerDate = new Date(followUp.time);
+
+  //     // Only schedule if time is in the future
+  //     if (triggerDate > new Date()) {
+  //       Notifications.scheduleNotificationAsync({
+  //         content: {
+  //           title: `Follow-up: ${item.name}`,
+  //           body: `You have a ${followUp.type} scheduled`,
+  //           data: {leadId: item._id},
+  //         },
+  //         trigger: {
+  //           date: triggerDate,
+  //         },
+  //       });
+  //     }
+  //   });
+  // };
+
+  const scheduleAllNotifications = async () => {
+    console.log('🛠️ Cancelling old notifications...');
+    await Notifications.cancelAllScheduledNotificationsAsync();
+
+    console.log('🔍 Checking follow-ups...');
+    data.forEach(item => validateAndSchedule(item));
+  };
+
+  const validateAndSchedule = async item => {
+    const followUp = item.salesFollowUp[0];
+    if (!followUp?.time) return;
+
+    const triggerDate = new Date(followUp.time);
+    const now = new Date();
+    const timeDiffInSeconds = (triggerDate - now) / 1000;
+
+    console.log(`
+🕒 Now: ${now.toISOString()}
+📅 Follow-up Time: ${triggerDate.toISOString()}
+⏱️ Difference: ${Math.round(timeDiffInSeconds)} seconds
+  `);
+
+    if (timeDiffInSeconds > 0 && timeDiffInSeconds <= 60) {
+      console.log('✅ Scheduling Notification Now...');
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: `Follow-up: ${item.name}`,
+          body: `Type: ${followUp.type}`,
+          data: {leadId: item._id},
+        },
+        trigger: {date: triggerDate},
+      });
+    } else {
+      console.log('❌ Time is not within 1 minute window. Skipping...');
+    }
+  };
+
+  const setupNotificationListeners = () => {
+    // Notification received while app is foregrounded
+    Notifications.addNotificationReceivedListener(notification => {
+      console.log('Notification received:', notification);
+    });
+
+    // User tapped on notification
+    Notifications.addNotificationResponseReceivedListener(response => {
+      const leadId = response.notification.request.content.data.leadId;
+      if (leadId) {
+        navigation.navigate('LeadDetails', {leadId});
+      }
+    });
+  };
 
   return (
     <Provider>

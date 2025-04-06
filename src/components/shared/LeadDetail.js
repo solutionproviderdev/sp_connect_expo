@@ -39,11 +39,11 @@ const LeadDetail = () => {
   const route = useRoute();
   const {leadId} = route.params || {};
   // Fetch lead data using the ID from params or use a default ID
-  console.log('--------------leadId--------->', leadId);
+  // console.log('--------------leadId--------->', leadId);
   const {data: lead, isLoading} = useGetLeadByIdQuery(leadId || null, {
     skip: !leadId
   });
-  console.log('--------------lead--------->', lead);
+  // console.log('--------------lead--------->', lead);
 
   // console.log(' from leaddetail', lead);
   const number = lead?.phone[0];
