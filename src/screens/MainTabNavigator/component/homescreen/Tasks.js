@@ -12,7 +12,7 @@ const Tasks = ({meeting, user, deviceType}) => {
   const today = new Date();
   const todayDate = today.toISOString().split('T')[0]; // Extract YYYY-MM-DD part
   const dateRange = `${todayDate}_${todayDate}`;
-  console.log('dateRange', dateRange);
+  // console.log('dateRange', dateRange);
   const {
     data: meetings = [],
     isLoading,
@@ -34,7 +34,7 @@ const Tasks = ({meeting, user, deviceType}) => {
     {skip: !userId},
   );
 
-  console.log('followup.length', data?.length);
+  //console.log(followup.length', data?.length);
 
   const taskItems = [
     {
@@ -69,7 +69,7 @@ const Tasks = ({meeting, user, deviceType}) => {
   ];
 
   const handleNavigation = (route, params) => {
-    console.log('route, params',route);
+    console.log('route, params', route);
     // if (!params?.user) {
     //   console.warn('User data is missing. Navigation stopped.');
     //   // ✅ Show an alert for production
@@ -112,7 +112,7 @@ const Tasks = ({meeting, user, deviceType}) => {
           deviceType === 'tablet' ? 'gap-4' : 'gap-2'
         }`}>
         <View
-         className={`bg-spRed rounded flex items-center justify-center ${
+          className={`bg-spRed rounded flex items-center justify-center ${
             deviceType === 'tablet' ? 'w-12 h-12' : 'w-6 h-6'
           }`}>
           <Text className="text-white font-bold">{count}</Text>

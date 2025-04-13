@@ -1,11 +1,9 @@
-
-
 import React from 'react';
-import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import {ScrollView, View, Text, TouchableOpacity, Image} from 'react-native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconE from 'react-native-vector-icons/Entypo';
-import { getDeviceType } from '../../MainTabNavigator/HomeScreen';
+import {getDeviceType} from '../../MainTabNavigator/HomeScreen';
 import FollowUpTopTab from '../../../navigation/FollowUpTopTab';
 import ProjectStatus from '../../MainTabNavigator/component/projectStatusTrack/ProjecStatus';
 import ActionButtons from '../components/followUpDetails/ActionButtons';
@@ -34,8 +32,8 @@ const formatTime = isoString => {
 
 const FollowUpDetails = () => {
   const navigation = useNavigation();
-  const { params } = useRoute();
-  const { followUp } = params; // followUp data passed via navigation
+  const {params} = useRoute();
+  const {followUp} = params; // followUp data passed via navigation
   const deviceType = getDeviceType();
 
   // Calculate last comment if available
@@ -45,7 +43,7 @@ const FollowUpDetails = () => {
   //     ? followUp.comment[lastCommentIndex]?.comment || 'No comment yet!'
   //     : 'No comment yet!';
 
-  console.log('follouwpdetails --->',followUp);
+  //console.log(follouwpdetails --->',followUp);
 
   return (
     <View className="flex-1 bg-white">
@@ -60,7 +58,10 @@ const FollowUpDetails = () => {
             }}
           />
         </TouchableOpacity>
-        <Text className={`text-${deviceType === 'tablet' ? '3xl' : '2xl'} font-extrabold text-spBlue`}>
+        <Text
+          className={`text-${
+            deviceType === 'tablet' ? '3xl' : '2xl'
+          } font-extrabold text-spBlue`}>
           Client Information
         </Text>
         <Text />
@@ -99,7 +100,9 @@ const FollowUpDetails = () => {
                 <IconE name="info-with-circle" size={18} color="#666" />
                 <View className="flex-row ml-1 gap-1">
                   {followUp.requirements.map((req, index) => (
-                    <Text key={index} className="bg-gray-800 text-gray-100 font-robotoCondensed p-1">
+                    <Text
+                      key={index}
+                      className="bg-gray-800 text-gray-100 font-robotoCondensed p-1">
                       {req}
                     </Text>
                   ))}
@@ -155,7 +158,10 @@ const FollowUpDetails = () => {
 
       {/* Project Status Tracking */}
       <View className="flex-row items-center justify-center pt-1 px-2">
-        <ProjectStatus projectStatus={followUp?.projectStatus || {}} leadId={followUp?._id || ''} />
+        <ProjectStatus
+          projectStatus={followUp?.projectStatus || {}}
+          leadId={followUp?._id || ''}
+        />
       </View>
 
       {/* Action Buttons */}

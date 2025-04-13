@@ -19,7 +19,7 @@ import Toast from 'react-native-toast-message';
 const FollowUpCall = ({leadId}) => {
   const navigation = useNavigation();
   const [addFollowUpCall, {isLoading}] = useAddFollowUpCallMutation();
-  console.log('followupcall', leadId);
+  //console.log(followupcall', leadId);
   // Store the selected date/time in a dayjs object:
   const [selected, setSelected] = useState(dayjs());
   const [comment, setComment] = useState('');
@@ -62,34 +62,33 @@ const FollowUpCall = ({leadId}) => {
       };
       console.log('handleSubmit--->', leadId);
       // console.log('body is here ',body);
-      const response=await addFollowUpCall({id: leadId, body}).unwrap();
+      const response = await addFollowUpCall({id: leadId, body}).unwrap();
 
-console.log('followup call response',response);
-if(response.message === 'Follow-up added successfully'){
+      console.log('followup call response', response);
+      if (response.message === 'Follow-up added successfully') {
+        Toast.show({
+          type: 'success', //
+          text1: 'Follow-up call scheduled successfully !',
+          position: 'top',
+          visibilityTime: 3000,
+          autoHide: true,
+          topOffset: 50,
+          bottomOffset: 50,
+          onHide: () => console.log('Toast has been hidden'),
 
-  Toast.show({
-   type: 'success', //
-   text1: 'Follow-up call scheduled successfully !',
-   position: 'top',
-   visibilityTime: 3000,
-   autoHide: true,
-   topOffset: 50,
-   bottomOffset: 50,
-   onHide: () => console.log('Toast has been hidden'),
-
-   style: {
-     backgroundColor: 'yellow',
-     borderRadius: 20,
-     paddingHorizontal: 20,
-     paddingVertical: 15,
-   },
-   text1Style: {
-     fontSize: 12,
-     fontWeight: 'bold',
-     color: 'black',
-   },
- });
-}
+          style: {
+            backgroundColor: 'yellow',
+            borderRadius: 20,
+            paddingHorizontal: 20,
+            paddingVertical: 15,
+          },
+          text1Style: {
+            fontSize: 12,
+            fontWeight: 'bold',
+            color: 'black',
+          },
+        });
+      }
 
       // navigation.goBack();
     } catch (error) {
