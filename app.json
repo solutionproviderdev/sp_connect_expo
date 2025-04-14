@@ -16,11 +16,12 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.solutionprovider.sp_sales",
+      "googleServicesFile": "./android/app/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/icons/spSalesIcon.png",
         "backgroundColor": "#ffffff"
-      },
-      "package": "com.solutionprovider.sp_sales"
+      }
     },
     "web": {
       "favicon": "./src/assets/sp_gear_icon.png",

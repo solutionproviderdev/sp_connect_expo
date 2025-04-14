@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "363386596509",
+    "project_id": "easeit-b205a",
+    "storage_bucket": "easeit-b205a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363386596509:android:5009fd819281320db23874",
+        "android_client_info": {
+          "package_name": "com.solutionprovider.sp_sales"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQN76j1vzcDjMhJonYSCtjXs7cvNMB2DA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -60,7 +60,7 @@ const LoginScreen = () => {
       const expoToken = await registerDevicePushToken(); // modify to return token
       // console.log('expoToken----->', expoToken, 'user?._id', user);
       if (expoToken && user) {
-        // console.log('expoToken----->', expoToken, 'user id here', user);
+        console.log('expoToken----->', expoToken, 'user id here', user);
          await saveMobileDeviceToken({
           userId: user,
           mobileDeviceToken: expoToken,
