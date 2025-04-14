@@ -60,7 +60,11 @@ const FollowUp = () => {
     },
     {skip: !userId},
   );
+<<<<<<< HEAD
 // console.log('follow up data is here --->',data);
+=======
+console.log('follow up data is here---->',data);
+>>>>>>> expo-notification
   const insets = useSafeAreaInsets();
   const togglePicker = useCallback(() => setPickerVisible(prev => !prev), []);
 

@@ -21,6 +21,8 @@ import * as Font from 'expo-font';
 import { ActivityIndicator, PaperProvider } from 'react-native-paper';
 import Toast from "react-native-toast-message";
 
+import * as Notifications from 'expo-notifications';
+
 // ✅ Create a global navigation reference
 export const navigationRef = createNavigationContainerRef();
 
@@ -43,6 +45,7 @@ export function resetNavigation() {
 }
 
 
+
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const appState = useRef(AppState.currentState);
@@ -60,6 +63,13 @@ const App = () => {
   // ✅ Monitor Network Status
   useEffect(() => {
     checkForUpdate()
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      console.log('📩 Notification Received:', notification);
+      // You can also show alert if you want
+      alert(`📩 New Notification: ${notification.request.content.title}`);
+    });
+
+    return () => subscription.remove();
   }, []);
 
   // ✅ Monitor Network Status
@@ -146,6 +156,8 @@ const App = () => {
     );
   }
 
+ 
+
   return (
     <>
       <Provider store={store}>
@@ -176,6 +188,5 @@ const App = () => {
 };
 
 export default App;
-
 
 

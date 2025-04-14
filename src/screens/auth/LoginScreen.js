@@ -16,9 +16,13 @@ import {useDispatch} from 'react-redux';
 import {loginSuccess} from '../../redux/authSlice';
 import {saveUserCredentials} from './BiometricAuth';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {useLoginMutation} from '../../redux/auth/authApi';
+import {
+  useLoginMutation,
+  useSaveMobileDeviceTokenMutation,
+} from '../../redux/auth/authApi';
 
 import IconF from 'react-native-vector-icons/Feather';
+import {registerDevicePushToken} from '../../utils/registerPushToken';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -26,19 +30,21 @@ const LoginScreen = () => {
   const [checked, setChecked] = useState(false);
   const navigation = useNavigation();
   const [login, {isLoading}] = useLoginMutation();
+  const [saveMobileDeviceToken] = useSaveMobileDeviceTokenMutation(); // ✅ New Hook here
+
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
   const [isBiometricAvailable, setIsBiometricAvailable] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-console.log('showPassword',showPassword);
+  console.log('showPassword', showPassword);
+
   const handleLogin = async () => {
     try {
       const response = await login({email, password}).unwrap();
+      // console.log('response------->', response);
 
-      console.log('salman fursi-1');
       const token = response.token;
       const user = response?.user?._id;
-      console.log('response is here ok --->', response);
       // Save token in Redux
       dispatch(loginSuccess({token, user: response.user}));
 
@@ -49,6 +55,18 @@ console.log('showPassword',showPassword);
       // Save email & password for biometric login
       await saveUserCredentials(email, password);
       await AsyncStorage.setItem('biometric_enabled', 'true');
+
+      // ✅ Fetch device token from Expo and Save
+      const expoToken = await registerDevicePushToken(); // modify to return token
+      // console.log('expoToken----->', expoToken, 'user?._id', user);
+      if (expoToken && user) {
+        console.log('expoToken----->', expoToken, 'user id here', user);
+         await saveMobileDeviceToken({
+          userId: user,
+          mobileDeviceToken: expoToken,
+        });
+      }
+      // console.log('tokenResponse----->', response?.user?.mobileDeviceToken);
 
       navigation.reset({index: 0, routes: [{name: 'main'}]});
     } catch (error) {
@@ -97,7 +115,7 @@ console.log('showPassword',showPassword);
                   }`}
                 />
                 <TouchableOpacity
-                  onPress={() =>setShowPassword(!showPassword)}
+                  onPress={() => setShowPassword(!showPassword)}
                   className="absolute right-2 top-7 ">
                   {showPassword ? (
                     <IconF name="eye" size={20} color="gray" />
@@ -151,4 +169,3 @@ console.log('showPassword',showPassword);
 };
 
 export default LoginScreen;
- 

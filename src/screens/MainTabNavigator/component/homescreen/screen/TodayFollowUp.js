@@ -1,6 +1,5 @@
-
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import FollowUpHeader from '../FollowUpHeader';
 import {SafeAreaView} from 'react-native-safe-area-context';
@@ -13,49 +12,50 @@ import {useUserCredentials} from '../../../../../utils/UserCredentials';
 import {FlatList} from 'react-native';
 import FollowUpCard from '../../../../followUp/components/FollowUpCard';
 import Ionicons2 from '@expo/vector-icons/Ionicons';
+import * as Notifications from 'expo-notifications';
+import {Platform} from 'react-native';
 
 const TodayFollowUp = () => {
   const navigation = useNavigation();
   const deviceType = getDeviceType();
   const {userId} = useUserCredentials();
 
-  // Format date range string if both dates exist
-
   const startDate = dayjs().format('YYYY-MM-DD');
 
   const dateRange = `${startDate}_${startDate}`; //test
-  // console.log('userId----->',userId);
 
-  const {data, error, isLoading} = useGetAllFollowupQuery(
+  const {
+    data,
+    error,
+    isLoading,
+  } = useGetAllFollowupQuery(
     {
       Id: userId,
       dateRange: dateRange,
     },
     {skip: !userId},
   );
-  // console.log('haha data followu', data);
+
   return (
     <Provider>
       <FollowUpHeader />
-      
-       {/* Header */}
-            <View className="flex-row bg-spBg items-center justify-between py-1 px-3">
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Image
-                  source={require('./../../../../../assets/backArrowImg.png')}
-                  style={{
-                    width: deviceType === 'tablet' ? 55 : 40,
-                    height: deviceType === 'tablet' ? 40 : 25,
-                  }}
-                />
-              </TouchableOpacity>
-              <Text
-                className={`text-3xl font-robotoCondensedExtraBold text-spBlue`}>
-                Today followup
-              </Text>
-              <Text />
-            </View>
 
+      {/* Header */}
+      <View className="flex-row bg-spBg items-center justify-between py-1 px-3">
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require('./../../../../../assets/backArrowImg.png')}
+            style={{
+              width: deviceType === 'tablet' ? 55 : 40,
+              height: deviceType === 'tablet' ? 40 : 25,
+            }}
+          />
+        </TouchableOpacity>
+        <Text className={`text-3xl font-robotoCondensedExtraBold text-spBlue`}>
+          Today followup
+        </Text>
+        <Text />
+      </View>
 
       <SafeAreaView className="flex-1 bg-spBg">
         {/* Wrap the scrollable content in a View with flex-1 */}
@@ -67,7 +67,7 @@ const TodayFollowUp = () => {
             FollowUp Loading...
           </View>
         )}
-        <View className="flex-1 mt-20">
+        <View className="flex-1 mt-5">
           {!isLoading && !error && (
             <FlatList
               data={data}

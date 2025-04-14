@@ -1,14 +1,13 @@
- 
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
-import { checkTokenAndLogout } from '../utils/checkTokenAndLogout';
+import {checkTokenAndLogout} from '../utils/checkTokenAndLogout';
 
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({
     // baseUrl: 'http://192.168.68.126:5000',
-    baseUrl: 'https://crm.solutionprovider.com.bd/api',
+    // baseUrl: 'https://crm.solutionprovider.com.bd/api',
+    baseUrl: 'http://192.168.68.151:5000',
     prepareHeaders: async (headers, {getState}) => {
       let token = getState().auth.token;
       // console.log("token from redux api",token);
@@ -30,11 +29,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Meeting', 'ProjectStatus', 'Comment', 'Lead','followUp'],  
+  tagTypes: ['Meeting', 'ProjectStatus', 'Comment', 'Lead', 'followUp'],
 
-  endpoints: builder => ({})
-
+  endpoints: builder => ({}),
 });
-
-
-

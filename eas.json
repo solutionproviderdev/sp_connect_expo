@@ -7,7 +7,10 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "channel": "development"
+      "channel": "development",
+      "env": {
+        "GOOGLE_SERVICES_JSON_FILE": "GOOGLE_SERVICES_JSON_FILE"
+      }
     },
     "preview": {
       "android": {
@@ -21,7 +24,10 @@
         "buildType": "apk"
       },
       "autoIncrement": true,
-      "channel": "production"
+      "channel": "production",
+      "env": {
+        "GOOGLE_SERVICES_JSON_FILE": "GOOGLE_SERVICES_JSON_FILE"
+      }
     }
   },
   "submit": {
